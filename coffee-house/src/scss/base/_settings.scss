@@ -1,0 +1,15 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    color: $dark;
+    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+}

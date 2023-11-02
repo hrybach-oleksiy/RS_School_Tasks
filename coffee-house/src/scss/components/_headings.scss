@@ -1,0 +1,24 @@
+h1 {
+    @include fluid-font(45, 25);
+}
+
+h2 {
+    @include fluid-font(40, 25);
+
+    font-family: 'Inika', sans-serif;
+}
+
+.title-1 {
+    color: $headings-color;
+    font-weight: 700;
+    line-height: 111%;
+}
+
+.title-2 {
+    line-height: 52px;
+}
+
+.title-3 {
+    font-weight: 700;
+    line-height: 100%;
+}

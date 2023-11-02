@@ -1,0 +1,17 @@
+.container {
+    max-width: $content-width;
+    margin: 0 auto;
+
+    @include media-laptop {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    @include media-tablet {
+        max-width: calc($content-tablet-width + 30px);
+    }
+
+    @include media-mobile {
+        max-width: calc($content-mobile-width + 29px);
+    }
+}

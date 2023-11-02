@@ -1,0 +1,30 @@
+// colors
+$accent: #e06733;
+$secondary-accent: #499a18;
+$light: #fff;
+$dark: #000;
+$error: #eb4034;
+$border-color: #e3e1d5;
+$headings-color: #717171;
+$paragraph-color: #636060;
+$links-nav-color: #010201;
+
+// backgrounds
+$background-accent: #edf2ec;
+$background-secondary: #d6e7d2;
+
+// media
+$desctop-width: 1441px;
+$laptop-width: 1200px;
+$tablet-width: 768px;
+$small-tablet-width: 650px;
+$mobile-width: 380px;
+$small-mobile-width: 320px;
+
+// sizes
+$page-width: 1440; // for adaptive font mixin need specify without px
+$content-width: 1222px;
+$content-tablet-width: 668px;
+$content-mobile-width: 330px;
+$container-offset: 30px;
+$container-width: calc($content-width + ($container-offset * 2));
