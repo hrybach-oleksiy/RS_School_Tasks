@@ -22,6 +22,12 @@
     justify-content: center;
 }
 
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 @mixin media-desktop {
     @media (min-width: $desktop-width) {
         @content;

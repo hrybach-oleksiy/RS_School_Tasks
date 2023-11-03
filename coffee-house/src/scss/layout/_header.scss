@@ -1,0 +1,39 @@
+.header {
+    @include flex-between;
+
+    padding-top: 20px;
+    font-weight: 600;
+    line-height: 150%;
+
+    a {
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease-in-out;
+    }
+
+    a:hover {
+        border-bottom: 2px solid $dark;
+    }
+
+    &__link {
+        @include flex-center;
+
+        gap: 8px;
+
+        img {
+            align-self: flex-start;
+        }
+
+        @include media-tablet {
+            display: none;
+        }
+    }
+}
+
+.menu-list {
+    display: flex;
+    gap: 40px;
+
+    @include media-tablet {
+        display: none;
+    }
+}
