@@ -1,23 +1,24 @@
-@import './base/reset';
+// @import "./base/reset";
 
-// @import "./base/normilize";
+@import "./base/normilize";
+
 // Abstract
-@import './abstract/vars';
-@import './abstract/mixins';
+@import "./abstract/vars";
+@import "./abstract/mixins";
 
 // Base
-@import './base/fonts';
-@import './base/settings';
+@import "./base/fonts";
+@import "./base/settings";
 
 // Layout
-@import './layout/container';
-@import './layout/layout-grid';
-@import './layout/header';
-@import './layout/footer';
+@import "./layout/container";
+@import "./layout/layout-grid";
+@import "./layout/header";
+@import "./layout/footer";
 
 // Components
-@import './components/buttons';
-@import './components/headings';
-@import './components/burger-menu';
+@import "./components/buttons";
+@import "./components/headings";
+@import "./components/burger-menu";
 
 /////

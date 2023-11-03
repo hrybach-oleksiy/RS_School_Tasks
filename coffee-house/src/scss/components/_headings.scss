@@ -1,24 +1,40 @@
+h1,
+h2,
+h3 {
+    font-weight: 600;
+}
+
 h1 {
-    @include fluid-font(45, 25);
+    @include fluid-font(72, 42);
+
+    line-height: 105%;
 }
 
 h2 {
-    @include fluid-font(40, 25);
+    @include fluid-font(60, 32);
 
-    font-family: 'Inika', sans-serif;
+    line-height: 125%;
 }
 
-.title-1 {
-    color: $headings-color;
-    font-weight: 700;
-    line-height: 111%;
+h3 {
+    line-height: 125%;
 }
 
-.title-2 {
-    line-height: 52px;
+h1.accent,
+h2.accent {
+    font-style: italic;
 }
 
-.title-3 {
-    font-weight: 700;
-    line-height: 100%;
-}
+// .title-1 {
+//     font-weight: 700;
+//     line-height: 105%;
+// }
+
+// .title-2 {
+//     line-height: 52px;
+// }
+
+// .title-3 {
+//     font-weight: 700;
+//     line-height: 100%;
+// }
