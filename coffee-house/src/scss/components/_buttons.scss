@@ -1,25 +1,161 @@
 .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6em 1.6em;
-    color: $dark;
-    font-size: 16px;
-    text-transform: uppercase;
-    background-color: transparent;
-    border: 2px solid $accent;
-    border-radius: 10px;
+    @include flex-center;
 
-    // line-height: 133%;
+    width: 200px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    border-radius: 100px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn--primary {
+    position: relative;
+    padding: 20px 78px;
+    color: $dark;
+    background-color: $light;
+
+    img {
+        position: absolute;
+        top: 50%;
+        left: 127px;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover img {
+        opacity: 1;
+    }
+}
+
+.btn--secondary {
+    padding: 10px 78px;
+    color: $dark;
+    background-color: transparent;
+    border: 1px solid $container;
     transition: all 0.3s ease-in-out;
 
     &:hover {
         color: $light;
-        background-color: $accent;
-        border: 2px solid transparent;
+        background-color: $container;
+        border: 1px solid transparent;
+    }
+}
+
+.btn-store {
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: transparent;
+    border: 1px solid $container;
+    transition: all 0.3s ease-in-out;
+
+    svg path {
+        transition: all 0.3s ease-in-out;
     }
 
-    @include media-mobile {
+    &__descr {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &__text {
         font-size: 10px;
+        line-height: 100%;
+    }
+
+    &:hover {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+    }
+
+    &:hover svg path {
+        fill: $light;
+    }
+}
+
+.btn-icon {
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    cursor: pointer;
+
+    @extend .btn;
+}
+
+.btn-icon--dark {
+    border: 1px solid $border-dark;
+
+    svg path {
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        background-color: $container;
+    }
+
+    &:hover svg path {
+        stroke: $light;
+    }
+}
+
+.btn-icon--light {
+    background-color: transparent;
+    border: 1px solid $border-light;
+
+    svg path {
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        background-color: $light;
+        border: 1px solid $light;
+    }
+
+    &:hover svg path {
+        stroke: $dark;
+    }
+}
+
+.btn-tab {
+    gap: 8px;
+    width: 115px;
+    padding: 8px 16px 8px 8px;
+    background-color: transparent;
+    border: 1px solid $border-light;
+    cursor: pointer;
+
+    &__icon {
+        @include flex-center;
+
+        width: 30px;
+        height: 30px;
+        background-color: $border-light;
+        border-radius: 100px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+    }
+
+    &:hover &__icon {
+        background-color: $light;
+    }
+
+    @extend .btn;
+}
+
+.btn-tab--active {
+    color: $light;
+    background-color: $container;
+    border: 1px solid transparent;
+
+    .btn-tab__icon {
+        background-color: $light;
     }
 }

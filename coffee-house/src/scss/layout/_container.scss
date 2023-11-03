@@ -1,17 +1,9 @@
 .container {
-    max-width: $content-width;
+    max-width: $container-width;
     margin: 0 auto;
-
-    @include media-laptop {
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
-    @include media-tablet {
-        max-width: calc($content-tablet-width + 30px);
-    }
+    padding: 0 $container-offset;
 
     @include media-mobile {
-        max-width: calc($content-mobile-width + 29px);
+        padding: 0 16px;
     }
 }

@@ -16,8 +16,14 @@
     }
 }
 
-@mixin media-desctop {
-    @media (min-width: $desctop-width) {
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin media-desktop {
+    @media (min-width: $desktop-width) {
         @content;
     }
 }
