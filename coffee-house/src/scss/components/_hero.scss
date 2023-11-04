@@ -1,0 +1,39 @@
+.hero {
+    display: grid;
+    grid-template-columns: minmax(auto, 530px);
+    gap: 40px;
+    padding: 100px;
+    color: $light;
+    background-image: url("../assets/images/img-hero.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 40px;
+
+    &__title {
+        span {
+            color: $accent;
+            font-style: italic;
+        }
+
+        @include media-small-tablet {
+            @include fluid-font(72, 42);
+        }
+
+        @include media-mobile {
+            line-height: 115%;
+        }
+    }
+
+    &__descr {
+        line-height: 150%;
+    }
+
+    @include media-tablet {
+        padding: 100px 60px;
+    }
+
+    @include media-small-tablet {
+        padding: 60px 16px;
+    }
+}

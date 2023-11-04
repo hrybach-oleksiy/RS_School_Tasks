@@ -5,11 +5,11 @@
     @media (max-width: $mobile-width) {
         font-size: calc(
             #{$mobile-size + px} + #{$add-mobile-size} *
-                ((100vw - 320px) / #{$page-width})
+                ((100vw - 380px) / #{$page-width})
         );
     }
 
-    @media (min-width: $mobile-width) {
+    @media (min-width: $mobile-width + 1) {
         font-size: calc(
             #{$mobile-size + px} + #{$add-size} * (100vw / #{$page-width})
         );

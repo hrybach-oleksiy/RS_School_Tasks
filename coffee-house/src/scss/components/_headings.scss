@@ -1,12 +1,13 @@
 h1,
 h2,
 h3 {
+    margin: 0;
     font-weight: 600;
 }
 
 h1 {
-    @include fluid-font(72, 42);
-
+    // @include fluid-font(72, 42);
+    font-size: 72px;
     line-height: 105%;
 }
 

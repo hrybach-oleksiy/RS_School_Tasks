@@ -10,22 +10,27 @@
 }
 
 .btn--primary {
-    position: relative;
+    gap: 6px;
     padding: 20px 78px;
     color: $dark;
     background-color: $light;
 
+    span {
+        margin-left: 26px;
+        transition: all 0.3s ease-in-out;
+    }
+
     img {
-        position: absolute;
-        top: 50%;
-        left: 127px;
-        transform: translateY(-50%);
         opacity: 0;
         transition: all 0.3s ease-in-out;
     }
 
     &:hover img {
         opacity: 1;
+    }
+
+    &:hover span {
+        margin-left: 0;
     }
 }
 
