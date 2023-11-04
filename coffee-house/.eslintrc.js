@@ -24,5 +24,6 @@ module.exports = {
             },
         ],
         'no-undef': 'warn',
+        '@typescript-eslint/no-unused-vars': 'warn',
     },
 };
