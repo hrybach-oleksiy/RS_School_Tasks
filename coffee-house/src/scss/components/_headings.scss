@@ -6,36 +6,21 @@ h3 {
 }
 
 h1 {
-    // @include fluid-font(72, 42);
     font-size: 72px;
     line-height: 105%;
 }
 
 h2 {
-    @include fluid-font(60, 32);
-
+    font-size: 60px;
     line-height: 125%;
 }
 
 h3 {
+    font-size: 24px;
     line-height: 125%;
 }
 
-h1.accent,
-h2.accent {
+.accent {
+    color: $accent;
     font-style: italic;
 }
-
-// .title-1 {
-//     font-weight: 700;
-//     line-height: 105%;
-// }
-
-// .title-2 {
-//     line-height: 52px;
-// }
-
-// .title-3 {
-//     font-weight: 700;
-//     line-height: 100%;
-// }

@@ -11,11 +11,6 @@
     border-radius: 40px;
 
     &__title {
-        span {
-            color: $accent;
-            font-style: italic;
-        }
-
         @include media-small-tablet {
             @include fluid-font(72, 42);
         }
