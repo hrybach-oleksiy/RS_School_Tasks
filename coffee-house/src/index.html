@@ -73,7 +73,8 @@
             <main>
                 <section class="hero">
                     <h1 class="hero__title">
-                        <span>Enjoy </span>premium coffee at our charming cafe
+                        <span class="accent">Enjoy </span>premium coffee at our
+                        charming cafe
                     </h1>
                     <p class="hero__descr">
                         With its inviting atmosphere and delicious coffee
@@ -89,16 +90,108 @@
                         />
                     </a>
                 </section>
+                <section class="favorite-coffee">
+                    <h2 class="favorite-coffee__title">
+                        Choose your <span class="accent">favorite</span> coffee
+                    </h2>
+                    <div class="slider">
+                        <div class="slides">
+                            <article class="slide fade active">
+                                <img
+                                    src="./assets/images/coffee-slider-1.png"
+                                    class="slide__img"
+                                />
+                                <div class="slide__text">
+                                    <h3 class="slide__title">
+                                        S'mores Frappuccino
+                                    </h3>
+                                    <p class="slide__descr">
+                                        This new drink takes an espresso and
+                                        mixes it with brown sugar and cinnamon
+                                        before being topped with oat milk.
+                                    </p>
+                                    <span class="slide__price">$5.50</span>
+                                </div>
+                            </article>
+                            <article class="slide fade">
+                                <img
+                                    src="./assets/images/coffee-slider-2.png"
+                                    class="slide__img"
+                                />
+                                <div class="slide__text">
+                                    <h3 class="slide__title">
+                                        Caramel Macchiato
+                                    </h3>
+                                    <p class="slide__descr">
+                                        Fragrant and unique classic espresso
+                                        with rich caramel-peanut syrup, with
+                                        cream under whipped thick foam.
+                                    </p>
+                                    <span class="slide__price">$5.00</span>
+                                </div>
+                            </article>
+                            <article class="slide fade">
+                                <img
+                                    src="./assets/images/coffee-slider-3.png"
+                                    class="slide__img"
+                                />
+                                <div class="slide__text">
+                                    <h3 class="slide__title">Ice coffee</h3>
+                                    <p class="slide__descr">
+                                        A popular summer drink that tones and
+                                        invigorates. Prepared from coffee, milk
+                                        and ice.
+                                    </p>
+                                    <span class="slide__price">$4.50</span>
+                                </div>
+                            </article>
+                        </div>
+
+                        <button
+                            class="btn-icon btn-icon--dark slide__btn slide__btn--next"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M6 12H18.5M18.5 12L12.5 6M18.5 12L12.5 18"
+                                    stroke="#403F3D"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                        <button
+                            class="btn-icon btn-icon--dark slide__btn slide__btn--prev"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M18.5 12H6M6 12L12 6M6 12L12 18"
+                                    stroke="#403F3D"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                        <div class="slider__dashes">
+                            <span class="slider__dash active"></span>
+                            <span class="slider__dash"></span>
+                            <span class="slider__dash"></span>
+                        </div>
+                    </div>
+                </section>
                 <!-- <div class="container">
 					<h1>Hello</h1>
-	
-					<a class="btn btn--primary" href="#">
-						<span>Menu</span>
-						<img
-							src="./assets/images/coffee-cup.png"
-							alt="Coffee-cup Icon"
-						/>
-					</a>
 	
 					<a class="btn btn--secondary" href="#">
 						<span>Close</span>
@@ -161,40 +254,6 @@
 							<span class="btn-store_title">Google Play</span>
 						</div>
 					</a>
-	
-					<button class="btn-icon btn-icon--dark btn-icon--arrow-right">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-						>
-							<path
-								d="M6 12H18.5M18.5 12L12.5 6M18.5 12L12.5 18"
-								stroke="#403F3D"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
-	
-					<button class="btn-icon btn-icon--dark btn-icon--arrow-left">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-						>
-							<path
-								d="M18.5 12H6M6 12L12 6M6 12L12 18"
-								stroke="#403F3D"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
 	
 					<a href="#" class="btn-icon btn-icon--light">
 						<svg
