@@ -1,0 +1,50 @@
+.downloads {
+    display: grid;
+    grid-template-rows: 630px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 100px;
+    margin: 100px 0;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-self: center;
+
+        @include media-big-tablet {
+            align-self: auto;
+        }
+    }
+
+    &__descr {
+        line-height: 150%;
+    }
+
+    &__image {
+        max-width: 630px;
+
+        // background-image: url("../assets/images/mobile-screens.png");
+        // background-repeat: no-repeat;
+        // background-position: center;
+        // background-size: cover;
+        img {
+            height: auto;
+        }
+    }
+
+    &__btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    @include media-big-tablet {
+        grid-template-rows: auto;
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    @include media-mobile {
+        gap: 40px;
+    }
+}
