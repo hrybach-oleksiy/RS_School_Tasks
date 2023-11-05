@@ -40,6 +40,12 @@
     }
 }
 
+@mixin media-big-tablet {
+    @media (max-width: $big-tablet-width) {
+        @content;
+    }
+}
+
 @mixin media-tablet {
     @media (max-width: $tablet-width) {
         @content;
