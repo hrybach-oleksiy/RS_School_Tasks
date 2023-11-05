@@ -50,10 +50,15 @@
 
 .btn-store {
     gap: 8px;
-    padding: 12px 20px;
+    justify-content: flex-start;
+    padding: 10px 20px;
     background-color: transparent;
     border: 1px solid $container;
     transition: all 0.3s ease-in-out;
+
+    &__icon {
+        display: flex;
+    }
 
     svg path {
         transition: all 0.3s ease-in-out;
@@ -62,12 +67,13 @@
     &__descr {
         display: flex;
         flex-direction: column;
+        gap: 2px;
         justify-content: center;
     }
 
     &__text {
         font-size: 10px;
-        line-height: 100%;
+        line-height: 140%;
     }
 
     &:hover {

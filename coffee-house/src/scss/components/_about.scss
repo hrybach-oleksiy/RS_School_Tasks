@@ -1,10 +1,6 @@
 .about {
     &__title {
         margin-bottom: 40px;
-
-        @include media-small-tablet {
-            @include fluid-font(60, 32);
-        }
     }
 }
 
