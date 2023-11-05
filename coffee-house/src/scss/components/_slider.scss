@@ -49,6 +49,10 @@
         width: 100%;
         max-width: 480px;
         height: 480px;
+
+        @include media-mobile {
+            height: 100%;
+        }
     }
 
     &__descr {
