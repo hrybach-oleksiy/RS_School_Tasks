@@ -1,83 +1,71 @@
 .footer {
-    padding: 46px 0;
-
-    @include media-tablet {
-        padding: 36px 0;
-    }
-
-    @include media-mobile {
-        padding: 22px 0;
-    }
-}
-
-.footer__container {
     display: grid;
-    place-items: center center;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 100px;
+    padding: 100px;
+    color: $light;
+    background-color: $container;
+    border-radius: 40px;
 
-    @include media-tablet {
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    &__title {
+    }
+
+    &__socials {
+        display: flex;
+        gap: 12px;
+    }
+
+    &__contacts {
+        align-self: center;
+
+        svg {
+            margin-right: 5px;
+        }
+    }
+
+    @include media-big-tablet {
         grid-template-columns: 1fr;
-        gap: 19px;
-    }
-}
-
-.copyright {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    gap: 20px;
-    justify-self: start;
-
-    &__link {
-        transition: color 0.3s ease-in-out;
-
-        &:hover {
-            color: $accent;
-        }
     }
 
     @include media-tablet {
-        gap: 22px;
-        justify-self: center;
+        padding: 100px 60px;
+    }
+
+    @include media-small-tablet {
+        gap: 40px;
+        padding: 62px 16px;
     }
 }
 
-.footer__text {
+.contacts {
     a {
-        transition: color 0.3s ease-in-out;
-
-        &:hover {
-            color: $accent;
-        }
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease-in-out;
     }
 
-    @include media-tablet {
-        margin-bottom: 10px;
-    }
-}
-
-.socials {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    gap: 20px;
-    justify-self: end;
-
-    &__link {
-        display: inline-block;
-
-        svg path {
-            transition: fill 0.3s ease-in-out;
-        }
-
-        &:hover svg path {
-            fill: $accent;
-        }
+    a:hover {
+        border-bottom: 2px solid $light;
     }
 
-    @include media-tablet {
-        justify-self: center;
+    address {
+        font-style: normal;
+        line-height: 150%;
     }
 
-    @include media-mobile {
-        margin-top: -10px;
+    &__title {
+        margin-bottom: 38px;
+    }
+
+    &__data {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
     }
 }
