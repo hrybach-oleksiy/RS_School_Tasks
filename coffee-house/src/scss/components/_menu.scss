@@ -1,0 +1,12 @@
+.menu {
+    &__title {
+        text-align: center;
+    }
+
+    &__tabs {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin: 40px 0;
+    }
+}

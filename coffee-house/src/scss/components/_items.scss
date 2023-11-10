@@ -1,0 +1,35 @@
+.items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 310px);
+    gap: 40px;
+    justify-content: center;
+}
+
+.item {
+    border: 1px solid $border-light;
+    border-radius: 40px;
+    cursor: pointer;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+    }
+
+    &__img {
+        overflow: hidden;
+        border-radius: 40px;
+    }
+
+    &__descr {
+        flex-grow: 1;
+        line-height: 150%;
+    }
+
+    &__price {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 125%;
+    }
+}
