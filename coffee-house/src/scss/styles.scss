@@ -20,10 +20,7 @@
 @import "./components/buttons";
 @import "./components/headings";
 @import "./components/burger-menu";
-@import "./components/hero";
-@import "./components/favorite-coffee";
-@import "./components/slider";
-@import "./components/about";
-@import "./components/downloads";
 
-/////
+// Pages
+@import "./pages/home";
+@import "./pages/menu";
