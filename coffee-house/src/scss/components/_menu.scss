@@ -1,6 +1,18 @@
 .menu {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 100px;
+
     &__title {
+        align-self: center;
+        max-width: 800px;
+        font-size: 60px;
+        line-height: 125%;
         text-align: center;
+
+        @include media-small-tablet {
+            @include fluid-font(60, 32);
+        }
     }
 
     &__tabs {
@@ -8,5 +20,41 @@
         gap: 16px;
         justify-content: center;
         margin: 40px 0;
+
+        @include media-mobile {
+            gap: 8px;
+        }
+    }
+}
+
+.menu-loader {
+    @include flex-center;
+
+    display: none;
+    align-self: center;
+    width: 60px;
+    height: 60px;
+    margin-top: 40px;
+    border: 1px solid $border-light;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    svg path {
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        background-color: $border-light;
+        border: 1px solid $border-dark;
+    }
+
+    &:hover svg path {
+        transform: scale(1.1);
+        stroke: $container;
+    }
+
+    @include media-tablet {
+        display: flex;
     }
 }

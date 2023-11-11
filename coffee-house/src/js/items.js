@@ -11,8 +11,8 @@ const renderItems = (category) => {
                 'beforeend',
                 `
 			<article class="item">
-			<div class="item__img">
-				<img
+			<div class="item__photo">
+				<img class="item__img"
 					src=${item.src}
 					alt=${item.name}
 				/>

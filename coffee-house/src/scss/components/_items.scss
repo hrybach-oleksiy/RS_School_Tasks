@@ -1,25 +1,59 @@
 .items {
     display: grid;
+    grid-auto-rows: 506px;
     grid-template-columns: repeat(auto-fill, 310px);
     gap: 40px;
     justify-content: center;
+
+    @include media-tablet {
+        max-height: 1052px;
+        overflow: hidden;
+    }
+
+    @include media-small-tablet {
+        max-height: 2144px;
+    }
+
+    // &.active {
+    //     opacity: 1;
+    // }
 }
 
 .item {
+    display: flex;
+    flex-direction: column;
     border: 1px solid $border-light;
     border-radius: 40px;
     cursor: pointer;
+    transition: all 0.5s ease-in-out;
+
+    &:not(:nth-child(-n + 4)) {
+        @include media-tablet {
+            height: 0; /* Optionally, set height to 0 to collapse the hidden cards */
+            margin: 0; /* Optionally, set margin to 0 to collapse the hidden cards */
+            padding: 0; /* Optionally, set padding to 0 to collapse the hidden cards */
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Smooth transition */
+            pointer-events: none; /* Disable interactions on hidden cards */
+        }
+    }
 
     &__text {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         gap: 12px;
         padding: 20px;
     }
 
-    &__img {
+    &__photo {
         overflow: hidden;
         border-radius: 40px;
+    }
+
+    &__img {
+        transform: scale(1.1);
+        transition: all 0.5s ease-in-out;
     }
 
     &__descr {
@@ -31,5 +65,9 @@
         font-weight: 600;
         font-size: 24px;
         line-height: 125%;
+    }
+
+    &:hover .item__img {
+        transform: scale(1);
     }
 }

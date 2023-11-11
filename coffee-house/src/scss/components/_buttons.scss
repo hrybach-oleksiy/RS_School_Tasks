@@ -131,8 +131,8 @@
 }
 
 .btn-tab {
-    gap: 8px;
-    width: 115px;
+    gap: 7px;
+    width: auto;
     padding: 8px 16px 8px 8px;
     background-color: transparent;
     border: 1px solid $border-light;
@@ -146,6 +146,11 @@
         background-color: $border-light;
         border-radius: 100px;
         transition: all 0.3s ease-in-out;
+
+        img {
+            width: auto;
+            height: auto;
+        }
     }
 
     &:hover {
