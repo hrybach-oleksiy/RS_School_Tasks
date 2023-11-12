@@ -15,7 +15,7 @@ const renderItems = (category) => {
 				<img class="item__img"
 					src=${item.src}
 					alt=${item.name}
-				/>
+				>
 			</div>
 			<div class="item__text">
 				<h3 class="item__title">${item.name}</h3>

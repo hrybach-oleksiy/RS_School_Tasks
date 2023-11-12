@@ -23,6 +23,16 @@
             align-self: flex-start;
         }
 
+        &.menu-link {
+            border: none;
+            pointer-events: none;
+
+            &:hover {
+                border-bottom: none;
+                cursor: auto;
+            }
+        }
+
         @include media-tablet {
             display: none;
         }
