@@ -1,49 +1,58 @@
 .header {
-    @include flex-between;
+	@include flex-between;
+	padding: 20px 0;
+	font-weight: 600;
+	line-height: 150%;
 
-    padding: 20px 0;
-    font-weight: 600;
-    line-height: 150%;
+	a {
+		position: relative;
+	}
 
-    a {
-        border-bottom: 2px solid transparent;
-        transition: all 0.3s ease-in-out;
-    }
+	a::before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 2px;
+		bottom: -4px;
+		left: 50%;
+		background-color: $dark;
+		transition: all 0.4s ease-in-out;
+	}
 
-    a:hover {
-        border-bottom: 2px solid $dark;
-    }
+	a:hover::before {
+		width: 100%;
+		left: 0;
+	}
 
-    &__link {
-        @include flex-center;
+	&__link {
+		@include flex-center;
+		gap: 8px;
 
-        gap: 8px;
+		img {
+			align-self: flex-start;
+		}
 
-        img {
-            align-self: flex-start;
-        }
+		&.menu-link {
+			border: none;
+			pointer-events: none;
 
-        &.menu-link {
-            border: none;
-            pointer-events: none;
+			&:hover {
+				border-bottom: none;
+				cursor: auto;
+			}
+		}
 
-            &:hover {
-                border-bottom: none;
-                cursor: auto;
-            }
-        }
-
-        @include media-tablet {
-            display: none;
-        }
-    }
+		@include media-tablet {
+			display: none;
+		}
+	}
 }
 
 .menu-list {
-    display: flex;
-    gap: 40px;
+	display: flex;
+	gap: 40px;
 
-    @include media-tablet {
-        display: none;
-    }
+	@include media-tablet {
+		display: none;
+	}
 }
