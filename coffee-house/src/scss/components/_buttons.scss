@@ -1,177 +1,181 @@
 .btn {
-    @include flex-center;
-
-    width: 200px;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 150%;
-    border-radius: 100px;
-    transition: all 0.3s ease-in-out;
+	@include flex-center;
+	width: 200px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 150%;
+	border-radius: 100px;
+	transition: all 0.3s ease-in-out;
+	user-select: none;
 }
 
 .btn--primary {
-    gap: 6px;
-    padding: 20px 78px;
-    color: $dark;
-    background-color: $light;
+	gap: 6px;
+	padding: 20px 78px;
+	color: $dark;
+	background-color: $light;
 
-    span {
-        margin-left: 26px;
-        transition: all 0.3s ease-in-out;
-    }
+	span {
+		margin-left: 26px;
+		transition: all 0.3s ease-in-out;
+	}
 
-    img {
-        opacity: 0;
-        transition: all 0.3s ease-in-out;
-    }
+	img {
+		opacity: 0;
+		transition: all 0.3s ease-in-out;
+	}
 
-    &:hover img {
-        opacity: 1;
-    }
+	&:hover img {
+		opacity: 1;
+	}
 
-    &:hover span {
-        margin-left: 0;
-    }
+	&:hover span {
+		margin-left: 0;
+	}
 }
 
 .btn--secondary {
-    padding: 10px 78px;
-    color: $dark;
-    background-color: transparent;
-    border: 1px solid $container;
-    transition: all 0.3s ease-in-out;
+	padding: 10px 78px;
+	color: $dark;
+	background-color: transparent;
+	border: 1px solid $container;
+	transition: all 0.3s ease-in-out;
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
-    }
+	&:hover {
+		color: $light;
+		background-color: $container;
+		border: 1px solid transparent;
+	}
 }
 
 .btn-store {
-    gap: 8px;
-    justify-content: flex-start;
-    padding: 10px 20px;
-    background-color: transparent;
-    border: 1px solid $container;
-    transition: all 0.3s ease-in-out;
+	gap: 8px;
+	justify-content: flex-start;
+	padding: 10px 20px;
+	background-color: transparent;
+	border: 1px solid $container;
+	transition: all 0.3s ease-in-out;
 
-    &__icon {
-        display: flex;
-    }
+	&__icon {
+		display: flex;
+	}
 
-    svg path {
-        transition: all 0.3s ease-in-out;
-    }
+	svg path {
+		transition: all 0.3s ease-in-out;
+	}
 
-    &__descr {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        justify-content: center;
-    }
+	&__descr {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		justify-content: center;
+	}
 
-    &__text {
-        font-size: 10px;
-        line-height: 140%;
-    }
+	&__text {
+		font-size: 10px;
+		line-height: 140%;
+	}
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
-    }
+	&:hover {
+		color: $light;
+		background-color: $container;
+		border: 1px solid transparent;
+	}
 
-    &:hover svg path {
-        fill: $light;
-    }
+	&:hover svg path {
+		fill: $light;
+	}
 }
 
 .btn-icon {
-    width: 60px;
-    height: 60px;
-    background-color: transparent;
-    cursor: pointer;
-
-    @extend .btn;
+	width: 60px;
+	height: 60px;
+	background-color: transparent;
+	cursor: pointer;
+	@extend .btn;
 }
 
 .btn-icon--dark {
-    border: 1px solid $border-dark;
+	border: 1px solid $border-dark;
 
-    svg path {
-        transition: all 0.3s ease-in-out;
-    }
+	svg path {
+		transition: all 0.3s ease-in-out;
+	}
 
-    &:hover {
-        background-color: $container;
-    }
+	&:hover {
+		background-color: $container;
+	}
 
-    &:hover svg path {
-        stroke: $light;
-    }
+	&:hover svg path {
+		stroke: $light;
+	}
 }
 
 .btn-icon--light {
-    background-color: transparent;
-    border: 1px solid $border-light;
+	background-color: transparent;
+	border: 1px solid $border-light;
 
-    svg path {
-        transition: all 0.3s ease-in-out;
-    }
+	svg path {
+		transition: all 0.3s ease-in-out;
+	}
 
-    &:hover {
-        background-color: $light;
-        border: 1px solid $light;
-    }
+	&:hover {
+		background-color: $light;
+		border: 1px solid $light;
+	}
 
-    &:hover svg path {
-        stroke: $dark;
-    }
+	&:hover svg path {
+		stroke: $dark;
+	}
 }
 
 .btn-tab {
-    gap: 7px;
-    width: auto;
-    padding: 8px 16px 8px 8px;
-    background-color: transparent;
-    border: 1px solid $border-light;
-    cursor: pointer;
+	gap: 7px;
+	width: auto;
+	padding: 8px 16px 8px 8px;
+	background-color: transparent;
+	border: 1px solid $border-light;
+	cursor: pointer;
 
-    &__icon {
-        @include flex-center;
+	&__icon {
+		@include flex-center;
+		width: 30px;
+		height: 30px;
+		background-color: $border-light;
+		border-radius: 100px;
+		transition: all 0.3s ease-in-out;
 
-        width: 30px;
-        height: 30px;
-        background-color: $border-light;
-        border-radius: 100px;
-        transition: all 0.3s ease-in-out;
+		img {
+			width: auto;
+			height: auto;
+		}
+	}
 
-        img {
-            width: auto;
-            height: auto;
-        }
-    }
+	&:hover {
+		color: $light;
+		background-color: $container;
+		border: 1px solid transparent;
+	}
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
-    }
+	&:hover &__icon {
+		background-color: $light;
+	}
 
-    &:hover &__icon {
-        background-color: $light;
-    }
-
-    @extend .btn;
+	@extend .btn;
 }
 
 .btn-tab--active {
-    color: $light;
-    background-color: $container;
-    border: 1px solid transparent;
+	color: $light;
+	background-color: $container;
+	border: 1px solid transparent;
+	pointer-events: none;
 
-    .btn-tab__icon {
-        background-color: $light;
-    }
+	.btn-tab__icon {
+		background-color: $light;
+	}
 }
+
+// close button
+// <a class="btn btn--secondary" href="#">
+// 	<span>Close</span>
+// </a>
