@@ -13,19 +13,37 @@
     }
 
     &__dash {
+        position: relative;
         width: 40px;
         height: 4px;
         background-color: $border-light;
         border-radius: 100px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
 
-        &:hover {
-            background-color: $border-dark;
-        }
+        // cursor: pointer;
+        transition: all 1s ease-in-out;
+
+        // &::after {
+        //     position: absolute;
+        //     top: 0;
+        //     left: 0;
+        //     display: block;
+        //     width: 0;
+        //     height: 4px;
+        //     background-color: $border-dark;
+        //     transition: all 1s ease-in-out;
+        //     content: "";
+        // }
+
+        // &:hover {
+        //     background-color: $border-dark;
+        // }
 
         &.active {
             background-color: $border-dark;
+
+            // &::after {
+            //     width: 40px;
+            // }
         }
     }
 
@@ -140,10 +158,6 @@
     &:nth-child(2) {
         order: 2;
     }
-
-    // &.active {
-    //     display: flex;
-    // }
 }
 
 .transition-right {
@@ -175,18 +189,3 @@
         left: -1152px;
     }
 }
-
-// .fade {
-//     animation-name: fade;
-//     animation-duration: 3s;
-// }
-
-// @keyframes fade {
-//     from {
-//         opacity: 0.4;
-//     }
-
-//     to {
-//         opacity: 1;
-//     }
-// }

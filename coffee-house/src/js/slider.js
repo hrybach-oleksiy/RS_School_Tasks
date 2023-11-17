@@ -5,6 +5,13 @@ const dashes = document.querySelectorAll('.slider__dash');
 const slider = document.querySelector('.slides');
 
 const slidesArr = [...slides];
+let step = 0;
+let defaultSwitchingTime = 7000;
+let currentSwitchingTime = 7000;
+let timerID;
+let timeLeft = currentSwitchingTime;
+let isPaused = false;
+let currentTimerId;
 
 const shiftSlides = (direction) => {
     let shiftedSlides = [];
@@ -37,16 +44,64 @@ const shiftSlides = (direction) => {
     });
 };
 
+const setActiveDash = () => {
+    for (let dash of dashes) {
+        dash.classList.remove('active');
+    }
+    dashes[step].classList.add('active');
+};
+
 const moveLeft = () => {
     slider.classList.add('transition-left');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
+    step++;
+
+    if (step > dashes.length - 1) {
+        step = 0;
+    }
+    setActiveDash();
 };
 
 const moveRight = () => {
     slider.classList.add('transition-right');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
+    step--;
+
+    if (step < 0) {
+        step = dashes.length - 1;
+    }
+    setActiveDash();
+};
+
+const adjustSwitchingTime = () => {
+    // currentSwitchingTime -= 1000;
+    // console.log(currentSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+    if (!isPaused) {
+        moveLeft();
+        timeLeft = currentSwitchingTime;
+        currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
+    }
+};
+
+const initSwitching = () => {
+    // timerID = setInterval(moveLeft, defaultSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+
+    currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
+};
+
+const pauseSwitching = () => {
+    clearTimeout(currentTimerId);
+    isPaused = true;
+    console.log('Timer paused');
+};
+const resumeSwitching = () => {
+    isPaused = false;
+    initSwitching();
+    console.log('Timer resumed');
 };
 
 prevBtn.addEventListener('click', moveLeft);
@@ -67,57 +122,34 @@ slider.addEventListener('animationend', (event) => {
 
     prevBtn.addEventListener('click', moveLeft);
     nextBtn.addEventListener('click', moveRight);
+    currentSwitchingTime = 7000;
 });
 
-// let slideIndex = 1;
+// pause
+dashes[0].addEventListener('click', () => {
+    // clearInterval(timerID);
+    // clearTimeout(currentTimerId);
+    // console.log('timer stopped');
+    if (!isPaused) {
+        pauseSwitching();
+    }
+});
 
-// const setActiveSlide = (index) => {
-//     for (let slide of slides) {
-//         slide.classList.remove('active');
-//     }
-//     slides[index - 1].classList.add('active');
-// };
+// continue
+dashes[2].addEventListener('click', () => {
+    // clearInterval(timerID);
+    // timerID = setInterval(moveLeft, currentSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+    // console.log('timer resumed');
+    if (isPaused) {
+        resumeSwitching();
+    }
+});
 
-// const setActiveDash = (index) => {
-//     for (let dash of dashes) {
-//         dash.classList.remove('active');
-//     }
-//     dashes[index - 1].classList.add('active');
-// };
-
-// const showSlides = (n) => {
-//     if (n > slides.length) {
-//         slideIndex = 1;
-//     }
-//     if (n < 1) {
-//         slideIndex = slides.length;
-//     }
-//     setActiveSlide(slideIndex);
-//     setActiveDash(slideIndex);
-// };
-
-// const plusSlides = (n) => {
-//     showSlides((slideIndex += n));
-// };
-
-// const currentSlide = (n) => {
-//     showSlides((slideIndex = n));
-// };
-
-// nextBtn.addEventListener('click', () => {
-//     plusSlides(1);
-// });
-
-// prevBtn.addEventListener('click', () => {
-//     plusSlides(-1);
-// });
+// initSwitching();
 
 // for (let i = 0; i < dashes.length; i++) {
 //     dashes[i].addEventListener('click', () => {
 //         currentSlide(i + 1);
 //     });
 // }
-
-// setInterval(() => {
-//     plusSlides(1);
-// }, 5000);
