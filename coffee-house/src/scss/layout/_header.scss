@@ -1,58 +1,60 @@
 .header {
-	@include flex-between;
-	padding: 20px 0;
-	font-weight: 600;
-	line-height: 150%;
+    @include flex-between;
 
-	a {
-		position: relative;
-	}
+    padding: 20px 0;
+    font-weight: 600;
+    line-height: 150%;
 
-	a::before {
-		content: "";
-		position: absolute;
-		width: 0;
-		height: 2px;
-		bottom: -4px;
-		left: 50%;
-		background-color: $dark;
-		transition: all 0.4s ease-in-out;
-	}
+    a {
+        position: relative;
+    }
 
-	a:hover::before {
-		width: 100%;
-		left: 0;
-	}
+    a::before {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: $dark;
+        transition: all 0.4s ease-in-out;
+        content: "";
+    }
 
-	&__link {
-		@include flex-center;
-		gap: 8px;
+    a:hover::before {
+        left: 0;
+        width: 100%;
+    }
 
-		img {
-			align-self: flex-start;
-		}
+    &__link {
+        @include flex-center;
 
-		&.menu-link {
-			border: none;
-			pointer-events: none;
+        gap: 8px;
 
-			&:hover {
-				border-bottom: none;
-				cursor: auto;
-			}
-		}
+        img {
+            align-self: flex-start;
+        }
 
-		@include media-tablet {
-			display: none;
-		}
-	}
+        &.menu-link {
+            border: none;
+            pointer-events: none;
+
+            &:hover {
+                border-bottom: none;
+                cursor: auto;
+            }
+        }
+
+        @include media-tablet {
+            display: none;
+        }
+    }
 }
 
 .menu-list {
-	display: flex;
-	gap: 40px;
+    display: flex;
+    gap: 40px;
 
-	@include media-tablet {
-		display: none;
-	}
+    @include media-tablet {
+        display: none;
+    }
 }

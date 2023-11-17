@@ -1,150 +1,191 @@
 .slider {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 
-	&__dashes {
-		@include flex-center;
-		gap: 12px;
-		margin-top: 40px;
-	}
+    &__dashes {
+        @include flex-center;
 
-	&__dash {
-		width: 40px;
-		height: 4px;
-		background-color: $border-light;
-		border-radius: 100px;
-		cursor: pointer;
-		transition: all 0.3s ease-in-out;
+        gap: 12px;
+        margin-top: 40px;
+    }
 
-		&:hover {
-			background-color: $border-dark;
-		}
+    &__dash {
+        width: 40px;
+        height: 4px;
+        background-color: $border-light;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
 
-		&.active {
-			background-color: $border-dark;
-		}
-	}
+        &:hover {
+            background-color: $border-dark;
+        }
+
+        &.active {
+            background-color: $border-dark;
+        }
+    }
+
+    &__btn {
+        position: absolute;
+        top: 47%;
+        transform: translateY(-50%);
+
+        &--next {
+            right: 4px;
+
+            @include media-tablet {
+                right: 0;
+            }
+        }
+
+        &--prev {
+            left: 4px;
+
+            @include media-tablet {
+                left: 0;
+            }
+        }
+
+        @include media-small-tablet {
+            display: none;
+        }
+    }
 }
 
 .slides-wrapper {
-	width: 3456px;
-	overflow: hidden;
+    width: 3456px;
+    overflow: hidden;
 }
 
 .slides {
-	position: relative;
-	display: flex;
-	left: 1152px;
+    position: relative;
+    left: 0;
+    display: flex;
 }
 
 .slide {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	align-items: center;
-	width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
 
-	&__text {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		align-items: center;
-		max-width: 480px;
-	}
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        max-width: 480px;
+    }
 
-	&__img {
-		width: 100%;
-		max-width: 480px;
-		height: 480px;
+    &__img {
+        width: 100%;
+        max-width: 480px;
+        height: 480px;
 
-		@include media-mobile {
-			height: 100%;
-		}
-	}
+        @include media-mobile {
+            height: 100%;
+        }
+    }
 
-	&__descr {
-		line-height: 150%;
-		text-align: center;
-	}
+    &__descr {
+        line-height: 150%;
+        text-align: center;
+    }
 
-	&__price {
-		font-weight: 600;
-		font-size: 24px;
-		line-height: 125%;
-	}
+    &__price {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 125%;
+    }
 
-	&__btn {
-		position: absolute;
-		top: 47%;
-		transform: translateY(-50%);
+    &__btn {
+        position: absolute;
+        top: 47%;
+        transform: translateY(-50%);
 
-		&--next {
-			right: 4px;
+        &--next {
+            right: 4px;
 
-			@include media-tablet {
-				right: 0;
-			}
-		}
+            @include media-tablet {
+                right: 0;
+            }
+        }
 
-		&--prev {
-			left: 4px;
+        &--prev {
+            left: 4px;
 
-			@include media-tablet {
-				left: 0;
-			}
-		}
+            @include media-tablet {
+                left: 0;
+            }
+        }
 
-		@include media-small-tablet {
-			display: none;
-		}
-	}
+        @include media-small-tablet {
+            display: none;
+        }
+    }
 
-	// &.active {
-	// 	display: flex;
-	// }
+    &:first-child {
+        order: 1;
+    }
+
+    &:last-child {
+        order: 0;
+    }
+
+    &:nth-child(2) {
+        order: 2;
+    }
+
+    // &.active {
+    //     display: flex;
+    // }
 }
 
 .transition-right {
-	animation: move-right;
-	animation-duration: 1s;
+    animation: move-right;
+    animation-duration: 1s;
 }
 
 .transition-left {
-	animation: move-left;
-	animation-duration: 1s;
+    animation: move-left;
+    animation-duration: 1s;
 }
 
 @keyframes move-right {
-	from {
-		left: 1152px;
-	}
+    from {
+        left: 0;
+    }
 
-	to {
-		left: 2304px;
-	}
+    to {
+        left: 1152px;
+    }
 }
 
 @keyframes move-left {
-	from {
-		left: 1152px;
-	}
+    from {
+        left: 0;
+    }
 
-	to {
-		left: 0;
-	}
+    to {
+        left: -1152px;
+    }
 }
 
 // .fade {
 //     animation-name: fade;
-//     animation-duration: 1.5s;
+//     animation-duration: 3s;
 // }
+
 // @keyframes fade {
 //     from {
 //         opacity: 0.4;
 //     }
+
 //     to {
 //         opacity: 1;
 //     }
