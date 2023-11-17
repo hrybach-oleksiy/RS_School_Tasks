@@ -1,57 +1,155 @@
 const slides = document.querySelectorAll('.slide');
-const nextBtn = document.querySelector('.slide__btn--next');
-const prevBtn = document.querySelector('.slide__btn--prev');
+const prevBtn = document.querySelector('.slider__btn--prev');
+const nextBtn = document.querySelector('.slider__btn--next');
 const dashes = document.querySelectorAll('.slider__dash');
+const slider = document.querySelector('.slides');
 
-let slideIndex = 1;
+const slidesArr = [...slides];
+let step = 0;
+let defaultSwitchingTime = 7000;
+let currentSwitchingTime = 7000;
+let timerID;
+let timeLeft = currentSwitchingTime;
+let isPaused = false;
+let currentTimerId;
 
-const setActiveSlide = (index) => {
-    for (let slide of slides) {
-        slide.classList.remove('active');
+const shiftSlides = (direction) => {
+    let shiftedSlides = [];
+
+    if (direction === 'left') {
+        shiftedSlides = slidesArr.slice(1).concat(slidesArr.slice(0, 1));
     }
-    slides[index - 1].classList.add('active');
+
+    if (direction === 'right') {
+        const lastSlideIndex = slidesArr.length - 1;
+
+        shiftedSlides = [slidesArr[lastSlideIndex]].concat(
+            slidesArr.slice(0, lastSlideIndex),
+        );
+    }
+
+    // Delete all slides from HTML
+    slides.forEach((slide) => {
+        slider.removeChild(slide);
+    });
+
+    // Insert slides in new order
+    shiftedSlides.forEach((slide) => {
+        slider.appendChild(slide);
+    });
+
+    // Update slidesArr to with slide in new order for the next click
+    shiftedSlides.forEach((slide, index) => {
+        slidesArr[index] = slide;
+    });
 };
 
-const setActiveDash = (index) => {
+const setActiveDash = () => {
     for (let dash of dashes) {
         dash.classList.remove('active');
     }
-    dashes[index - 1].classList.add('active');
+    dashes[step].classList.add('active');
 };
 
-const showSlides = (n) => {
-    if (n > slides.length) {
-        slideIndex = 1;
+const moveLeft = () => {
+    slider.classList.add('transition-left');
+    prevBtn.removeEventListener('click', moveLeft);
+    nextBtn.removeEventListener('click', moveRight);
+    step++;
+
+    if (step > dashes.length - 1) {
+        step = 0;
     }
-    if (n < 1) {
-        slideIndex = slides.length;
+    setActiveDash();
+};
+
+const moveRight = () => {
+    slider.classList.add('transition-right');
+    prevBtn.removeEventListener('click', moveLeft);
+    nextBtn.removeEventListener('click', moveRight);
+    step--;
+
+    if (step < 0) {
+        step = dashes.length - 1;
     }
-    setActiveSlide(slideIndex);
-    setActiveDash(slideIndex);
+    setActiveDash();
 };
 
-const plusSlides = (n) => {
-    showSlides((slideIndex += n));
+const adjustSwitchingTime = () => {
+    // currentSwitchingTime -= 1000;
+    // console.log(currentSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+    if (!isPaused) {
+        moveLeft();
+        timeLeft = currentSwitchingTime;
+        currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
+    }
 };
 
-const currentSlide = (n) => {
-    showSlides((slideIndex = n));
+const initSwitching = () => {
+    // timerID = setInterval(moveLeft, defaultSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+
+    currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
 };
 
-nextBtn.addEventListener('click', () => {
-    plusSlides(1);
+const pauseSwitching = () => {
+    clearTimeout(currentTimerId);
+    isPaused = true;
+    console.log('Timer paused');
+};
+const resumeSwitching = () => {
+    isPaused = false;
+    initSwitching();
+    console.log('Timer resumed');
+};
+
+prevBtn.addEventListener('click', moveLeft);
+nextBtn.addEventListener('click', moveRight);
+
+slider.addEventListener('animationend', (event) => {
+    const animationDirection = event.animationName;
+
+    if (animationDirection === 'move-left') {
+        slider.classList.remove('transition-left');
+        shiftSlides('left');
+    }
+
+    if (animationDirection === 'move-right') {
+        slider.classList.remove('transition-right');
+        shiftSlides('right');
+    }
+
+    prevBtn.addEventListener('click', moveLeft);
+    nextBtn.addEventListener('click', moveRight);
+    currentSwitchingTime = 7000;
 });
 
-prevBtn.addEventListener('click', () => {
-    plusSlides(-1);
+// pause
+dashes[0].addEventListener('click', () => {
+    // clearInterval(timerID);
+    // clearTimeout(currentTimerId);
+    // console.log('timer stopped');
+    if (!isPaused) {
+        pauseSwitching();
+    }
 });
 
-for (let i = 0; i < dashes.length; i++) {
-    dashes[i].addEventListener('click', () => {
-        currentSlide(i + 1);
-    });
-}
+// continue
+dashes[2].addEventListener('click', () => {
+    // clearInterval(timerID);
+    // timerID = setInterval(moveLeft, currentSwitchingTime);
+    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
+    // console.log('timer resumed');
+    if (isPaused) {
+        resumeSwitching();
+    }
+});
 
-// setInterval(() => {
-//     plusSlides(1);
-// }, 5000);
+// initSwitching();
+
+// for (let i = 0; i < dashes.length; i++) {
+//     dashes[i].addEventListener('click', () => {
+//         currentSlide(i + 1);
+//     });
+// }

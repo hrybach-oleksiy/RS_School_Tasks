@@ -13,25 +13,80 @@
     }
 
     &__dash {
+        position: relative;
         width: 40px;
         height: 4px;
         background-color: $border-light;
         border-radius: 100px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
 
-        &:hover {
-            background-color: $border-dark;
-        }
+        // cursor: pointer;
+        transition: all 1s ease-in-out;
+
+        // &::after {
+        //     position: absolute;
+        //     top: 0;
+        //     left: 0;
+        //     display: block;
+        //     width: 0;
+        //     height: 4px;
+        //     background-color: $border-dark;
+        //     transition: all 1s ease-in-out;
+        //     content: "";
+        // }
+
+        // &:hover {
+        //     background-color: $border-dark;
+        // }
 
         &.active {
             background-color: $border-dark;
+
+            // &::after {
+            //     width: 40px;
+            // }
+        }
+    }
+
+    &__btn {
+        position: absolute;
+        top: 47%;
+        transform: translateY(-50%);
+
+        &--next {
+            right: 4px;
+
+            @include media-tablet {
+                right: 0;
+            }
+        }
+
+        &--prev {
+            left: 4px;
+
+            @include media-tablet {
+                left: 0;
+            }
+        }
+
+        @include media-small-tablet {
+            display: none;
         }
     }
 }
 
+.slides-wrapper {
+    width: 3456px;
+    overflow: hidden;
+}
+
+.slides {
+    position: relative;
+    left: 0;
+    display: flex;
+}
+
 .slide {
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
@@ -92,22 +147,45 @@
         }
     }
 
-    &.active {
-        display: flex;
+    &:first-child {
+        order: 1;
+    }
+
+    &:last-child {
+        order: 0;
+    }
+
+    &:nth-child(2) {
+        order: 2;
     }
 }
 
-// .fade {
-//     animation-name: fade;
-//     animation-duration: 1.5s;
-// }
+.transition-right {
+    animation: move-right;
+    animation-duration: 1s;
+}
 
-// @keyframes fade {
-//     from {
-//         opacity: 0.4;
-//     }
+.transition-left {
+    animation: move-left;
+    animation-duration: 1s;
+}
 
-//     to {
-//         opacity: 1;
-//     }
-// }
+@keyframes move-right {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: 1152px;
+    }
+}
+
+@keyframes move-left {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: -1152px;
+    }
+}

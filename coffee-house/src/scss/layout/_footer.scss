@@ -1,79 +1,79 @@
 .footer {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 100px;
-	padding: 100px;
-	color: $light;
-	background-color: $container;
-	border-radius: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 100px;
+    padding: 100px;
+    color: $light;
+    background-color: $container;
+    border-radius: 40px;
 
-	&__text {
-		display: flex;
-		flex-direction: column;
-		gap: 40px;
-	}
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
 
-	&__socials {
-		display: flex;
-		gap: 12px;
-	}
+    &__socials {
+        display: flex;
+        gap: 12px;
+    }
 
-	&__contacts {
-		align-self: center;
+    &__contacts {
+        align-self: center;
 
-		svg {
-			margin-right: 5px;
-		}
-	}
+        svg {
+            margin-right: 5px;
+        }
+    }
 
-	@include media-big-tablet {
-		grid-template-columns: 1fr;
-	}
+    @include media-big-tablet {
+        grid-template-columns: 1fr;
+    }
 
-	@include media-tablet {
-		padding: 100px 60px;
-	}
+    @include media-tablet {
+        padding: 100px 60px;
+    }
 
-	@include media-small-tablet {
-		gap: 40px;
-		padding: 62px 16px;
-	}
+    @include media-small-tablet {
+        gap: 40px;
+        padding: 62px 16px;
+    }
 }
 
 .contacts {
-	a {
-		position: relative;
-	}
+    a {
+        position: relative;
+    }
 
-	a::before {
-		content: "";
-		position: absolute;
-		width: 0;
-		height: 2px;
-		bottom: -4px;
-		left: 50%;
-		background-color: $light;
-		transition: all 0.4s ease-in-out;
-	}
+    a::before {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: $light;
+        transition: all 0.4s ease-in-out;
+        content: "";
+    }
 
-	a:hover::before {
-		width: 100%;
-		left: 0;
-	}
+    a:hover::before {
+        left: 0;
+        width: 100%;
+    }
 
-	address {
-		font-style: normal;
-		line-height: 150%;
-	}
+    address {
+        font-style: normal;
+        line-height: 150%;
+    }
 
-	&__title {
-		margin-bottom: 38px;
-	}
+    &__title {
+        margin-bottom: 38px;
+    }
 
-	&__data {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		align-items: flex-start;
-	}
+    &__data {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
 }
