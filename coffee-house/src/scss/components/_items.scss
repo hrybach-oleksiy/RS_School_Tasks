@@ -5,17 +5,18 @@
     gap: 40px;
     justify-content: center;
 
-    @include media-tablet {
-        max-height: 1052px;
-        overflow: hidden;
+    &.visible {
+        max-height: none;
+        overflow: visible;
     }
 
-    @include media-small-tablet {
-        max-height: 2144px;
-    }
+    // @include media-tablet {
+    //     max-height: 1052px;
+    //     overflow: hidden;
+    // }
 
-    // &.active {
-    //     opacity: 1;
+    // @include media-small-tablet {
+    //     max-height: 2144px;
     // }
 }
 
@@ -25,18 +26,16 @@
     border: 1px solid $border-light;
     border-radius: 40px;
     cursor: pointer;
-    transition: all 0.5s ease-in-out;
 
-    &:not(:nth-child(-n + 4)) {
-        @include media-tablet {
-            height: 0; /* Optionally, set height to 0 to collapse the hidden cards */
-            margin: 0; /* Optionally, set margin to 0 to collapse the hidden cards */
-            padding: 0; /* Optionally, set padding to 0 to collapse the hidden cards */
-            opacity: 0;
-            transition: opacity 0.5s ease; /* Smooth transition */
-            pointer-events: none; /* Disable interactions on hidden cards */
-        }
-    }
+    // opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+    // &:not(:nth-child(-n + 4)) {
+    //     @include media-tablet {
+    //         opacity: 0;
+    //         transition: opacity 0.5s ease-in-out;
+    //     }
+    // }
 
     &__text {
         display: flex;
@@ -69,5 +68,31 @@
 
     &:hover .item__img {
         transform: scale(1);
+    }
+
+    &.visible {
+        opacity: 1;
+    }
+}
+
+.loader {
+    align-self: center;
+    width: 60px;
+    height: 60px;
+    margin-top: 40px;
+    background: transparent;
+    border: 5px solid #bbb;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
     }
 }

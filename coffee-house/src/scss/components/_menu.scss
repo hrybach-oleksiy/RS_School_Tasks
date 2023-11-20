@@ -54,6 +54,10 @@
         stroke: $container;
     }
 
+    &.hide {
+        display: none;
+    }
+
     @include media-tablet {
         display: flex;
     }
