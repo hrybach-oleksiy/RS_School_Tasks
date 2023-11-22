@@ -5,10 +5,10 @@
     gap: 40px;
     justify-content: center;
 
-    &.visible {
-        max-height: none;
-        overflow: visible;
-    }
+    // &.visible {
+    //     max-height: none;
+    //     overflow: visible;
+    // }
 
     // @include media-tablet {
     //     max-height: 1052px;
@@ -30,6 +30,7 @@
     // opacity: 0;
     transition: opacity 0.5s ease-in-out;
 
+    // show only first 4 elements
     // &:not(:nth-child(-n + 4)) {
     //     @include media-tablet {
     //         opacity: 0;
