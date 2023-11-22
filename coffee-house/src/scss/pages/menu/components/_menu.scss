@@ -10,9 +10,9 @@
         line-height: 125%;
         text-align: center;
 
-        @include media-small-tablet {
-            @include fluid-font(60, 32);
-        }
+        // @include media-small-tablet {
+        //     @include fluid-font(60, 32);
+        // }
     }
 
     &__tabs {
@@ -21,9 +21,9 @@
         justify-content: center;
         margin: 40px 0;
 
-        @include media-mobile {
-            gap: 8px;
-        }
+        // @include media-mobile {
+        //     gap: 8px;
+        // }
     }
 }
 

@@ -14,9 +14,9 @@ h2 {
     font-size: 60px;
     line-height: 125%;
 
-    @include media-small-tablet {
-        @include fluid-font(60, 32);
-    }
+    // @include media-small-tablet {
+    //     @include fluid-font(60, 32);
+    // }
 }
 
 h3 {
