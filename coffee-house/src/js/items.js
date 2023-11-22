@@ -23,6 +23,7 @@ const renderItems = (items, category) => {
     itemsBlock.innerHTML = '';
 
     filteredItems.map((item) => {
+        console.log(item.name);
         itemsBlock.insertAdjacentHTML(
             'beforeend',
             `
@@ -30,7 +31,7 @@ const renderItems = (items, category) => {
 				<div class="item__photo">
 					<img class="item__img"
 						src=${item.src}
-						alt=${item.name}
+						alt="${item.name}"
 					>
 				</div>
 				<div class="item__text">
