@@ -8,7 +8,8 @@
         "dev": "cross-env NODE_ENV=development webpack --mode development",
         "build": "cross-env NODE_ENV=production webpack --mode production",
         "stylelint": "stylelint '**/*{.css,.scss}'",
-        "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix"
+        "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix",
+        "deploy": "npm run build && npx gh-pages -d dist -e coffee-house"
     },
     "keywords": [],
     "author": "",
@@ -24,6 +25,7 @@
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.1",
         "filemanager-webpack-plugin": "^8.0.0",
+        "gh-pages": "^6.1.0",
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.0",
         "mini-css-extract-plugin": "^2.7.2",
