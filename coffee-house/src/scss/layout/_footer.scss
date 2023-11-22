@@ -7,6 +7,12 @@
     background-color: $container;
     border-radius: 40px;
 
+    &__title {
+        &.accent {
+            font-style: italic;
+        }
+    }
+
     &__text {
         display: flex;
         flex-direction: column;
