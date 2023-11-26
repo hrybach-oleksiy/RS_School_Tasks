@@ -87,32 +87,143 @@
 					<span class="accent">amazing surprise</span>
 				</h1>
 				<div class="menu__tabs">
-					<button class="btn-tab btn-tab--active"
+					<button class="btn-tab menu-tab menu-tab--active"
 							data-category="coffee">
-						<span class="btn-tab__icon">
+						<span class="menu-tab__icon">
 							<img src="./assets/images/cup-icon.png"
 								 alt="Coffee Cup Icon">
 						</span>
-						<span class="btn-tab__title">Coffee</span>
+						<span class="menu-tab__title">Coffee</span>
 					</button>
-					<button class="btn-tab"
+					<button class="btn-tab menu-tab"
 							data-category="tea">
-						<span class="btn-tab__icon">
+						<span class="menu-tab__icon">
 							<img src="./assets/images/kettle-icon.png"
 								 alt="Kettle Icon">
 						</span>
-						<span class="btn-tab__title">Tea</span>
+						<span class="menu-tab__title">Tea</span>
 					</button>
-					<button class="btn-tab"
+					<button class="btn-tab menu-tab"
 							data-category="dessert">
-						<span class="btn-tab__icon">
+						<span class="menu-tab__icon">
 							<img src="./assets/images/dessert-icon.png"
 								 alt="Kettle Icon">
 						</span>
-						<span class="btn-tab__title">Dessert</span>
+						<span class="menu-tab__title">Dessert</span>
 					</button>
 				</div>
 				<div class="items"></div>
+
+				<div id="myModal"
+					 class="modal">
+					<div class="modal__photo">
+						<img src="./assets/images/coffee-1.jpg"
+							 alt="Coffee"
+							 class="modal__img">
+					</div>
+					<div class="modal__text">
+						<h3 class="modal__title">Irish coffee</h3>
+						<div class="modal__descr">
+							<p>Fragrant black coffee with Jameson Irish whiskey and whipped milk</p>
+							<div class="modal__sizes item-choice">
+								<h4 class="item-choice__title">Size</h4>
+								<div class="item-choice__btns">
+									<button class="btn-tab btn-tab--active"
+											data-category="coffee">
+										<span class="btn-tab__icon">
+											S
+										</span>
+										<span class="btn-tab__title">200 ml</span>
+									</button>
+									<button class="btn-tab"
+											data-category="tea">
+										<span class="btn-tab__icon">
+											M
+										</span>
+										<span class="btn-tab__title">300 ml</span>
+									</button>
+									<button class="btn-tab"
+											data-category="dessert">
+										<span class="btn-tab__icon">
+											L
+										</span>
+										<span class="btn-tab__title">400 ml</span>
+									</button>
+								</div>
+							</div>
+							<div class="modal__additives item-choice">
+								<h4 class="item-choice__title">Additives</h4>
+								<div class="item-choice__btns">
+									<button class="btn-tab btn-tab--active"
+											data-category="coffee">
+										<span class="btn-tab__icon">
+											1
+										</span>
+										<span class="btn-tab__title">Sugar</span>
+									</button>
+									<button class="btn-tab"
+											data-category="tea">
+										<span class="btn-tab__icon">
+											2
+										</span>
+										<span class="btn-tab__title">Cinnamon</span>
+									</button>
+									<button class="btn-tab"
+											data-category="dessert">
+										<span class="btn-tab__icon">
+											3
+										</span>
+										<span class="btn-tab__title">Syrup</span>
+									</button>
+								</div>
+							</div>
+							<div class="modal__price">
+								<span>Total:</span>
+								<span>$7.00</span>
+							</div>
+							<div class="modal__info">
+								<div>
+									<svg xmlns="http://www.w3.org/2000/svg"
+										 width="16"
+										 height="16"
+										 viewBox="0 0 16 16"
+										 fill="none">
+										<g clip-path="url(#clip0_268_9737)">
+											<path d="M8 7.66663V11"
+												  stroke="#403F3D"
+												  stroke-linecap="round"
+												  stroke-linejoin="round" />
+											<path d="M8 5.00667L8.00667 4.99926"
+												  stroke="#403F3D"
+												  stroke-linecap="round"
+												  stroke-linejoin="round" />
+											<path d="M8.00016 14.6667C11.6821 14.6667 14.6668 11.6819 14.6668 8.00004C14.6668 4.31814 11.6821 1.33337 8.00016 1.33337C4.31826 1.33337 1.3335 4.31814 1.3335 8.00004C1.3335 11.6819 4.31826 14.6667 8.00016 14.6667Z"
+												  stroke="#403F3D"
+												  stroke-linecap="round"
+												  stroke-linejoin="round" />
+										</g>
+										<defs>
+											<clipPath id="clip0_268_9737">
+												<rect width="16"
+													  height="16"
+													  fill="white" />
+											</clipPath>
+										</defs>
+									</svg>
+								</div>
+
+								<p>The cost is not final. Download our mobile app to see the final price and place your
+									order. Earn loyalty points and enjoy your favorite coffee with up to 20% discount.
+								</p>
+							</div>
+							<a class="btn btn--secondary modal__btn-close"
+							   href="#">
+								<span>Close</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
 				<div class="menu-loader hidden">
 					<svg xmlns="http://www.w3.org/2000/svg"
 						 width="24"

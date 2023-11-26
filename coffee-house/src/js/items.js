@@ -1,7 +1,7 @@
 import itemsData from '../api/items.json';
 
 const itemsBlock = document.querySelector('.items');
-const menuTabs = document.querySelectorAll('.btn-tab');
+const menuTabs = document.querySelectorAll('.menu-tab');
 const loaderBtn = document.querySelector('.menu-loader');
 const loaderSvg = document.querySelector('.menu-loader__svg');
 
@@ -75,11 +75,11 @@ const loadItems = () => {
 menuTabs.forEach((menuTab) => {
     menuTab.addEventListener('click', (event) => {
         const category = event.currentTarget.dataset.category;
-        const activeTab = document.querySelector('.btn-tab--active');
+        const activeTab = document.querySelector('.menu-tab--active');
         currentCategory = category;
 
-        activeTab.classList.remove('btn-tab--active');
-        menuTab.classList.add('btn-tab--active');
+        activeTab.classList.remove('menu-tab--active');
+        menuTab.classList.add('menu-tab--active');
 
         itemsBlock.innerHTML = '';
         isLoadingMore = false;

@@ -1,0 +1,59 @@
+.modal {
+    display: grid;
+    grid-template-columns: 340px 458px;
+    gap: 20px;
+    max-width: 800px;
+    padding: 16px;
+    background-color: $body;
+    border-radius: 40px;
+
+    &__photo {
+        height: 340px;
+        border-radius: 40px;
+        overflow: hidden;
+    }
+
+    &__title {
+        margin-bottom: 12px;
+    }
+
+    &__descr {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__price {
+        display: flex;
+        justify-content: space-between;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 125%;
+    }
+
+    &__info {
+        display: flex;
+        gap: 8px;
+
+        p {
+            font-size: 10px;
+            line-height: 140%;
+        }
+    }
+
+    &__btn-close {
+        width: 100%;
+    }
+}
+
+.item-choice {
+    &__title {
+        margin-bottom: 8px;
+        font-weight: 400;
+        line-height: 150%;
+    }
+    &__btns {
+        display: flex;
+        gap: 8px;
+    }
+}

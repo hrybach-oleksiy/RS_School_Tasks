@@ -146,12 +146,6 @@
         height: 30px;
         background-color: $border-light;
         border-radius: 100px;
-        transition: all 0.3s ease-in-out;
-
-        img {
-            width: auto;
-            height: auto;
-        }
     }
 
     &:hover {
@@ -160,25 +154,37 @@
         border: 1px solid transparent;
     }
 
-    &:hover &__icon {
-        background-color: $light;
-    }
-
     @extend .btn;
 }
 
-.btn-tab--active {
-    color: $light;
-    background-color: $container;
-    border: 1px solid transparent;
-    pointer-events: none;
+.menu-tab {
+    &__icon {
+        @include flex-center;
 
-    .btn-tab__icon {
+        width: 30px;
+        height: 30px;
+        background-color: $border-light;
+        border-radius: 100px;
+        transition: all 0.3s ease-in-out;
+
+        img {
+            width: auto;
+            height: auto;
+        }
+    }
+
+    &--active {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+        pointer-events: none;
+
+        .menu-tab__icon {
+            background-color: $light;
+        }
+    }
+
+    &:hover &__icon {
         background-color: $light;
     }
 }
-
-// close button
-// <a class="btn btn--secondary" href="#">
-// 	<span>Close</span>
-// </a>
