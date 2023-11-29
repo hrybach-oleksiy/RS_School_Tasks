@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 100px;
+    margin-bottom: 40px;
     padding: 100px;
     color: $light;
     background-color: $container;
@@ -32,18 +33,18 @@
         }
     }
 
-    @include media-big-tablet {
-        grid-template-columns: 1fr;
-    }
+    // @include media-big-tablet {
+    //     grid-template-columns: 1fr;
+    // }
 
-    @include media-tablet {
-        padding: 100px 60px;
-    }
+    // @include media-tablet {
+    //     padding: 100px 60px;
+    // }
 
-    @include media-small-tablet {
-        gap: 40px;
-        padding: 62px 16px;
-    }
+    // @include media-small-tablet {
+    //     gap: 40px;
+    //     padding: 62px 16px;
+    // }
 }
 
 .contacts {

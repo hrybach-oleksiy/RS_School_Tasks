@@ -11,9 +11,9 @@
         gap: 40px;
         align-self: center;
 
-        @include media-big-tablet {
-            align-self: auto;
-        }
+        // @include media-big-tablet {
+        //     align-self: auto;
+        // }
     }
 
     &__descr {
@@ -23,10 +23,6 @@
     &__image {
         max-width: 630px;
 
-        // background-image: url("../assets/images/mobile-screens.png");
-        // background-repeat: no-repeat;
-        // background-position: center;
-        // background-size: cover;
         img {
             height: auto;
         }
@@ -38,13 +34,13 @@
         gap: 20px;
     }
 
-    @include media-big-tablet {
-        grid-template-rows: auto;
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
+    // @include media-big-tablet {
+    //     grid-template-rows: auto;
+    //     grid-template-columns: 1fr;
+    //     justify-items: center;
+    // }
 
-    @include media-mobile {
-        gap: 40px;
-    }
+    // @include media-mobile {
+    //     gap: 40px;
+    // }
 }
