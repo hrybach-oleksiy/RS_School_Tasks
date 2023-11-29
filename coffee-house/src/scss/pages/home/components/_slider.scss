@@ -55,22 +55,22 @@
         &--next {
             right: 4px;
 
-            // @include media-tablet {
-            //     right: 0;
-            // }
+            @include media-tablet {
+                right: 0;
+            }
         }
 
         &--prev {
             left: 4px;
 
-            // @include media-tablet {
-            //     left: 0;
-            // }
+            @include media-tablet {
+                left: 0;
+            }
         }
 
-        // @include media-small-tablet {
-        //     display: none;
-        // }
+        @include media-small-tablet {
+            display: none;
+        }
     }
 }
 
@@ -105,9 +105,9 @@
         max-width: 480px;
         height: 480px;
 
-        // @include media-mobile {
-        //     height: 100%;
-        // }
+        @include media-mobile {
+            height: 100%;
+        }
     }
 
     &__descr {
@@ -129,17 +129,17 @@
         &--next {
             right: 4px;
 
-            // @include media-tablet {
-            //     right: 0;
-            // }
+            @include media-tablet {
+                right: 0;
+            }
         }
 
         &--prev {
             left: 4px;
 
-            // @include media-tablet {
-            //     left: 0;
-            // }
+            @include media-tablet {
+                left: 0;
+            }
         }
 
         @include media-small-tablet {

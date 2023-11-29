@@ -10,25 +10,25 @@
     background-size: cover;
     border-radius: 40px;
 
-    // &__title {
-    //     @include media-small-tablet {
-    //         @include fluid-font(72, 42);
-    //     }
+    &__title {
+        @include media-small-tablet {
+            @include fluid-font(72, 42);
+        }
 
-    //     @include media-mobile {
-    //         line-height: 115%;
-    //     }
-    // }
+        @include media-mobile {
+            line-height: 115%;
+        }
+    }
 
     &__descr {
         line-height: 150%;
     }
 
-    // @include media-tablet {
-    //     padding: 100px 60px;
-    // }
+    @include media-tablet {
+        padding: 100px 60px;
+    }
 
-    // @include media-small-tablet {
-    //     padding: 60px 16px;
-    // }
+    @include media-small-tablet {
+        padding: 60px 16px;
+    }
 }

@@ -4,6 +4,11 @@
     &__link {
         display: flex;
         gap: 16px;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
     }
 
     &__item {
@@ -74,7 +79,7 @@
         }
     }
 
-    // @include media-tablet {
-    //     display: block;
-    // }
+    @include media-tablet {
+        display: block;
+    }
 }
