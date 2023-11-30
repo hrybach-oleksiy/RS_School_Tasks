@@ -1,7 +1,7 @@
 import itemsData from '../api/items.json';
 
 const itemsBlock = document.querySelector('.items');
-const menuTabs = document.querySelectorAll('.btn-tab');
+const menuTabs = document.querySelectorAll('.menu-tab');
 const loaderBtn = document.querySelector('.menu-loader');
 const loaderSvg = document.querySelector('.menu-loader__svg');
 
@@ -71,35 +71,35 @@ const loadItems = () => {
     }, 2000);
 };
 
-// menuTabs.forEach((menuTab) => {
-//     menuTab.addEventListener('click', (event) => {
-//         const category = event.currentTarget.dataset.category;
-//         const activeTab = document.querySelector('.btn-tab--active');
-//         currentCategory = category;
+menuTabs.forEach((menuTab) => {
+    menuTab.addEventListener('click', (event) => {
+        const category = event.currentTarget.dataset.category;
+        const activeTab = document.querySelector('.menu-tab--active');
+        currentCategory = category;
 
-//         activeTab.classList.remove('btn-tab--active');
-//         menuTab.classList.add('btn-tab--active');
+        activeTab.classList.remove('menu-tab--active');
+        menuTab.classList.add('menu-tab--active');
 
-//         itemsBlock.innerHTML = '';
-//         isLoadingMore = false;
-//         renderItems(itemsData, currentCategory);
-//         loaderBtn.classList.remove('hidden');
-//         loaderBtn.classList.add('menu-loader');
-//         loaderSvg.classList.remove('hidden');
-//         loaderBtn.addEventListener('click', loadItems);
+        //         itemsBlock.innerHTML = '';
+        //         isLoadingMore = false;
+        //         renderItems(itemsData, currentCategory);
+        //         loaderBtn.classList.remove('hidden');
+        //         loaderBtn.classList.add('menu-loader');
+        //         loaderSvg.classList.remove('hidden');
+        //         loaderBtn.addEventListener('click', loadItems);
 
-//         // setTimeout(() => {
-//         //     const items = document.querySelectorAll('.item');
-//         //     items.forEach((item) => {
-//         //         item.classList.add('visible');
-//         //     });
-//         // }, 100);
+        //         // setTimeout(() => {
+        //         //     const items = document.querySelectorAll('.item');
+        //         //     items.forEach((item) => {
+        //         //         item.classList.add('visible');
+        //         //     });
+        //         // }, 100);
 
-//         // loaderBtn.classList.remove('hide');
-//         // loaderBtn.classList.add('menu-loader');
-//         // loaderBtn.addEventListener('click', loadItems);
-//     });
-// });
+        //         // loaderBtn.classList.remove('hide');
+        //         // loaderBtn.classList.add('menu-loader');
+        //         // loaderBtn.addEventListener('click', loadItems);
+    });
+});
 
 // loaderBtn.addEventListener('click', loadItems);
 

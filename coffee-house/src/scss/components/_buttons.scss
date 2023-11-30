@@ -207,3 +207,35 @@
         background-color: $light;
     }
 }
+
+.menu-tab {
+    &__icon {
+        @include flex-center;
+
+        width: 30px;
+        height: 30px;
+        background-color: $border-light;
+        border-radius: 100px;
+        transition: all 0.3s ease-in-out;
+
+        img {
+            width: auto;
+            height: auto;
+        }
+    }
+
+    &:hover &__icon {
+        background-color: $light;
+    }
+
+    &--active {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+        pointer-events: none;
+
+        .menu-tab__icon {
+            background-color: $light;
+        }
+    }
+}
