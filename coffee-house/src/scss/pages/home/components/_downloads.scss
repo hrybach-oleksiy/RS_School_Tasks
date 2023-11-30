@@ -34,13 +34,13 @@
         gap: 20px;
     }
 
-    // @include media-big-tablet {
-    //     grid-template-rows: auto;
-    //     grid-template-columns: 1fr;
-    //     justify-items: center;
-    // }
+    @include media-big-tablet {
+        grid-template-rows: auto;
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
 
-    // @include media-mobile {
-    //     gap: 40px;
-    // }
+    @include media-mobile {
+        gap: 40px;
+    }
 }

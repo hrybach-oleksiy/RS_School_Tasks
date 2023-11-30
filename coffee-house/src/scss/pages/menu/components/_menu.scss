@@ -1,7 +1,7 @@
 .menu {
     display: flex;
     flex-direction: column;
-    margin-bottom: 100px;
+    margin-bottom: 98px;
 
     &__title {
         align-self: center;
@@ -10,9 +10,9 @@
         line-height: 125%;
         text-align: center;
 
-        // @include media-small-tablet {
-        //     @include fluid-font(60, 32);
-        // }
+        @include media-small-tablet {
+            @include fluid-font(60, 32);
+        }
     }
 
     &__tabs {
@@ -21,9 +21,9 @@
         justify-content: center;
         margin: 40px 0;
 
-        // @include media-mobile {
-        //     gap: 8px;
-        // }
+        @include media-mobile {
+            gap: 8px;
+        }
     }
 }
 
@@ -50,21 +50,23 @@
         transition: all 0.3s ease-in-out;
     }
 
-    &:hover {
-        background-color: $border-light;
-        border: 1px solid $border-dark;
-    }
-
-    &:hover svg path {
-        transform: scale(1.1);
-        stroke: $container;
-    }
-
     &.hidden {
         display: none;
     }
 
-    // @include media-tablet {
-    //     display: flex;
-    // }
+    @include media-tablet {
+        display: flex;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background-color: $border-light;
+            border: 1px solid $border-dark;
+        }
+
+        &:hover svg path {
+            transform: scale(1.1);
+            stroke: $container;
+        }
+    }
 }

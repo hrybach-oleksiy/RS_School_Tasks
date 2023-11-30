@@ -14,9 +14,9 @@
             align-self: flex-start;
         }
 
-        // @include media-tablet {
-        //     display: none;
-        // }
+        @include media-tablet {
+            display: none;
+        }
     }
 }
 
@@ -24,9 +24,9 @@
     display: flex;
     gap: 40px;
 
-    // @include media-tablet {
-    //     display: none;
-    // }
+    @include media-tablet {
+        display: none;
+    }
 }
 
 .menu-link {
@@ -44,8 +44,10 @@
         content: "";
     }
 
-    &:hover {
-        border-bottom: none;
-        cursor: auto;
+    @media (hover: hover) {
+        &:hover {
+            border-bottom: none;
+            cursor: auto;
+        }
     }
 }

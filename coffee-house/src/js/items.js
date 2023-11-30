@@ -5,7 +5,7 @@ const menuTabs = document.querySelectorAll('.btn-tab');
 const loaderBtn = document.querySelector('.menu-loader');
 const loaderSvg = document.querySelector('.menu-loader__svg');
 
-// let isRendered = false;
+let isRendered = true;
 const initialCategory = 'coffee';
 let currentCategory = initialCategory;
 let isLoadingMore = false;
@@ -23,7 +23,6 @@ const renderItems = (items, category) => {
     itemsBlock.innerHTML = '';
 
     filteredItems.map((item) => {
-        console.log(item.name);
         itemsBlock.insertAdjacentHTML(
             'beforeend',
             `
@@ -108,20 +107,25 @@ window.addEventListener('load', () => {
     renderItems(itemsData, initialCategory);
 });
 
-// window.addEventListener('resize', () => {
-//     // if (window.innerWidth <= 768 && !isRendered) {
-//     //     renderItems(itemsData, currentCategory);
-//     //     console.log('resized, width less than 768px');
-//     //     isRendered = false;
-//     // } else {
-//     //     // isRendered = false;
-//     //     renderItems(itemsData, currentCategory);
-//     //     ('resized, width more than 768px');
-//     // }
+window.addEventListener('resize', () => {
+    // if (window.innerWidth <= 768 && !isRendered) {
+    //     renderItems(itemsData, currentCategory);
+    //     console.log('resized, width less than 768px');
+    //     isRendered = false;
+    // } else {
+    //     // isRendered = false;
+    //     renderItems(itemsData, currentCategory);
+    //     ('resized, width more than 768px');
+    // }
 
-//     if (window.innerWidth > 768 && isRendered) {
-//         console.log('resized, width more than 768px');
-//         renderItems(itemsData, currentCategory);
-//         isRendered = false;
-//     }
-// });
+    if (window.innerWidth <= 768 && isRendered) {
+        renderItems(itemsData, currentCategory);
+        isRendered = false;
+    }
+
+    if (window.innerWidth > 768 && !isRendered) {
+        renderItems(itemsData, currentCategory);
+        isRendered = true;
+        loaderBtn.classList.add('hidden');
+    }
+});

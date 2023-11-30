@@ -67,12 +67,14 @@
         line-height: 125%;
     }
 
-    &:hover .item__img {
-        transform: scale(1);
-    }
-
     &.visible {
         opacity: 1;
+    }
+
+    @media (hover: hover) {
+        &:hover .item__img {
+            transform: scale(1);
+        }
     }
 }
 
