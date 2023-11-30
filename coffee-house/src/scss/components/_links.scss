@@ -12,9 +12,11 @@
         content: "";
     }
 
-    &:hover::before {
-        left: 0;
-        width: 100%;
+    @media (hover: hover) {
+        &:hover::before {
+            left: 0;
+            width: 100%;
+        }
     }
 }
 

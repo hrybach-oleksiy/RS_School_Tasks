@@ -50,21 +50,23 @@
         transition: all 0.3s ease-in-out;
     }
 
-    &:hover {
-        background-color: $border-light;
-        border: 1px solid $border-dark;
-    }
-
-    &:hover svg path {
-        transform: scale(1.1);
-        stroke: $container;
-    }
-
     &.hidden {
         display: none;
     }
 
     @include media-tablet {
         display: flex;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background-color: $border-light;
+            border: 1px solid $border-dark;
+        }
+
+        &:hover svg path {
+            transform: scale(1.1);
+            stroke: $container;
+        }
     }
 }

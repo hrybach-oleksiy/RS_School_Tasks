@@ -26,22 +26,32 @@
     }
 
     img {
+        width: 20px;
+        height: 20px;
         opacity: 0;
         transition: all 0.3s ease-in-out;
 
-        @include media-tablet {
-            width: 20px;
-            height: 20px;
+        // @include media-tablet {
+        //     opacity: 1;
+        // }
+
+        @media (hover: none) {
             opacity: 1;
+
+            span {
+                margin-left: 0;
+            }
         }
     }
 
-    &:hover img {
-        opacity: 1;
-    }
+    @media (hover: hover) {
+        &:hover img {
+            opacity: 1;
+        }
 
-    &:hover span {
-        margin-left: 0;
+        &:hover span {
+            margin-left: 0;
+        }
     }
 }
 
@@ -52,10 +62,12 @@
     border: 1px solid $container;
     transition: all 0.3s ease-in-out;
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
+    @media (hover: hover) {
+        &:hover {
+            color: $light;
+            background-color: $container;
+            border: 1px solid transparent;
+        }
     }
 }
 
@@ -87,14 +99,16 @@
         line-height: 140%;
     }
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
-    }
+    @media (hover: hover) {
+        &:hover {
+            color: $light;
+            background-color: $container;
+            border: 1px solid transparent;
+        }
 
-    &:hover svg path {
-        fill: $light;
+        &:hover svg path {
+            fill: $light;
+        }
     }
 }
 
@@ -114,12 +128,14 @@
         transition: all 0.3s ease-in-out;
     }
 
-    &:hover {
-        background-color: $container;
-    }
+    @media (hover: hover) {
+        &:hover {
+            background-color: $container;
+        }
 
-    &:hover svg path {
-        stroke: $light;
+        &:hover svg path {
+            stroke: $light;
+        }
     }
 }
 
@@ -131,13 +147,15 @@
         transition: all 0.3s ease-in-out;
     }
 
-    &:hover {
-        background-color: $light;
-        border: 1px solid $light;
-    }
+    @media (hover: hover) {
+        &:hover {
+            background-color: $light;
+            border: 1px solid $light;
+        }
 
-    &:hover svg path {
-        stroke: $dark;
+        &:hover svg path {
+            stroke: $dark;
+        }
     }
 }
 
@@ -164,14 +182,16 @@
         }
     }
 
-    &:hover {
-        color: $light;
-        background-color: $container;
-        border: 1px solid transparent;
-    }
+    @media (hover: hover) {
+        &:hover {
+            color: $light;
+            background-color: $container;
+            border: 1px solid transparent;
+        }
 
-    &:hover &__icon {
-        background-color: $light;
+        &:hover &__icon {
+            background-color: $light;
+        }
     }
 
     @extend .btn;

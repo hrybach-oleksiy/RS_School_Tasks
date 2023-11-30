@@ -44,8 +44,10 @@
         content: "";
     }
 
-    &:hover {
-        border-bottom: none;
-        cursor: auto;
+    @media (hover: hover) {
+        &:hover {
+            border-bottom: none;
+            cursor: auto;
+        }
     }
 }
