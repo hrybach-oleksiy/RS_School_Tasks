@@ -148,6 +148,13 @@
         border-radius: 100px;
     }
 
+    &--active {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+        pointer-events: none;
+    }
+
     &:hover {
         color: $light;
         background-color: $container;

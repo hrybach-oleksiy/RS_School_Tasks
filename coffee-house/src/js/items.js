@@ -23,11 +23,10 @@ const renderItems = (items, category) => {
     itemsBlock.innerHTML = '';
 
     filteredItems.map((item) => {
-        console.log(item.name);
         itemsBlock.insertAdjacentHTML(
             'beforeend',
             `
-				<article class="item">
+				<article class="item" data-id=${item.id}>
 				<div class="item__photo">
 					<img class="item__img"
 						src=${item.src}
