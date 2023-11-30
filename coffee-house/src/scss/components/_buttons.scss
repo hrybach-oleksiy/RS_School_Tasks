@@ -182,6 +182,13 @@
         }
     }
 
+    &--active {
+        color: $light;
+        background-color: $container;
+        border: 1px solid transparent;
+        pointer-events: none;
+    }
+
     @media (hover: hover) {
         &:hover {
             color: $light;
@@ -197,16 +204,16 @@
     @extend .btn;
 }
 
-.btn-tab--active {
-    color: $light;
-    background-color: $container;
-    border: 1px solid transparent;
-    pointer-events: none;
+// .btn-tab--active {
+//     color: $light;
+//     background-color: $container;
+//     border: 1px solid transparent;
+//     pointer-events: none;
 
-    .btn-tab__icon {
-        background-color: $light;
-    }
-}
+//     .btn-tab__icon {
+//         background-color: $light;
+//     }
+// }
 
 .menu-tab {
     &__icon {

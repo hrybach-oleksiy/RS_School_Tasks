@@ -1,5 +1,6 @@
 [
     {
+		"id":"1",
         "name": "Irish coffee",
         "src": "assets/coffee-1.jpg",
         "description": "Fragrant black coffee with Jameson Irish whiskey and whipped milk",
@@ -36,6 +37,7 @@
     },
 
     {
+		"id":"2",
         "name": "Kahlua coffee",
         "src": "assets/coffee-2.jpg",
         "description": "Classic coffee with milk and Kahlua liqueur under a cap of frothed milk",
@@ -72,6 +74,7 @@
     },
 
     {
+		"id":"3",
         "name": "Honey raf",
         "src": "assets/coffee-3.jpg",
         "description": "Espresso with frothed milk, cream and aromatic honey",
@@ -108,6 +111,7 @@
     },
 
     {
+		"id":"4",
         "name": "Ice cappuccino",
         "src": "assets/coffee-4.jpg",
         "description": "Cappuccino with soft thick foam in summer version with ice",
@@ -144,6 +148,7 @@
     },
 
     {
+		"id":"5",
         "name": "Espresso",
         "src": "assets/coffee-5.jpg",
         "description": "Classic black coffee",
@@ -180,6 +185,7 @@
     },
 
     {
+		"id":"6",
         "name": "Latte",
         "src": "assets/coffee-6.jpg",
         "description": "Espresso coffee with the addition of steamed milk and dense milk foam",
@@ -216,6 +222,7 @@
     },
 
     {
+		"id":"7",
         "name": "Latte macchiato",
         "src": "assets/coffee-7.jpg",
         "description": "Espresso with frothed milk and chocolate",
@@ -252,6 +259,7 @@
     },
 
     {
+		"id":"8",
         "name": "Coffee with cognac",
         "src": "assets/coffee-8.jpg",
         "description": "Fragrant black coffee with cognac and whipped cream",
@@ -288,6 +296,7 @@
     },
 
     {
+		"id":"9",
         "name": "Moroccan",
         "src": "assets/tea-1.jpg",
         "description": "Fragrant black tea with the addition of tangerine, cinnamon, honey, lemon and mint",
@@ -324,6 +333,7 @@
     },
 
     {
+		"id":"10",
         "name": "Ginger",
         "src": "assets/tea-2.jpg",
         "description": "Original black tea with fresh ginger, lemon and honey",
@@ -360,6 +370,7 @@
     },
 
     {
+		"id":"11",
         "name": "Cranberry",
         "src": "assets/tea-3.jpg",
         "description": "Invigorating black tea with cranberry and honey",
@@ -396,6 +407,7 @@
     },
 
     {
+		"id":"12",
         "name": "Sea buckthorn",
         "src": "assets/tea-4.jpg",
         "description": "Toning sweet black tea with sea buckthorn, fresh thyme and cinnamon",
@@ -432,6 +444,7 @@
     },
 
     {
+		"id":"13",
         "name": "Marble cheesecake",
         "src": "assets/dessert-1.jpg",
         "description": "Philadelphia cheese with lemon zest on a light sponge cake and red currant jam",
@@ -468,6 +481,7 @@
     },
 
     {
+		"id":"14",
         "name": "Red velvet",
         "src": "assets/dessert-2.jpg",
         "description": "Layer cake with cream cheese frosting",
@@ -504,6 +518,7 @@
     },
 
     {
+		"id":"15",
         "name": "Cheesecakes",
         "src": "assets/dessert-3.jpg",
         "description": "Soft cottage cheese pancakes with sour cream and fresh berries and sprinkled with powdered sugar",
@@ -540,6 +555,7 @@
     },
 
     {
+		"id":"16",
         "name": "Creme brulee",
         "src": "assets/dessert-4.jpg",
         "description": "Delicate creamy dessert in a caramel basket with wild berries",
@@ -576,6 +592,7 @@
     },
 
     {
+		"id":"17",
         "name": "Pancakes",
         "src": "assets/dessert-5.jpg",
         "description": "Tender pancakes with strawberry jam and fresh strawberries",
@@ -612,6 +629,7 @@
     },
 
     {
+		"id":"18",
         "name": "Honey cake",
         "src": "assets/dessert-6.jpg",
         "description": "Classic honey cake with delicate custard",
@@ -648,6 +666,7 @@
     },
 
     {
+		"id":"19",
         "name": "Chocolate cake",
         "src": "assets/dessert-7.jpg",
         "description": "Cake with hot chocolate filling and nuts with dried apricots",
@@ -684,6 +703,7 @@
     },
 
     {
+		"id":"20",
         "name": "Black forest",
         "src": "assets/dessert-8.jpg",
         "description": "A combination of thin sponge cake with cherry jam and light chocolate mousse",
