@@ -19,11 +19,21 @@
     span {
         margin-left: 29px;
         transition: all 0.3s ease-in-out;
+
+        @include media-tablet {
+            margin-left: 0;
+        }
     }
 
     img {
         opacity: 0;
         transition: all 0.3s ease-in-out;
+
+        @include media-tablet {
+            width: 20px;
+            height: 20px;
+            opacity: 1;
+        }
     }
 
     &:hover img {
@@ -52,7 +62,7 @@
 .btn-store {
     gap: 8px;
     justify-content: flex-start;
-    padding: 10px 20px;
+    padding: 11px 20px;
     background-color: transparent;
     border: 1px solid $container;
     transition: all 0.3s ease-in-out;

@@ -98,6 +98,10 @@
         gap: 16px;
         align-items: center;
         max-width: 480px;
+
+        @include media-mobile {
+            max-width: 348px;
+        }
     }
 
     &__img {
@@ -106,7 +110,8 @@
         height: 480px;
 
         @include media-mobile {
-            height: 100%;
+            width: auto;
+            height: 348px;
         }
     }
 

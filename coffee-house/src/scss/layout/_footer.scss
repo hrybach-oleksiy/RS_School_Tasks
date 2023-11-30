@@ -38,12 +38,12 @@
     }
 
     @include media-tablet {
-        padding: 100px 60px;
+        padding: 100px 60px 106px;
     }
 
     @include media-small-tablet {
         gap: 40px;
-        padding: 62px 16px;
+        padding: 60px 16px 64px;
     }
 }
 
@@ -58,7 +58,11 @@
     }
 
     &__title {
-        margin-bottom: 38px;
+        margin-bottom: 35px;
+
+        @include media-tablet {
+            margin-bottom: 38px;
+        }
     }
 
     &__data {
