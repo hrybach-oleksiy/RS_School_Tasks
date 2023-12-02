@@ -5,48 +5,6 @@
     align-items: center;
     overflow: hidden;
 
-    &__dashes {
-        @include flex-center;
-
-        gap: 12px;
-        margin-top: 40px;
-    }
-
-    &__dash {
-        position: relative;
-        width: 40px;
-        height: 4px;
-        background-color: $border-light;
-        border-radius: 100px;
-
-        // cursor: pointer;
-        transition: all 1s ease-in-out;
-
-        // &::after {
-        //     position: absolute;
-        //     top: 0;
-        //     left: 0;
-        //     display: block;
-        //     width: 0;
-        //     height: 4px;
-        //     background-color: $border-dark;
-        //     transition: all 1s ease-in-out;
-        //     content: "";
-        // }
-
-        // &:hover {
-        //     background-color: $border-dark;
-        // }
-
-        &.active {
-            background-color: $border-dark;
-
-            // &::after {
-            //     width: 40px;
-            // }
-        }
-    }
-
     &__btn {
         position: absolute;
         top: 47%;
@@ -87,15 +45,13 @@
 
 .slide {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
+    justify-content: center;
     width: 100%;
 
-    &__text {
+    &__wrapper {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
         align-items: center;
         max-width: 480px;
 
@@ -104,15 +60,29 @@
         }
     }
 
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+
+        // max-width: 480px;
+
+        // @include media-mobile {
+        //     max-width: 348px;
+        // }
+    }
+
     &__img {
         width: 100%;
-        max-width: 480px;
+
+        // max-width: 480px;
         height: 480px;
 
-        @include media-mobile {
-            width: auto;
-            height: 348px;
-        }
+        // @include media-mobile {
+        //     width: auto;
+        //     height: 348px;
+        // }
     }
 
     &__descr {
@@ -192,5 +162,29 @@
 
     to {
         left: -1152px;
+    }
+}
+
+.progress-bar {
+    @include flex-center;
+
+    gap: 12px;
+    margin-top: 40px;
+
+    &__item {
+        width: 40px;
+        background-color: $border-light;
+        border-radius: 100px;
+    }
+
+    &__bar {
+        width: 0;
+        height: 4px;
+        border-radius: 100px;
+        transition: all 0.1s ease-in-out;
+
+        &.active {
+            background-color: $border-dark;
+        }
     }
 }

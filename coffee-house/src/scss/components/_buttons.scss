@@ -231,10 +231,6 @@
         }
     }
 
-    &:hover &__icon {
-        background-color: $light;
-    }
-
     &--active {
         color: $light;
         background-color: $container;
@@ -242,6 +238,12 @@
         pointer-events: none;
 
         .menu-tab__icon {
+            background-color: $light;
+        }
+    }
+
+    @media (hover: hover) {
+        &:hover &__icon {
             background-color: $light;
         }
     }

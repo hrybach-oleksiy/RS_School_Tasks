@@ -1,17 +1,17 @@
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.slider__btn--prev');
 const nextBtn = document.querySelector('.slider__btn--next');
-const dashes = document.querySelectorAll('.slider__dash');
+const progressBarElems = document.querySelectorAll('.progress-bar__bar');
 const slider = document.querySelector('.slides');
 
 const slidesArr = [...slides];
 let step = 0;
-let defaultSwitchingTime = 7000;
-let currentSwitchingTime = 7000;
-let timerID;
-let timeLeft = currentSwitchingTime;
-let isPaused = false;
-let currentTimerId;
+let fillSpeed = 7;
+let progressBarWidth = 0;
+let progressBarFillIntervalID = 0;
+let switchSlidesIntervalID = 0;
+let decreaseTimerID = 0;
+let currentSwitchingInterval = 7000;
 
 const shiftSlides = (direction) => {
     let shiftedSlides = [];
@@ -44,11 +44,49 @@ const shiftSlides = (direction) => {
     });
 };
 
-const setActiveDash = () => {
-    for (let dash of dashes) {
-        dash.classList.remove('active');
+const decreaseTimer = () => {
+    decreaseTimerID = setInterval(() => {
+        currentSwitchingInterval -= 1000;
+
+        if (currentSwitchingInterval <= 0) {
+            currentSwitchingInterval = 7000;
+        }
+    }, 1000);
+};
+
+const fillProgressBar = () => {
+    const activeBar = document.querySelector('.progress-bar__bar.active');
+
+    const increment = 100 / (fillSpeed * 10); // filling speed in % for 0.1 sec
+
+    progressBarFillIntervalID = setInterval(() => {
+        progressBarWidth += increment;
+        activeBar.style.width = progressBarWidth + '%';
+
+        if (progressBarWidth >= 100) {
+            clearInterval(progressBarFillIntervalID);
+        }
+    }, 100); // every 0.1 sec update progress
+};
+
+const setActiveProgressBar = () => {
+    for (let bar of progressBarElems) {
+        bar.classList.remove('active');
+        bar.style.width = 0;
     }
-    dashes[step].classList.add('active');
+    progressBarElems[step].classList.add('active');
+};
+
+const handleSwitchingSlides = () => {
+    setActiveProgressBar();
+    clearInterval(progressBarFillIntervalID);
+    clearInterval(decreaseTimerID);
+    clearInterval(switchSlidesIntervalID);
+    progressBarWidth = 0;
+    currentSwitchingInterval = 7000;
+    switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
+    fillProgressBar();
+    decreaseTimer();
 };
 
 const moveLeft = () => {
@@ -57,10 +95,11 @@ const moveLeft = () => {
     nextBtn.removeEventListener('click', moveRight);
     step++;
 
-    if (step > dashes.length - 1) {
+    if (step > progressBarElems.length - 1) {
         step = 0;
     }
-    setActiveDash();
+
+    handleSwitchingSlides();
 };
 
 const moveRight = () => {
@@ -70,38 +109,23 @@ const moveRight = () => {
     step--;
 
     if (step < 0) {
-        step = dashes.length - 1;
+        step = progressBarElems.length - 1;
     }
-    setActiveDash();
-};
+    setActiveProgressBar();
 
-const adjustSwitchingTime = () => {
-    // currentSwitchingTime -= 1000;
-    // console.log(currentSwitchingTime);
-    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
-    if (!isPaused) {
-        moveLeft();
-        timeLeft = currentSwitchingTime;
-        currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
-    }
-};
-
-const initSwitching = () => {
-    // timerID = setInterval(moveLeft, defaultSwitchingTime);
-    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
-
-    currentTimerId = setTimeout(adjustSwitchingTime, timeLeft);
+    handleSwitchingSlides();
 };
 
 const pauseSwitching = () => {
-    clearTimeout(currentTimerId);
-    isPaused = true;
-    console.log('Timer paused');
+    clearInterval(progressBarFillIntervalID);
+    clearInterval(switchSlidesIntervalID);
+    clearInterval(decreaseTimerID);
 };
+
 const resumeSwitching = () => {
-    isPaused = false;
-    initSwitching();
-    console.log('Timer resumed');
+    switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
+    fillProgressBar();
+    decreaseTimer();
 };
 
 prevBtn.addEventListener('click', moveLeft);
@@ -122,34 +146,19 @@ slider.addEventListener('animationend', (event) => {
 
     prevBtn.addEventListener('click', moveLeft);
     nextBtn.addEventListener('click', moveRight);
-    currentSwitchingTime = 7000;
 });
 
-// pause
-dashes[0].addEventListener('click', () => {
-    // clearInterval(timerID);
-    // clearTimeout(currentTimerId);
-    // console.log('timer stopped');
-    if (!isPaused) {
+// pause, continue
+slides.forEach((slide) => {
+    //since slide cover 100% width I add listener to the child of slide(wrapper) which cover only central part of the slide
+    slide.lastElementChild.addEventListener('mouseover', () => {
         pauseSwitching();
-    }
-});
-
-// continue
-dashes[2].addEventListener('click', () => {
-    // clearInterval(timerID);
-    // timerID = setInterval(moveLeft, currentSwitchingTime);
-    // currentTimerId = setTimeout(adjustSwitchingTime, 1000);
-    // console.log('timer resumed');
-    if (isPaused) {
+    });
+    slide.lastElementChild.addEventListener('mouseout', () => {
         resumeSwitching();
-    }
+    });
 });
 
-// initSwitching();
-
-// for (let i = 0; i < dashes.length; i++) {
-//     dashes[i].addEventListener('click', () => {
-//         currentSlide(i + 1);
-//     });
-// }
+// fillProgressBar();
+// decreaseTimer();
+// switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
