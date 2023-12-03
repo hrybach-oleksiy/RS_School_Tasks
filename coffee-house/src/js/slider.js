@@ -1,3 +1,4 @@
+// TODO: add tocuh and drag functionality
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.slider__btn--prev');
 const nextBtn = document.querySelector('.slider__btn--next');
@@ -159,6 +160,7 @@ slides.forEach((slide) => {
     });
 });
 
+// TODO: uncomment to start automatic switching
 // fillProgressBar();
 // decreaseTimer();
 // switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);

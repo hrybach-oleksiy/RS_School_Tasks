@@ -4,20 +4,6 @@
     grid-template-columns: repeat(auto-fill, 310px);
     gap: 40px;
     justify-content: center;
-
-    // &.visible {
-    //     max-height: none;
-    //     overflow: visible;
-    // }
-
-    // @include media-tablet {
-    //     max-height: 1052px;
-    //     overflow: hidden;
-    // }
-
-    // @include media-small-tablet {
-    //     max-height: 2144px;
-    // }
 }
 
 .item {
@@ -26,8 +12,7 @@
     border: 1px solid $border-light;
     border-radius: 40px;
     cursor: pointer;
-
-    // opacity: 0;
+    opacity: 0;
     transition: opacity 0.5s ease-in-out;
 
     // show only first 4 elements
