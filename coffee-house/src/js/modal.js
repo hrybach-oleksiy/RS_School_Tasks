@@ -3,33 +3,41 @@ import itemsData from '../api/items.json';
 const modal = document.querySelector('.modal');
 const closeBtn = document.querySelector('.modal__btn-close');
 const items = document.querySelector('.items');
-const modalTitle = document.querySelector('.modal__title');
 
 const itemModalInfoElements = {
     titleElem: document.querySelector('.modal__title'),
-    descrElem: document.querySelector('.modal__descr'),
+    descrElem: document.querySelector('.modal__descr p'),
     sizesElem: document.querySelector('.item-choice__btns--sizes'),
     additivesElem: document.querySelector('.item-choice__btns--additives'),
     priceElem: document.querySelector('.modal__price'),
+    photoElem: document.querySelector('.modal__photo'),
 };
 
-console.log(itemModalInfoElements.titleElem.textContent);
-
 const renderItemInfo = (item) => {
-    const title = item.title;
-    const descr = item.descr;
-    // const sizes = item.sizes;
-    // const additives = item.additives;
+    console.log(item);
+    const title = item.name;
+    const descr = item.description;
+    const sizes = item.sizes;
+    const additives = item.additives;
     const price = item.price;
+    const photo = item.src;
+    console.log(sizes);
 
-    modalTitle.textContent = title;
+    itemModalInfoElements.titleElem.textContent = title;
     itemModalInfoElements.descrElem.textContent = descr;
-    itemModalInfoElements.descrElem.textContent = `$${price}`;
+    itemModalInfoElements.priceElem.textContent = `$${price}`;
+    itemModalInfoElements.photoElem.innerHTML = `
+	<img src=${photo}
+	     alt="${title}"
+	     class="modal__img">
+	`;
 
     itemModalInfoElements.sizesElem.innerHTML = '';
 
-    for (const size in item.sizes) {
-        const sizeData = item.sizes[size];
+    for (const size in sizes) {
+        console.log(size);
+        const sizeData = sizes[size];
+        console.log(sizeData);
         const sizeBtn = document.createElement('button');
         sizeBtn.classList.add('btn-tab');
         sizeBtn.innerHTML = `
@@ -41,11 +49,11 @@ const renderItemInfo = (item) => {
 
     itemModalInfoElements.additivesElem.innerHTML = '';
 
-    item.additives.forEach((additive) => {
+    additives.forEach((additive, index) => {
         const additiveBtn = document.createElement('button');
         additiveBtn.classList.add('btn-tab');
         additiveBtn.innerHTML = `
-            <span class="btn-tab__icon">${additive.name}</span>
+            <span class="btn-tab__icon">${index + 1}</span>
             <span class="btn-tab__title">${additive.name}</span>
         `;
         itemModalInfoElements.additivesElem.appendChild(additiveBtn);
@@ -57,12 +65,12 @@ const showModal = (id) => {
 
     renderItemInfo(currentItem);
     modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    // document.body.style.overflow = 'hidden';
 };
 
 const closeModal = () => {
     modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
+    // document.body.style.overflow = '';
 };
 
 const handleItemsClick = (event) => {
