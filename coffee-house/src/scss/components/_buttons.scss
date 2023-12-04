@@ -189,6 +189,12 @@
         pointer-events: none;
     }
 
+    &--active-event {
+        pointer-events: auto;
+
+        @extend .btn-tab--active;
+    }
+
     @media (hover: hover) {
         &:hover {
             color: $light;
