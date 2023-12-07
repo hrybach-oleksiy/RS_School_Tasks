@@ -161,6 +161,6 @@ slides.forEach((slide) => {
 });
 
 // TODO: uncomment to start automatic switching
-// fillProgressBar();
-// decreaseTimer();
-// switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
+fillProgressBar();
+decreaseTimer();
+switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
