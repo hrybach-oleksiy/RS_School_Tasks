@@ -1,7 +1,7 @@
 import itemsData from '../api/items.json';
 
 const itemsBlock = document.querySelector('.items');
-const menuTabs = document.querySelectorAll('.btn-tab');
+const menuTabs = document.querySelectorAll('.menu-tab');
 const loaderBtn = document.querySelector('.menu-loader');
 const loaderSvg = document.querySelector('.menu-loader__svg');
 
@@ -9,15 +9,35 @@ let isRendered = true;
 const initialCategory = 'coffee';
 let currentCategory = initialCategory;
 let isLoadingMore = false;
+let itemsNumber = 0;
 
-// FIXME: delete loader when in the category only 4 elements
-// FIXME: fix rerender after resize
+const hideLoadMoreBtn = () => {
+    loaderSvg.classList.add('hidden');
+    loaderBtn.classList.remove('menu-loader');
+    loaderBtn.classList.add('hidden');
+};
+
+const showLoadMoreBtn = () => {
+    loaderBtn.classList.remove('hidden');
+    loaderBtn.classList.add('menu-loader');
+    loaderSvg.classList.remove('hidden');
+};
+
+const showLoader = () => {
+    loaderBtn.classList.add('loader');
+};
+
+const hideLoader = () => {
+    loaderBtn.classList.remove('loader');
+};
+
 const renderItems = (items, category) => {
     let filteredItems = items.filter((item) => item.category === category);
+    itemsNumber = filteredItems.length;
 
-    if (window.innerWidth <= 768 && !isLoadingMore) {
+    if (window.innerWidth <= 768 && !isLoadingMore && itemsNumber > 4) {
         filteredItems = filteredItems.slice(0, 4);
-        loaderBtn.classList.remove('hidden');
+        showLoadMoreBtn();
     }
 
     itemsBlock.innerHTML = '';
@@ -26,7 +46,7 @@ const renderItems = (items, category) => {
         itemsBlock.insertAdjacentHTML(
             'beforeend',
             `
-				<article class="item">
+				<article class="item" data-id=${item.id}>
 				<div class="item__photo">
 					<img class="item__img"
 						src=${item.src}
@@ -44,80 +64,52 @@ const renderItems = (items, category) => {
 				`,
         );
     });
+
+    setTimeout(() => {
+        const items = document.querySelectorAll('.item');
+        items.forEach((item) => {
+            item.classList.add('visible');
+        });
+    }, 50);
 };
 
-// const showHiddenItems = (items) => {
-//     itemsBlock.classList.add('visible');
-//     items.forEach((item) => {
-//         item.classList.add('visible');
-//     });
-// };
-
-// const hideItems = () => {
-//     itemsBlock.classList.remove('visible');
-// };
-
 const loadItems = () => {
-    loaderSvg.classList.add('hidden');
-    loaderBtn.classList.remove('menu-loader');
-    loaderBtn.classList.add('loader');
+    hideLoadMoreBtn();
+    showLoader();
+
     setTimeout(() => {
-        // const items = document.querySelectorAll('.item');
-        loaderBtn.classList.add('hidden');
-        loaderBtn.classList.remove('loader');
+        hideLoader();
         loaderBtn.removeEventListener('click', loadItems);
         isLoadingMore = true;
         renderItems(itemsData, currentCategory);
     }, 2000);
 };
 
-// menuTabs.forEach((menuTab) => {
-//     menuTab.addEventListener('click', (event) => {
-//         const category = event.currentTarget.dataset.category;
-//         const activeTab = document.querySelector('.btn-tab--active');
-//         currentCategory = category;
+menuTabs.forEach((menuTab) => {
+    menuTab.addEventListener('click', (event) => {
+        const category = event.currentTarget.dataset.category;
+        const activeTab = document.querySelector('.menu-tab--active');
 
-//         activeTab.classList.remove('btn-tab--active');
-//         menuTab.classList.add('btn-tab--active');
+        currentCategory = category;
 
-//         itemsBlock.innerHTML = '';
-//         isLoadingMore = false;
-//         renderItems(itemsData, currentCategory);
-//         loaderBtn.classList.remove('hidden');
-//         loaderBtn.classList.add('menu-loader');
-//         loaderSvg.classList.remove('hidden');
-//         loaderBtn.addEventListener('click', loadItems);
+        activeTab.classList.remove('menu-tab--active');
+        menuTab.classList.add('menu-tab--active');
+        hideLoadMoreBtn();
+        loaderBtn.addEventListener('click', loadItems);
 
-//         // setTimeout(() => {
-//         //     const items = document.querySelectorAll('.item');
-//         //     items.forEach((item) => {
-//         //         item.classList.add('visible');
-//         //     });
-//         // }, 100);
+        itemsBlock.innerHTML = '';
+        isLoadingMore = false;
+        renderItems(itemsData, currentCategory);
+    });
+});
 
-//         // loaderBtn.classList.remove('hide');
-//         // loaderBtn.classList.add('menu-loader');
-//         // loaderBtn.addEventListener('click', loadItems);
-//     });
-// });
-
-// loaderBtn.addEventListener('click', loadItems);
+loaderBtn.addEventListener('click', loadItems);
 
 window.addEventListener('load', () => {
     renderItems(itemsData, initialCategory);
 });
 
 window.addEventListener('resize', () => {
-    // if (window.innerWidth <= 768 && !isRendered) {
-    //     renderItems(itemsData, currentCategory);
-    //     console.log('resized, width less than 768px');
-    //     isRendered = false;
-    // } else {
-    //     // isRendered = false;
-    //     renderItems(itemsData, currentCategory);
-    //     ('resized, width more than 768px');
-    // }
-
     if (window.innerWidth <= 768 && isRendered) {
         renderItems(itemsData, currentCategory);
         isRendered = false;
