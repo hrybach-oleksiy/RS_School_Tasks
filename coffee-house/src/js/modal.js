@@ -113,7 +113,7 @@ const showModal = (id) => {
 
     renderItemInfo(currentItem);
     modal.classList.remove('hidden');
-    // document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
     itemModalInfoElements.sizesElem.children[0].classList.add(
         'btn-tab--active',
     );
@@ -124,7 +124,7 @@ const showModal = (id) => {
 
 const closeModal = () => {
     modal.classList.add('hidden');
-    // document.body.style.overflow = '';
+    document.body.style.overflow = '';
 };
 
 const handleItemsClick = (event) => {
