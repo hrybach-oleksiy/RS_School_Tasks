@@ -21,12 +21,25 @@
         background-color: $body;
         border-radius: 40px;
         transform: translate(-50%, -50%);
+
+        @include media-tablet {
+            width: 650px;
+        }
+
+        @include media-small-tablet {
+            grid-template-columns: 1fr;
+            width: 342px;
+        }
     }
 
     &__photo {
         height: 340px;
         overflow: hidden;
         border-radius: 40px;
+
+        @include media-small-tablet {
+            display: none;
+        }
     }
 
     &__title {
@@ -77,5 +90,9 @@
     &__btns {
         display: flex;
         gap: 8px;
+
+        @include media-tablet {
+            flex-wrap: wrap;
+        }
     }
 }
