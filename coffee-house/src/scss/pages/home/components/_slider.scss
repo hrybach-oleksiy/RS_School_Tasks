@@ -65,24 +65,16 @@
         flex-direction: column;
         gap: 16px;
         align-items: center;
-
-        // max-width: 480px;
-
-        // @include media-mobile {
-        //     max-width: 348px;
-        // }
     }
 
     &__img {
         width: 100%;
-
-        // max-width: 480px;
         height: 480px;
 
-        // @include media-mobile {
-        //     width: auto;
-        //     height: 348px;
-        // }
+        @include media-mobile {
+            width: auto;
+            height: 100%;
+        }
     }
 
     &__descr {
