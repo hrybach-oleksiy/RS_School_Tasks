@@ -1,11 +1,11 @@
-// TODO: add tocuh and drag functionality
+// TODO: add touch and drag functionality
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.slider__btn--prev');
 const nextBtn = document.querySelector('.slider__btn--next');
 const progressBarElems = document.querySelectorAll('.progress-bar__bar');
 const slider = document.querySelector('.slides');
+// const slidesArr = [...slides];
 
-const slidesArr = [...slides];
 let step = 0;
 let fillSpeed = 7;
 let progressBarWidth = 0;
@@ -13,37 +13,71 @@ let progressBarFillIntervalID = 0;
 let switchSlidesIntervalID = 0;
 let decreaseTimerID = 0;
 let currentSwitchingInterval = 7000;
+let x1 = null;
+let sliderXPosition = 0;
+let sliderPosition = 1152;
 
-const shiftSlides = (direction) => {
-    let shiftedSlides = [];
-
-    if (direction === 'left') {
-        shiftedSlides = slidesArr.slice(1).concat(slidesArr.slice(0, 1));
+const handleTouchStart = (event) => {
+    const initTouchX = event.touches[0].clientX;
+    if (initTouchX > 119 && initTouchX < 1032) {
+        x1 = initTouchX;
+        console.log(initTouchX);
     }
-
-    if (direction === 'right') {
-        const lastSlideIndex = slidesArr.length - 1;
-
-        shiftedSlides = [slidesArr[lastSlideIndex]].concat(
-            slidesArr.slice(0, lastSlideIndex),
-        );
-    }
-
-    // Delete all slides from HTML
-    slides.forEach((slide) => {
-        slider.removeChild(slide);
-    });
-
-    // Insert slides in new order
-    shiftedSlides.forEach((slide) => {
-        slider.appendChild(slide);
-    });
-
-    // Update slidesArr to with slide in new order for the next click
-    shiftedSlides.forEach((slide, index) => {
-        slidesArr[index] = slide;
-    });
 };
+
+const handleTouchMove = (event) => {
+    event.preventDefault();
+    let currentX = event.touches[0].clientX;
+    sliderXPosition = currentX - x1;
+
+    slider.style.left = sliderXPosition + 'px';
+};
+
+const handleTouchEnd = (event) => {
+    const endTouchX = event.changedTouches[0].clientX;
+    // if (endTouchX > 119 && endTouchX < 1032) {
+    if (endTouchX < x1) {
+        moveLeft();
+        sliderXPosition = 0;
+        slider.style.left = sliderXPosition;
+    } else {
+        slider.style.left = 1152 + 'px';
+        shiftSlides('right');
+    }
+    x1 = null;
+    // };
+};
+
+// const shiftSlides = (direction) => {
+//     let shiftedSlides = [];
+
+//     if (direction === 'left') {
+//         shiftedSlides = slidesArr.slice(1).concat(slidesArr.slice(0, 1));
+//     }
+
+//     if (direction === 'right') {
+//         const lastSlideIndex = slidesArr.length - 1;
+
+//         shiftedSlides = [slidesArr[lastSlideIndex]].concat(
+//             slidesArr.slice(0, lastSlideIndex),
+//         );
+//     }
+
+//     // Delete all slides from HTML
+//     slides.forEach((slide) => {
+//         slider.removeChild(slide);
+//     });
+
+//     // Insert slides in new order
+//     shiftedSlides.forEach((slide) => {
+//         slider.appendChild(slide);
+//     });
+
+//     // Update slidesArr to with slide in new order for the next click
+//     shiftedSlides.forEach((slide, index) => {
+//         slidesArr[index] = slide;
+//     });
+// };
 
 const decreaseTimer = () => {
     decreaseTimerID = setInterval(() => {
@@ -78,6 +112,22 @@ const setActiveProgressBar = () => {
     progressBarElems[step].classList.add('active');
 };
 
+const animateSlider = (direction) => {
+    if (direction === 'right') {
+        sliderPosition -= 1152;
+        if (sliderPosition < -1152) {
+            sliderPosition = 1152;
+        }
+    } else if (direction === 'left') {
+        sliderPosition += 1152;
+        if (sliderPosition > 1152) {
+            sliderPosition = -1152;
+        }
+    }
+
+    slider.style.transform = `translateX(${sliderPosition}px)`;
+};
+
 const handleSwitchingSlides = () => {
     setActiveProgressBar();
     clearInterval(progressBarFillIntervalID);
@@ -91,28 +141,29 @@ const handleSwitchingSlides = () => {
 };
 
 const moveLeft = () => {
-    slider.classList.add('transition-left');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
-    step++;
+    animateSlider('left');
 
-    if (step > progressBarElems.length - 1) {
-        step = 0;
+    step--;
+
+    if (step < 0) {
+        step = progressBarElems.length - 1;
     }
 
     handleSwitchingSlides();
 };
 
 const moveRight = () => {
-    slider.classList.add('transition-right');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
-    step--;
+    animateSlider('right');
 
-    if (step < 0) {
-        step = progressBarElems.length - 1;
+    step++;
+
+    if (step > progressBarElems.length - 1) {
+        step = 0;
     }
-    setActiveProgressBar();
 
     handleSwitchingSlides();
 };
@@ -132,22 +183,14 @@ const resumeSwitching = () => {
 prevBtn.addEventListener('click', moveLeft);
 nextBtn.addEventListener('click', moveRight);
 
-slider.addEventListener('animationend', (event) => {
-    const animationDirection = event.animationName;
-
-    if (animationDirection === 'move-left') {
-        slider.classList.remove('transition-left');
-        shiftSlides('left');
-    }
-
-    if (animationDirection === 'move-right') {
-        slider.classList.remove('transition-right');
-        shiftSlides('right');
-    }
-
+slider.addEventListener('transitionend', () => {
     prevBtn.addEventListener('click', moveLeft);
     nextBtn.addEventListener('click', moveRight);
 });
+
+slider.addEventListener('touchstart', handleTouchStart, false);
+slider.addEventListener('touchmove', handleTouchMove, false);
+slider.addEventListener('touchend', handleTouchEnd, false);
 
 // pause, continue
 slides.forEach((slide) => {
@@ -161,6 +204,6 @@ slides.forEach((slide) => {
 });
 
 // TODO: uncomment to start automatic switching
-fillProgressBar();
-decreaseTimer();
-switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
+// fillProgressBar();
+// decreaseTimer();
+// switchSlidesIntervalID = setInterval(moveLeft, currentSwitchingInterval);
