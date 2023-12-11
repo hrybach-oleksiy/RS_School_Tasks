@@ -1,11 +1,11 @@
-// TODO: add tocuh and drag functionality
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.slider__btn--prev');
 const nextBtn = document.querySelector('.slider__btn--next');
 const progressBarElems = document.querySelectorAll('.progress-bar__bar');
 const slider = document.querySelector('.slides');
 
-const slidesArr = [...slides];
+const SLIDER_WIDTH = 1152;
+
 let step = 0;
 let fillSpeed = 7;
 let progressBarWidth = 0;
@@ -13,36 +13,44 @@ let progressBarFillIntervalID = 0;
 let switchSlidesIntervalID = 0;
 let decreaseTimerID = 0;
 let currentSwitchingInterval = 7000;
+let x1 = null;
+let sliderPosition = SLIDER_WIDTH;
+let initialSliderPosition = null;
+let currentSliderPosition = SLIDER_WIDTH;
 
-const shiftSlides = (direction) => {
-    let shiftedSlides = [];
+const handleTouchStart = (event) => {
+    const initTouchX = event.touches[0].clientX;
+    if (initTouchX > 119 && initTouchX < 1032) {
+        x1 = initTouchX;
+        initialSliderPosition = sliderPosition;
+    }
+};
 
-    if (direction === 'left') {
-        shiftedSlides = slidesArr.slice(1).concat(slidesArr.slice(0, 1));
+const handleTouchMove = (event) => {
+    const currentTouchPosition = event.touches[0].clientX;
+    const difference = currentTouchPosition - x1;
+
+    sliderPosition = initialSliderPosition + difference;
+
+    slider.style.transform = `translateX(${sliderPosition}px)`;
+};
+
+const handleTouchEnd = (event) => {
+    isTouchEnd = true;
+    const endTouchPosition = event.changedTouches[0].clientX;
+
+    if (endTouchPosition < x1) {
+        // console.log('move left');
+        sliderPosition = currentSliderPosition;
+        moveLeft();
+    } else {
+        // console.log('move right');
+        sliderPosition = currentSliderPosition;
+        moveRight();
     }
 
-    if (direction === 'right') {
-        const lastSlideIndex = slidesArr.length - 1;
-
-        shiftedSlides = [slidesArr[lastSlideIndex]].concat(
-            slidesArr.slice(0, lastSlideIndex),
-        );
-    }
-
-    // Delete all slides from HTML
-    slides.forEach((slide) => {
-        slider.removeChild(slide);
-    });
-
-    // Insert slides in new order
-    shiftedSlides.forEach((slide) => {
-        slider.appendChild(slide);
-    });
-
-    // Update slidesArr to with slide in new order for the next click
-    shiftedSlides.forEach((slide, index) => {
-        slidesArr[index] = slide;
-    });
+    x1 = null;
+    initialSliderPosition = null;
 };
 
 const decreaseTimer = () => {
@@ -78,6 +86,22 @@ const setActiveProgressBar = () => {
     progressBarElems[step].classList.add('active');
 };
 
+const animateSlider = (direction) => {
+    if (direction === 'left') {
+        sliderPosition -= SLIDER_WIDTH;
+        if (sliderPosition < -SLIDER_WIDTH) {
+            sliderPosition = SLIDER_WIDTH;
+        }
+    } else if (direction === 'right') {
+        sliderPosition += SLIDER_WIDTH;
+        if (sliderPosition > SLIDER_WIDTH) {
+            sliderPosition = -SLIDER_WIDTH;
+        }
+    }
+
+    slider.style.transform = `translateX(${sliderPosition}px)`;
+};
+
 const handleSwitchingSlides = () => {
     setActiveProgressBar();
     clearInterval(progressBarFillIntervalID);
@@ -91,9 +115,15 @@ const handleSwitchingSlides = () => {
 };
 
 const moveLeft = () => {
-    slider.classList.add('transition-left');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
+    currentSliderPosition -= SLIDER_WIDTH;
+    if (currentSliderPosition < -SLIDER_WIDTH) {
+        currentSliderPosition = SLIDER_WIDTH;
+    }
+    animateSlider('left');
+    console.log('move left');
+
     step++;
 
     if (step > progressBarElems.length - 1) {
@@ -104,15 +134,19 @@ const moveLeft = () => {
 };
 
 const moveRight = () => {
-    slider.classList.add('transition-right');
     prevBtn.removeEventListener('click', moveLeft);
     nextBtn.removeEventListener('click', moveRight);
+    currentSliderPosition += SLIDER_WIDTH;
+    if (currentSliderPosition > SLIDER_WIDTH) {
+        currentSliderPosition = -SLIDER_WIDTH;
+    }
+    animateSlider('right');
+    console.log('move right');
     step--;
 
     if (step < 0) {
         step = progressBarElems.length - 1;
     }
-    setActiveProgressBar();
 
     handleSwitchingSlides();
 };
@@ -129,33 +163,27 @@ const resumeSwitching = () => {
     decreaseTimer();
 };
 
-prevBtn.addEventListener('click', moveLeft);
-nextBtn.addEventListener('click', moveRight);
+prevBtn.addEventListener('click', moveRight);
+nextBtn.addEventListener('click', moveLeft);
 
-slider.addEventListener('animationend', (event) => {
-    const animationDirection = event.animationName;
-
-    if (animationDirection === 'move-left') {
-        slider.classList.remove('transition-left');
-        shiftSlides('left');
-    }
-
-    if (animationDirection === 'move-right') {
-        slider.classList.remove('transition-right');
-        shiftSlides('right');
-    }
-
+slider.addEventListener('transitionend', () => {
     prevBtn.addEventListener('click', moveLeft);
     nextBtn.addEventListener('click', moveRight);
 });
 
+slider.addEventListener('touchstart', handleTouchStart, false);
+slider.addEventListener('touchmove', handleTouchMove, false);
+slider.addEventListener('touchend', handleTouchEnd, false);
+
 // pause, continue
 slides.forEach((slide) => {
     //since slide cover 100% width I add listener to the child of slide(wrapper) which cover only central part of the slide
-    slide.lastElementChild.addEventListener('mouseover', () => {
+    slide.lastElementChild.addEventListener('pointerover', (event) => {
+        // event.preventDefault();
         pauseSwitching();
     });
-    slide.lastElementChild.addEventListener('mouseout', () => {
+    slide.lastElementChild.addEventListener('pointerout', (event) => {
+        // event.preventDefault();
         resumeSwitching();
     });
 });

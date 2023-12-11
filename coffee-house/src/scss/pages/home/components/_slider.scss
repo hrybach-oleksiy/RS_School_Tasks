@@ -39,8 +39,11 @@
 
 .slides {
     position: relative;
-    left: 0;
     display: flex;
+    transform: translateX(1152px);
+    transition: transform 1s;
+    user-select: none;
+    touch-action: none;
 }
 
 .slide {
@@ -112,48 +115,6 @@
         @include media-small-tablet {
             display: none;
         }
-    }
-
-    &:first-child {
-        order: 1;
-    }
-
-    &:last-child {
-        order: 0;
-    }
-
-    &:nth-child(2) {
-        order: 2;
-    }
-}
-
-.transition-right {
-    animation: move-right;
-    animation-duration: 1s;
-}
-
-.transition-left {
-    animation: move-left;
-    animation-duration: 1s;
-}
-
-@keyframes move-right {
-    from {
-        left: 0;
-    }
-
-    to {
-        left: 1152px;
-    }
-}
-
-@keyframes move-left {
-    from {
-        left: 0;
-    }
-
-    to {
-        left: -1152px;
     }
 }
 
