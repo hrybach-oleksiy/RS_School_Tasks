@@ -42,6 +42,8 @@
     display: flex;
     transform: translateX(1152px);
     transition: transform 1s;
+    user-select: none;
+    touch-action: none;
 }
 
 .slide {
