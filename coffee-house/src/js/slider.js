@@ -36,15 +36,18 @@ const handleTouchMove = (event) => {
 };
 
 const handleTouchEnd = (event) => {
-    isTouchEnd = true;
     const endTouchPosition = event.changedTouches[0].clientX;
+    let movementDiff = Math.abs(endTouchPosition - x1);
+
+    if (movementDiff < 150) {
+        slider.style.transform = `translateX(${currentSliderPosition}px)`;
+        return;
+    }
 
     if (endTouchPosition < x1) {
-        // console.log('move left');
         sliderPosition = currentSliderPosition;
         moveLeft();
     } else {
-        // console.log('move right');
         sliderPosition = currentSliderPosition;
         moveRight();
     }
@@ -122,7 +125,7 @@ const moveLeft = () => {
         currentSliderPosition = SLIDER_WIDTH;
     }
     animateSlider('left');
-    console.log('move left');
+    // console.log('move left');
 
     step++;
 
@@ -141,7 +144,7 @@ const moveRight = () => {
         currentSliderPosition = -SLIDER_WIDTH;
     }
     animateSlider('right');
-    console.log('move right');
+    // console.log('move right');
     step--;
 
     if (step < 0) {
@@ -179,11 +182,9 @@ slider.addEventListener('touchend', handleTouchEnd, false);
 slides.forEach((slide) => {
     //since slide cover 100% width I add listener to the child of slide(wrapper) which cover only central part of the slide
     slide.lastElementChild.addEventListener('pointerover', (event) => {
-        // event.preventDefault();
         pauseSwitching();
     });
     slide.lastElementChild.addEventListener('pointerout', (event) => {
-        // event.preventDefault();
         resumeSwitching();
     });
 });
