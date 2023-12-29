@@ -1,0 +1,32 @@
+h1,
+h2,
+h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 72px;
+    line-height: 105%;
+}
+
+h2 {
+    font-size: 60px;
+    line-height: 125%;
+
+    @include media-small-tablet {
+        @include fluid-font(60, 32);
+    }
+}
+
+h3 {
+    font-size: 24px;
+    line-height: 125%;
+}
+
+.accent {
+    color: $accent;
+    font-style: italic;
+}
+
+// TODO: add fluid font to h2 and h3
