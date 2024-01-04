@@ -1,0 +1,86 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1200px;
+    margin: 300px auto;
+}
+
+.hangman__image {
+    position: relative;
+
+    img {
+        position: absolute;
+        height: auto;
+    }
+
+    .gallows {
+        width: 353px;
+    }
+
+    .head {
+        top: 149px;
+        left: 254px;
+        width: 100px;
+    }
+
+    .body {
+        top: 249px;
+        left: 301px;
+        width: 5px;
+    }
+
+    .right-hand,
+    .left-hand,
+    .right-foot,
+    .left-foot {
+        width: 67px;
+    }
+
+    .right-hand {
+        top: 265px;
+        left: 239px;
+    }
+
+    .left-hand {
+        top: 265px;
+        left: 300px;
+    }
+
+    .right-foot {
+        top: 375px;
+        left: 238px;
+    }
+
+    .left-foot {
+        top: 375px;
+        left: 302px;
+    }
+}
+
+.keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.key {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    margin: 3px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 45px;
+    text-align: center;
+    background-color: #e5e5e5;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    user-select: none;
+
+    &:hover {
+        background-color: #d7d5d5;
+        border: 1px solid #e5e5e5;
+    }
+}

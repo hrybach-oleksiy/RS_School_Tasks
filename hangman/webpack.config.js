@@ -12,7 +12,6 @@ const fileName = (ext) =>
 module.exports = {
     entry: {
         index: path.join(__dirname, 'src', 'index.js'),
-        menu: path.join(__dirname, 'src', 'menu.js'),
     },
     mode: 'development',
     output: {
@@ -87,18 +86,6 @@ module.exports = {
             inject: true,
             chunks: ['index'],
             filename: 'index.html',
-            minify: {
-                collapseWhitespace: isProd,
-                removeComments: isProd,
-                removeRedundantAttributes: isProd,
-                useShortDoctype: isProd,
-            },
-        }),
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'menu.html'),
-            inject: true,
-            chunks: ['menu'],
-            filename: 'menu.html',
             minify: {
                 collapseWhitespace: isProd,
                 removeComments: isProd,
