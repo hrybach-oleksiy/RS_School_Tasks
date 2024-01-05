@@ -1,8 +1,45 @@
+.hangman__title {
+    margin: 100px 0 50px;
+    text-align: center;
+
+    @include media-mobile {
+        margin: 50px 0 20px;
+        font-size: 40px;
+    }
+}
+
+.hangman__description {
+    margin-bottom: 30px;
+    font-size: 40px;
+    line-height: 120%;
+    text-align: center;
+
+    @include media-mobile {
+        font-size: 28px;
+    }
+}
+
 .wrapper {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(auto, 581px);
+    grid-template-columns: 423px 1fr;
+    gap: 7vw;
     max-width: 1200px;
-    margin: 300px auto;
+    margin: 0 auto;
+
+    @include media-big-tablet {
+        grid-template-columns: 227px 1fr;
+    }
+
+    @include media-tablet {
+        grid-template-rows: minmax(auto, 404px) auto;
+        grid-template-columns: 1fr;
+    }
+
+    @include media-mobile {
+        grid-template-rows: minmax(auto, 360px) auto;
+        justify-content: center;
+    }
 }
 
 .hangman__image {
@@ -13,47 +50,130 @@
         height: auto;
     }
 
-    .gallows {
-        width: 353px;
+    .gallows-wrapper {
+        height: 100%;
+
+        .gallows {
+            width: 353px;
+
+            @include media-tablet {
+                width: 227px;
+            }
+        }
     }
 
-    .head {
-        top: 149px;
-        left: 254px;
-        width: 100px;
+    .body-wrapper {
+        position: absolute;
+        top: 140px;
+        left: 229px;
+        display: flex;
+        justify-content: center;
+        width: 150px;
+        height: 330px;
+
+        .head {
+            width: auto;
+        }
+
+        .body {
+            top: 99px;
+            left: 72px;
+            width: 5px;
+
+            @include media-big-tablet {
+                top: 57px;
+                left: 28px;
+            }
+        }
+
+        .right-hand,
+        .left-hand,
+        .right-foot,
+        .left-foot {
+            width: 67px;
+        }
+
+        .right-hand {
+            top: 113px;
+            left: 9px;
+
+            @include media-big-tablet {
+                top: 64px;
+                left: -26px;
+            }
+        }
+
+        .left-hand {
+            top: 113px;
+            left: 73px;
+
+            @include media-big-tablet {
+                top: 64px;
+                left: 28px;
+            }
+        }
+
+        .right-foot {
+            top: 226px;
+            left: 9px;
+
+            @include media-big-tablet {
+                top: 185px;
+                left: -26px;
+            }
+        }
+
+        .left-foot {
+            top: 226px;
+            left: 73px;
+
+            @include media-big-tablet {
+                top: 185px;
+                left: 28px;
+            }
+        }
+
+        @include media-big-tablet {
+            top: 88px;
+            left: 164px;
+            width: 60px;
+            height: 330px;
+        }
+
+        @include media-tablet {
+            // top: 0;
+            // right: 2px;
+        }
+    }
+}
+
+.hangman__content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-self: center;
+    padding-bottom: 50px;
+    font-size: 30px;
+    line-height: 120%;
+
+    .hold {
+        align-self: center;
+        margin-bottom: 30px;
+        font-size: 60px;
     }
 
-    .body {
-        top: 249px;
-        left: 301px;
-        width: 5px;
+    .guesses,
+    .hint {
+        @include media-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     }
 
-    .right-hand,
-    .left-hand,
-    .right-foot,
-    .left-foot {
-        width: 67px;
-    }
-
-    .right-hand {
-        top: 265px;
-        left: 239px;
-    }
-
-    .left-hand {
-        top: 265px;
-        left: 300px;
-    }
-
-    .right-foot {
-        top: 375px;
-        left: 238px;
-    }
-
-    .left-foot {
-        top: 375px;
-        left: 302px;
+    .guesses__heading,
+    .hint__heading {
+        font-weight: 700;
     }
 }
 
