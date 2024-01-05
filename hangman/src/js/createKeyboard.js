@@ -2,6 +2,7 @@ import createHTMLElement from './createHTMLElement';
 
 /**
  * @param {Array} kk Array of keyboard letters.
+ * @returns {Array} Array of HTML elements with keyboard letters.
  */
 
 const createKeyboard = (kk) => {
@@ -9,7 +10,11 @@ const createKeyboard = (kk) => {
 
     for (let i = 0; i < kk.length; i++) {
         const div = createHTMLElement('div', { class: 'key' }, null, [
-            createHTMLElement('span', { class: 'letter' }, kk[i]),
+            createHTMLElement(
+                'span',
+                { class: 'letter', ['data-letter']: kk[i] },
+                kk[i],
+            ),
         ]);
         keys.push(div);
     }

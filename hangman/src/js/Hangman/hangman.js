@@ -1,6 +1,9 @@
 import createHTMLElement from '../createHTMLElement';
 import createKeyboard from '../createKeyboard';
 import keys from '../keys';
+import generateAnswerTemplate from './generateAnswerTemplate';
+import setRandomAnswer from './setRandomAnswer';
+import { hints, answers } from './hints';
 
 // Creating a <div> element with attributes, content, and children
 // const container= createHTMLElement(
@@ -16,6 +19,9 @@ import keys from '../keys';
 //         ),
 //     ],
 // );
+
+let randomAnswer = '';
+let randomHint = '';
 
 // HTML Elements
 const container = createHTMLElement('div', { class: 'container' });
@@ -67,7 +73,7 @@ const hangmanImage = createHTMLElement(
     ],
 );
 const hangmanContent = createHTMLElement('div', { class: 'hangman__content' });
-const hold = createHTMLElement('div', { class: 'hold' }, '_ _ _ _ _ _ _');
+const hold = createHTMLElement('div', { class: 'hold' }, '');
 const hint = createHTMLElement('div', { class: 'hint' }, null, [
     createHTMLElement('span', { class: 'hint__heading' }, 'Hint: '),
     createHTMLElement('span', { class: 'hint__text' }, 'Just a sample'),
@@ -95,7 +101,68 @@ const description = createHTMLElement(
     'Use the keyboard below to guess the word',
 );
 
+const guessWord = (event) => {
+    const guessWord = event.target.dataset.letter;
+    console.log(guessWord);
+    // const answerArray = answer.split('');
+    // let counter = 0;
+    // if (answer === winningCheck) {
+    //     livesDisplay.innerHTML = `YOU WIN!`;
+    //     return;
+    // } else {
+    //     if (life > 0) {
+    //         for (let j = 0; j < answer.length; j++) {
+    //             if (guessWord === answerArray[j]) {
+    //                 wordDisplay[j] = guessWord;
+    //                 console.log(guessWord);
+    //                 answerDisplay.innerHTML = wordDisplay.join(' ');
+    //                 winningCheck = wordDisplay.join('');
+    //                 //console.log(winningCheck)
+    //                 counter += 1;
+    //             }
+    //         }
+    //         if (counter === 0) {
+    //             life -= 1;
+    //             counter = 0;
+    //             animate();
+    //         } else {
+    //             counter = 0;
+    //         }
+    //         if (life > 1) {
+    //             livesDisplay.innerHTML = `You have ${life} lives!`;
+    //         } else if (life === 1) {
+    //             livesDisplay.innerHTML = `You have ${life} life!`;
+    //         } else {
+    //             livesDisplay.innerHTML = `GAME OVER!`;
+    //         }
+    //     } else {
+    //         return;
+    //     }
+    //     console.log(wordDisplay);
+    //     //console.log(counter);
+    //     //console.log(life);
+    //     if (answer === winningCheck) {
+    //         livesDisplay.innerHTML = `YOU WIN!`;
+    //         return;
+    //     }
+    // }
+};
+
+const init = () => {
+    const hintElem = document.querySelector('.hint__text');
+    let randomAnswerIndex;
+    randomAnswer = setRandomAnswer();
+    console.log(randomAnswer);
+    randomAnswerIndex = answers.indexOf(randomAnswer);
+    hold.textContent = generateAnswerTemplate(randomAnswer);
+    hintElem.textContent = hints[randomAnswerIndex];
+};
+
 container.append(heading, description, wrapper);
 hangmanContent.append(hold, hint, guesses, keyboard);
 wrapper.append(hangmanImage, hangmanContent);
 document.body.append(container);
+
+// keyboard.addEventListener('click', guessWord);
+
+init();
