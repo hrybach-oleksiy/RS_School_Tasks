@@ -10,6 +10,14 @@ const animateHangman = (counter) => {
     const rightFoot = document.querySelector('.right-foot');
     const leftFoot = document.querySelector('.left-foot');
     switch (counter) {
+        case 0:
+            head.classList.add('hidden');
+            body.classList.add('hidden');
+            leftHand.classList.add('hidden');
+            rightHand.classList.add('hidden');
+            leftFoot.classList.add('hidden');
+            rightFoot.classList.add('hidden');
+            break;
         case 1:
             head.classList.remove('hidden');
             break;

@@ -243,37 +243,47 @@
     background-color: rgb(0 0 0 / 40%);
     transition: all 2s linear;
 
-    // &__content {
-    //     position: absolute;
-    //     top: 50%;
-    //     left: 50%;
-    //     display: grid;
-    //     grid-template-columns: 340px 1fr;
-    //     gap: 20px;
-    //     max-width: 800px;
-    //     padding: 16px;
-    //     background-color: $body;
-    //     border-radius: 40px;
-    //     transform: translate(-50%, -50%);
+    &__content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background-color: $body;
+        border-radius: 40px;
+        transform: translate(-50%, -50%);
 
-    //     @include media-tablet {
-    //         width: 650px;
-    //     }
+        @include media-tablet {
+            width: 650px;
+        }
 
-    //     @include media-small-tablet {
-    //         grid-template-columns: 1fr;
-    //         width: 342px;
-    //     }
-    // }
+        @include media-small-tablet {
+            grid-template-columns: 1fr;
+            width: 342px;
+        }
+    }
 
     &__title {
         margin-bottom: 12px;
+        text-align: center;
     }
 
     &__descr {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .modal__result {
+            color: #036728;
+            font-weight: 700;
+            font-size: 40px;
+        }
     }
 
     &.hidden {
