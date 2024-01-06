@@ -9,13 +9,11 @@ const createKeyboard = (kk) => {
     const keys = [];
 
     for (let i = 0; i < kk.length; i++) {
-        const div = createHTMLElement('div', { class: 'key' }, null, [
-            createHTMLElement(
-                'span',
-                { class: 'letter', ['data-letter']: kk[i] },
-                kk[i],
-            ),
-        ]);
+        const div = createHTMLElement(
+            'button',
+            { class: 'key', ['data-letter']: kk[i] },
+            kk[i],
+        );
         keys.push(div);
     }
 

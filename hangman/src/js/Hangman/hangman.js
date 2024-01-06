@@ -3,6 +3,7 @@ import createKeyboard from '../createKeyboard';
 import keys from '../keys';
 import generateAnswerTemplate from './generateAnswerTemplate';
 import setRandomAnswer from './setRandomAnswer';
+import animateHangman from './animateHangman';
 import { hints, answers } from './hints';
 
 // Creating a <div> element with attributes, content, and children
@@ -22,6 +23,9 @@ import { hints, answers } from './hints';
 
 let randomAnswer = '';
 let randomHint = '';
+let correctAnswer = '';
+let displayedLetters = [];
+let incorrectGuesses = 0;
 
 // HTML Elements
 const container = createHTMLElement('div', { class: 'container' });
@@ -42,32 +46,32 @@ const hangmanImage = createHTMLElement(
             createHTMLElement('img', {
                 src: 'assets/head.svg',
                 alt: 'Head',
-                class: 'head',
+                class: 'head hidden',
             }),
             createHTMLElement('img', {
                 src: 'assets/body.svg',
                 alt: 'Body',
-                class: 'body',
+                class: 'body hidden',
             }),
             createHTMLElement('img', {
                 src: 'assets/right-hand.svg',
                 alt: 'Right Hand',
-                class: 'right-hand',
+                class: 'right-hand hidden',
             }),
             createHTMLElement('img', {
                 src: 'assets/left-hand.svg',
                 alt: 'Left Hand',
-                class: 'left-hand',
+                class: 'left-hand hidden',
             }),
             createHTMLElement('img', {
                 src: 'assets/right-foot.svg',
                 alt: 'Right Foot',
-                class: 'right-foot',
+                class: 'right-foot hidden',
             }),
             createHTMLElement('img', {
                 src: 'assets/left-foot.svg',
                 alt: 'Left Foot',
-                class: 'left-foot',
+                class: 'left-foot hidden',
             }),
         ]),
     ],
@@ -102,10 +106,42 @@ const description = createHTMLElement(
 );
 
 const guessWord = (event) => {
-    const guessWord = event.target.dataset.letter;
-    console.log(guessWord);
-    // const answerArray = answer.split('');
-    // let counter = 0;
+    const guessLetter = event.target.dataset.letter;
+    const currentButton = event.target;
+    const answerArray = randomAnswer.split('');
+    // const capitalLetter = answerArray[0];
+
+    let counter = 0;
+
+    if (incorrectGuesses < 6) {
+        for (let i = 0; i < randomAnswer.length; i++) {
+            if (guessLetter === answerArray[i].toLowerCase()) {
+                displayedLetters[i] = guessLetter.toUpperCase();
+                currentButton.classList.add('disabled');
+                hold.textContent = displayedLetters.join(' ');
+                correctAnswer = displayedLetters.join('');
+                counter++;
+            }
+        }
+
+        if (counter === 0) {
+            const guessesCounter = document.querySelector('.guesses__text');
+            incorrectGuesses++;
+            guessesCounter.textContent = `${incorrectGuesses}/6`;
+            animateHangman(incorrectGuesses);
+
+            if (incorrectGuesses === 6) {
+                console.log('You lost. Game over!');
+                keyboard.removeEventListener('click', guessWord);
+            }
+
+            console.log('wrong letter');
+            counter = 0;
+        } else {
+            counter = 0;
+        }
+    }
+
     // if (answer === winningCheck) {
     //     livesDisplay.innerHTML = `YOU WIN!`;
     //     return;
@@ -121,6 +157,7 @@ const guessWord = (event) => {
     //                 counter += 1;
     //             }
     //         }
+
     //         if (counter === 0) {
     //             life -= 1;
     //             counter = 0;
@@ -128,6 +165,7 @@ const guessWord = (event) => {
     //         } else {
     //             counter = 0;
     //         }
+
     //         if (life > 1) {
     //             livesDisplay.innerHTML = `You have ${life} lives!`;
     //         } else if (life === 1) {
@@ -155,14 +193,14 @@ const init = () => {
     console.log(randomAnswer);
     randomAnswerIndex = answers.indexOf(randomAnswer);
     hold.textContent = generateAnswerTemplate(randomAnswer);
+    displayedLetters = generateAnswerTemplate(randomAnswer).split(' ');
     hintElem.textContent = hints[randomAnswerIndex];
+    keyboard.addEventListener('click', guessWord);
 };
 
 container.append(heading, description, wrapper);
 hangmanContent.append(hold, hint, guesses, keyboard);
 wrapper.append(hangmanImage, hangmanContent);
 document.body.append(container);
-
-// keyboard.addEventListener('click', guessWord);
 
 init();
