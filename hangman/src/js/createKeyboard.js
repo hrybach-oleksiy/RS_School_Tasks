@@ -6,18 +6,18 @@ import createHTMLElement from './createHTMLElement';
  */
 
 const createKeyboard = (kk) => {
-    const keys = [];
+  const keys = [];
 
-    for (let i = 0; i < kk.length; i++) {
-        const div = createHTMLElement(
-            'button',
-            { class: 'key', ['data-letter']: kk[i] },
-            kk[i],
-        );
-        keys.push(div);
-    }
+  for (let i = 0; i < kk.length; i++) {
+    const div = createHTMLElement(
+      'button',
+      { class: 'key', ['data-letter']: kk[i] },
+      kk[i].toUpperCase(),
+    );
+    keys.push(div);
+  }
 
-    return keys;
+  return keys;
 };
 
 export default createKeyboard;

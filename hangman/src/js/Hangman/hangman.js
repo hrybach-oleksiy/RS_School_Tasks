@@ -7,102 +7,86 @@ import animateHangman from './animateHangman';
 import createModal from '../createModal';
 import { hints, answers } from './hints';
 
-// Creating a <div> element with attributes, content, and children
-// const container= createHTMLElement(
-//     'div',
-//     { class: 'container' },
-//     'Hello, World!',
-//     [
-//         createHTMLElement('p', null, 'This is a paragraph.'),
-//         createHTMLElement(
-//             'a',
-//             { href: 'https://example.com' },
-//             'Link to Example',
-//         ),
-//     ],
-// );
-
 let randomAnswer = '';
 let correctAnswer = '';
 let displayedLetters = [];
 let incorrectGuesses = 0;
 
-// HTML Elements
 const container = createHTMLElement('div', { class: 'container' });
 const wrapper = createHTMLElement('div', { class: 'wrapper' });
 const hangmanImage = createHTMLElement(
-    'div',
-    { class: 'hangman__image' },
-    null,
-    [
-        createHTMLElement('div', { class: 'gallows-wrapper' }, null, [
-            createHTMLElement('img', {
-                src: 'assets/gallows.svg',
-                alt: 'Gallows',
-                class: 'gallows',
-            }),
-        ]),
-        createHTMLElement('div', { class: 'body-wrapper' }, null, [
-            createHTMLElement('img', {
-                src: 'assets/head.svg',
-                alt: 'Head',
-                class: 'head hidden',
-            }),
-            createHTMLElement('img', {
-                src: 'assets/body.svg',
-                alt: 'Body',
-                class: 'body hidden',
-            }),
-            createHTMLElement('img', {
-                src: 'assets/right-hand.svg',
-                alt: 'Right Hand',
-                class: 'right-hand hidden',
-            }),
-            createHTMLElement('img', {
-                src: 'assets/left-hand.svg',
-                alt: 'Left Hand',
-                class: 'left-hand hidden',
-            }),
-            createHTMLElement('img', {
-                src: 'assets/right-foot.svg',
-                alt: 'Right Foot',
-                class: 'right-foot hidden',
-            }),
-            createHTMLElement('img', {
-                src: 'assets/left-foot.svg',
-                alt: 'Left Foot',
-                class: 'left-foot hidden',
-            }),
-        ]),
-    ],
+  'div',
+  { class: 'hangman__image' },
+  null,
+  [
+    createHTMLElement('div', { class: 'gallows-wrapper' }, null, [
+      createHTMLElement('img', {
+        src: 'assets/gallows.svg',
+        alt: 'Gallows',
+        class: 'gallows',
+      }),
+    ]),
+    createHTMLElement('div', { class: 'body-wrapper' }, null, [
+      createHTMLElement('img', {
+        src: 'assets/head.svg',
+        alt: 'Head',
+        class: 'head hidden',
+      }),
+      createHTMLElement('img', {
+        src: 'assets/body.svg',
+        alt: 'Body',
+        class: 'body hidden',
+      }),
+      createHTMLElement('img', {
+        src: 'assets/right-hand.svg',
+        alt: 'Right Hand',
+        class: 'right-hand hidden',
+      }),
+      createHTMLElement('img', {
+        src: 'assets/left-hand.svg',
+        alt: 'Left Hand',
+        class: 'left-hand hidden',
+      }),
+      createHTMLElement('img', {
+        src: 'assets/right-foot.svg',
+        alt: 'Right Foot',
+        class: 'right-foot hidden',
+      }),
+      createHTMLElement('img', {
+        src: 'assets/left-foot.svg',
+        alt: 'Left Foot',
+        class: 'left-foot hidden',
+      }),
+    ]),
+  ],
 );
 const hangmanContent = createHTMLElement('div', { class: 'hangman__content' });
 const hold = createHTMLElement('div', { class: 'hold' }, '');
 const hint = createHTMLElement('div', { class: 'hint' }, null, [
-    createHTMLElement('span', { class: 'hint__heading' }, 'Hint: '),
-    createHTMLElement('span', { class: 'hint__text' }, 'Just a sample'),
+  createHTMLElement('span', { class: 'hint__heading' }, 'Hint: '),
+  createHTMLElement('span', { class: 'hint__text' }, 'Just a sample'),
 ]);
 const guesses = createHTMLElement('div', { class: 'guesses' }, null, [
-    createHTMLElement(
-        'span',
-        { class: 'guesses__heading' },
-        'Incorrect guesses: ',
-    ),
-    createHTMLElement('span', { class: 'guesses__text' }, '0/6'),
+  createHTMLElement(
+    'span',
+    { class: 'guesses__heading' },
+    'Incorrect guesses: ',
+  ),
+  createHTMLElement('span', { class: 'guesses__text' }, '0/6'),
 ]);
 const keyboard = createHTMLElement('div', { class: 'keyboard' }, null, [
-    ...createKeyboard(keys),
+  ...createKeyboard(keys),
 ]);
 const heading = createHTMLElement(
-    'h1',
-    { class: 'hangman__title' },
-    'Hangman Game',
+  'h1',
+  { class: 'hangman__title' },
+  'Hangman Game',
 );
 
 const description = createHTMLElement(
-    'p',
-    { class: 'hangman__description' },
-    'Use the keyboard below to guess the word',
+  'p',
+  { class: 'hangman__description' },
+  'Use the keyboard below to guess the word',
 );
 
 const modal = createModal();
@@ -119,133 +103,97 @@ const guessesCounter = document.querySelector('.guesses__text');
 
 // TODO: refactor modal window
 const guessWord = (event) => {
-    if (event.target.classList.contains('key')) {
-        const guessLetter = event.target.dataset.letter;
-        const currentButton = event.target;
-        const answerArray = randomAnswer.split('');
+  let guessLetter;
+  let currentKey;
 
-        let counter = 0;
+  if (event.type === 'click' && event.target.classList.contains('key')) {
+    guessLetter = event.target.dataset.letter;
+    currentKey = event.target;
+  }
 
-        if (randomAnswer.toUpperCase() === correctAnswer) {
-            // const modal = createModal('You win!', randomAnswer);
-            // container.insertAdjacentHTML('beforeend', modal);
-            // keyboard.removeEventListener('click', guessWord);
-        } else {
-            if (incorrectGuesses < 6) {
-                for (let i = 0; i < randomAnswer.length; i++) {
-                    if (guessLetter === answerArray[i].toLowerCase()) {
-                        displayedLetters[i] = guessLetter.toUpperCase();
-                        currentButton.classList.add('disabled');
-                        correctAnswer = displayedLetters.join('');
-                        hold.textContent = displayedLetters.join(' ');
-                        counter++;
-                    }
-                }
+  if (event.type === 'keydown') {
+    if (/^[a-zA-Z]$/.test(event.key)) {
+      guessLetter = event.key.toLowerCase();
+      currentKey = document.querySelector(`.key[data-letter="${guessLetter}"]`);
+    } else {
+      return;
+    }
+  }
 
-                if (counter === 0) {
-                    incorrectGuesses++;
-                    guessesCounter.textContent = `${incorrectGuesses}/6`;
-                    animateHangman(incorrectGuesses);
+  if (event.target.classList.contains('key') || event.type === 'keydown') {
+    const answerArray = randomAnswer.split('');
 
-                    if (incorrectGuesses === 6) {
-                        // const modal = createModal(
-                        //     'You loose. Game Over!',
-                        //     randomAnswer,
-                        // );
-                        // container.insertAdjacentHTML('beforeend', modal);
-                        modalTitle.textContent = 'You loose. Game Over!';
-                        modalResult.textContent = randomAnswer;
-                        modal.classList.remove('hidden');
-                        const keys = document.querySelectorAll('.key');
-                        keys.forEach((key) => {
-                            key.classList.remove('disabled');
-                        });
-                        keyboard.removeEventListener('click', guessWord);
-                    }
-                    counter = 0;
-                } else {
-                    counter = 0;
-                }
-            }
+    let counter = 0;
 
-            if (randomAnswer.toUpperCase() === correctAnswer) {
-                modalTitle.textContent = 'You win!';
-                modalResult.textContent = randomAnswer;
-                modal.classList.remove('hidden');
-                const keys = document.querySelectorAll('.key');
-                keys.forEach((key) => {
-                    key.classList.remove('disabled');
-                });
-                keyboard.removeEventListener('click', guessWord);
-            }
+    if (incorrectGuesses < 6) {
+      for (let i = 0; i < randomAnswer.length; i++) {
+        if (guessLetter === answerArray[i].toLowerCase()) {
+          displayedLetters[i] = guessLetter.toUpperCase();
+          currentKey.classList.add('disabled');
+          correctAnswer = displayedLetters.join('');
+          hold.textContent = displayedLetters.join(' ');
+          counter++;
         }
+      }
+
+      if (counter === 0) {
+        incorrectGuesses++;
+        guessesCounter.textContent = `${incorrectGuesses}/6`;
+        animateHangman(incorrectGuesses);
+
+        if (incorrectGuesses === 6) {
+          modalTitle.textContent = 'You loose. Game Over!';
+          modalTitle.classList.add('wrong');
+          modalResult.textContent = randomAnswer;
+          modal.classList.remove('hidden');
+          const keys = document.querySelectorAll('.key');
+          keys.forEach((key) => {
+            key.classList.remove('disabled');
+          });
+          keyboard.removeEventListener('click', guessWord);
+        }
+        counter = 0;
+      } else {
+        counter = 0;
+      }
     }
 
-    // if (answer === winningCheck) {
-    //     livesDisplay.innerHTML = `YOU WIN!`;
-    //     return;
-    // } else {
-    //     if (life > 0) {
-    //         for (let j = 0; j < answer.length; j++) {
-    //             if (guessWord === answerArray[j]) {
-    //                 wordDisplay[j] = guessWord;
-    //                 console.log(guessWord);
-    //                 answerDisplay.innerHTML = wordDisplay.join(' ');
-    //                 winningCheck = wordDisplay.join('');
-    //                 //console.log(winningCheck)
-    //                 counter += 1;
-    //             }
-    //         }
-
-    //         if (counter === 0) {
-    //             life -= 1;
-    //             counter = 0;
-    //             animate();
-    //         } else {
-    //             counter = 0;
-    //         }
-
-    //         if (life > 1) {
-    //             livesDisplay.innerHTML = `You have ${life} lives!`;
-    //         } else if (life === 1) {
-    //             livesDisplay.innerHTML = `You have ${life} life!`;
-    //         } else {
-    //             livesDisplay.innerHTML = `GAME OVER!`;
-    //         }
-    //     } else {
-    //         return;
-    //     }
-    //     console.log(wordDisplay);
-    //     //console.log(counter);
-    //     //console.log(life);
-    //     if (answer === winningCheck) {
-    //         livesDisplay.innerHTML = `YOU WIN!`;
-    //         return;
-    //     }
-    // }
+    if (randomAnswer.toUpperCase() === correctAnswer) {
+      modalTitle.textContent = 'You win!';
+      modalTitle.classList.add('correct');
+      modalResult.textContent = randomAnswer;
+      modal.classList.remove('hidden');
+      const keys = document.querySelectorAll('.key');
+      keys.forEach((key) => {
+        key.classList.remove('disabled');
+      });
+      keyboard.removeEventListener('click', guessWord);
+    }
+  }
 };
-
-playAgainBtn.addEventListener('click', () => {
-    init();
-});
 
 const init = () => {
-    const hintElem = document.querySelector('.hint__text');
-    let randomAnswerIndex;
-    randomAnswer = setRandomAnswer();
-    console.log(randomAnswer);
-    randomAnswerIndex = answers.indexOf(randomAnswer);
-    hold.textContent = generateAnswerTemplate(randomAnswer);
-    displayedLetters = generateAnswerTemplate(randomAnswer).split(' ');
-    hintElem.textContent = hints[randomAnswerIndex];
-    // randomAnswer = '';
-    // correctAnswer = '';
-    // displayedLetters = [];
-    incorrectGuesses = 0;
-    guessesCounter.textContent = `${incorrectGuesses}/6`;
-    modal.classList.add('hidden');
-    animateHangman(0);
-    keyboard.addEventListener('click', guessWord);
+  const hintElem = document.querySelector('.hint__text');
+  let randomAnswerIndex;
+  randomAnswer = setRandomAnswer();
+  console.log(randomAnswer);
+  randomAnswerIndex = answers.indexOf(randomAnswer);
+  hold.textContent = generateAnswerTemplate(randomAnswer);
+  displayedLetters = generateAnswerTemplate(randomAnswer).split(' ');
+  hintElem.textContent = hints[randomAnswerIndex];
+  incorrectGuesses = 0;
+  guessesCounter.textContent = `${incorrectGuesses}/6`;
+  modal.classList.add('hidden');
+  animateHangman(0);
+  keyboard.addEventListener('click', guessWord);
+  document.addEventListener('keydown', guessWord);
 };
+
+playAgainBtn.addEventListener('click', init);
+// document.addEventListener('keydown', (event) => {
+//   if (event.key === 'Enter') {
+//     init();
+//   }
+// });
 
 init();

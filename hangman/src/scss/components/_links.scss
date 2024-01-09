@@ -1,32 +1,32 @@
 .hovered {
-    position: relative;
+  position: relative;
 
-    &::before {
-        position: absolute;
-        bottom: -4px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background-color: $dark;
-        transition: all 0.4s ease-in-out;
-        content: "";
-    }
+  &::before {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: $dark;
+    transition: all 0.4s ease-in-out;
+    content: "";
+  }
 
-    @media (hover: hover) {
-        &:hover::before {
-            left: 0;
-            width: 100%;
-        }
+  @media (hover: hover) {
+    &:hover::before {
+      left: 0;
+      width: 100%;
     }
+  }
 }
 
 .non-active {
-    border: none;
-    user-select: none;
-    pointer-events: none;
+  border: none;
+  user-select: none;
+  pointer-events: none;
 
-    &::before {
-        left: 0;
-        width: 100%;
-    }
+  &::before {
+    left: 0;
+    width: 100%;
+  }
 }

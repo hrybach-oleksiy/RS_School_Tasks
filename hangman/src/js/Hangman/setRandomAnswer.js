@@ -6,10 +6,10 @@ import { answers } from './hints';
  */
 
 const setRandomAnswer = () => {
-    const randomWordOrder = Math.floor(Math.random() * answers.length);
-    const randomAnswer = answers[randomWordOrder];
+  const randomWordOrder = Math.floor(Math.random() * answers.length);
+  const randomAnswer = answers[randomWordOrder];
 
-    return randomAnswer;
+  return randomAnswer;
 };
 
 export default setRandomAnswer;

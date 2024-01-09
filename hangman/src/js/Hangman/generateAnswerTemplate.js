@@ -4,14 +4,14 @@
  */
 
 const generateAnswerTemplate = (word) => {
-    const wordArray = word.split('');
-    const answerTemplate = [];
+  const wordArray = word.split('');
+  const answerTemplate = [];
 
-    for (let i = 0; i < wordArray.length; i++) {
-        answerTemplate.push('_');
-    }
+  for (let i = 0; i < wordArray.length; i++) {
+    answerTemplate.push('_');
+  }
 
-    return answerTemplate.join(' ');
+  return answerTemplate.join(' ');
 };
 
 export default generateAnswerTemplate;
