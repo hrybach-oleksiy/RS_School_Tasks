@@ -18,6 +18,7 @@ import {
 import generateModalContent from './generateModalContent';
 
 const MAX_INCORRECT_GUESSES = 6;
+const checkedLetters = [];
 
 let randomAnswer = '';
 let correctAnswer = '';
@@ -40,13 +41,14 @@ const guessWord = (event) => {
   if (event.type === 'click' && event.target.classList.contains('key')) {
     guessLetter = event.target.dataset.letter;
     currentKey = event.target;
-    // currentKey.classList.add('disabled');
+    currentKey.classList.add('disabled');
   }
 
   if (event.type === 'keydown') {
     if (/^[a-zA-Z]$/.test(event.key)) {
       guessLetter = event.key.toLowerCase();
       currentKey = document.querySelector(`.key[data-letter="${guessLetter}"]`);
+      currentKey.classList.add('disabled');
     } else {
       return;
     }
@@ -61,7 +63,6 @@ const guessWord = (event) => {
       for (let i = 0; i < randomAnswer.length; i++) {
         if (guessLetter === answerArray[i].toLowerCase()) {
           displayedLetters[i] = guessLetter.toUpperCase();
-          currentKey.classList.add('disabled');
           correctAnswer = displayedLetters.join('');
           hold.textContent = displayedLetters.join(' ');
           counter++;
@@ -69,9 +70,14 @@ const guessWord = (event) => {
       }
 
       if (counter === 0) {
+        if (checkedLetters.includes(currentKey)) {
+          return;
+        }
+
         incorrectGuesses++;
         guessesCounter.textContent = `${incorrectGuesses}/${MAX_INCORRECT_GUESSES}`;
         animateHangman(incorrectGuesses);
+        checkedLetters.push(currentKey);
 
         if (incorrectGuesses === 6) {
           generateModalContent(randomAnswer, 'You loose. Game Over!', 'wrong');
@@ -102,6 +108,7 @@ const init = () => {
   displayedLetters = generateAnswerTemplate(randomAnswer).split(' ');
   hintElem.textContent = hints[randomAnswerIndex];
   incorrectGuesses = 0;
+  checkedLetters.length = 0;
   guessesCounter.textContent = `${incorrectGuesses}/${MAX_INCORRECT_GUESSES}`;
   modalWindow.classList.add('hidden');
   animateHangman(0);
