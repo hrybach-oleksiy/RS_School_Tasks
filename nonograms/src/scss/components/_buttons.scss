@@ -1,0 +1,13 @@
+.btn {
+  @include flex-center;
+
+  width: 200px;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  user-select: none;
+}

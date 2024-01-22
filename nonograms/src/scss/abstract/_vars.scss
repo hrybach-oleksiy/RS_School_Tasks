@@ -1,0 +1,28 @@
+// colors
+$accent: #b0907a;
+$light: #e1d4c9;
+$dark: #403f3d;
+
+// backgrounds
+$body: #e1d4c9;
+$container: #665f55;
+$backdrop: #403f3d80;
+
+// border
+$border-light: #c1b6ad;
+$border-dark: #665f55;
+
+// media
+$desktop-width: 1441px;
+$laptop-width: 1200px;
+$big-tablet-width: 992px;
+$tablet-width: 768px;
+$small-tablet-width: 680px;
+$mobile-width: 440px;
+$small-mobile-width: 320px;
+
+// sizes
+$page-width: 1440; // for adaptive font mixin need specify without px
+$content-width: 1360px;
+$container-offset: 40px;
+$container-width: calc($content-width + ($container-offset * 2));
