@@ -68,11 +68,11 @@ module.exports = {
         test: /\.(woff2?|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
-      // {
-      //     test: /\.js$/,
-      //     exclude: /node_modules/,
-      //     use: ['babel-loader'],
-      // },
+      {
+        test: /\.js$/,
+        use: ['babel-loader'],
+        exclude: /node_modules/,
+      },
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
