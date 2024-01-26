@@ -1,0 +1,32 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80vmin;
+
+  // height: 80vmin;
+  height: 500px;
+
+  // margin: 20px auto auto;
+  background-color: $light;
+  box-shadow: 4px 4px 6px $shadow;
+}
+
+.menu-item {
+  display: flex;
+
+  // flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  margin: 20px;
+  padding: 30px 100px;
+  color: #f0f8ff;
+  font-weight: 900;
+  font-size: 30px;
+  background-color: $backdrop;
+  border-radius: 8px;
+  box-shadow: 2px 2px 2px $shadow;
+  cursor: pointer;
+}
