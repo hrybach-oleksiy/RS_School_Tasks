@@ -1,5 +1,5 @@
 import ElementCreator from '../ElementCreator';
-
+import Game from './Game';
 export default class GameHandler {
   constructor(...sizes) {
     this.sizes = sizes;
@@ -29,9 +29,14 @@ export default class GameHandler {
       const menuElement = ElementCreator.create('menu-item', '', 'li');
 
       menuElement.innerHTML = `${size} &times ${size}`;
+      menuElement.addEventListener('click', () => this.startGame(size, this));
       boardElement.append(menuElement);
     }
 
     rootElement.append(titleElement, difficultyElement, boardElement);
+  }
+
+  startGame(size, gameHandler) {
+    new Game(size, gameHandler);
   }
 }

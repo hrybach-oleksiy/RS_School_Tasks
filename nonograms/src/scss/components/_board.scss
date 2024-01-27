@@ -1,0 +1,60 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  width: 50vmin;
+  height: 50vmin;
+  margin: 20px auto;
+  background-color: $light;
+  border: 2px solid $dark;
+  box-shadow: 4px 4px 6px $shadow;
+  user-select: none;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+}
+
+.cell {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.header-column-cell {
+  display: flex;
+  align-items: flex-end;
+  height: auto;
+  white-space: pre;
+}
+
+.header-row-cell {
+  align-items: center;
+}
+
+.game-cell {
+  background-color: transparent;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.divider-bottom {
+  border-bottom: 2px solid $dark;
+}
+
+.divider-right {
+  border-right: 2px solid $dark;
+}
+
+.border-regular {
+  &--bottom {
+    border-bottom: 1px dotted $dark;
+  }
+
+  &--right {
+    border-right: 1px dotted $dark;
+  }
+}
+
+.clicked {
+  background-color: $backdrop;
+}
