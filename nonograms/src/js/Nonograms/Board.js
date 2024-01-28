@@ -1,4 +1,5 @@
 import ElementCreator from '../ElementCreator';
+import Modal from './Modal';
 
 export default class Board {
   constructor(puzzle, gameHandler) {
@@ -11,6 +12,7 @@ export default class Board {
     this.boardRows = puzzle.puzzleRows;
     this.gameHandler = gameHandler;
     this.boardElement = ElementCreator.create('board');
+    this.modal = new Modal(gameHandler);
     this.setBoard(rootElement);
   }
 
@@ -56,11 +58,17 @@ export default class Board {
           cellElement.dataset.indexes = `${i - 1}-${j - 1}`;
 
           cellElement.addEventListener('click', (event) => {
-            const indexes = event.target.dataset.indexes.split('-');
+            if (!this.checkWin()) {
+              const indexes = event.target.dataset.indexes.split('-');
 
-            this.board.toggleCellState(indexes[0], indexes[1]);
+              this.board.toggleCellState(indexes[0], indexes[1]);
 
-            event.target.classList.toggle('clicked');
+              event.target.classList.toggle('clicked');
+            }
+
+            if (this.checkWin()) {
+              this.modal.open();
+            }
           });
         }
 
@@ -77,5 +85,35 @@ export default class Board {
     restartBtn.addEventListener('click', () => this.gameHandler.showInitPage());
 
     rootElement.append(restartBtn);
+  }
+
+  checkWin() {
+    let isWin = true;
+
+    this.board.cols.forEach((col, index) => {
+      if (col.length === this.boardCols[index].length) {
+        col.forEach((el, i) => {
+          if (el != this.boardCols[index][i]) {
+            isWin = false;
+          }
+        });
+      } else {
+        isWin = false;
+      }
+    });
+
+    this.board.rows.forEach((row, index) => {
+      if (row.length === this.boardRows[index].length) {
+        row.forEach((el, i) => {
+          if (el != this.boardRows[index][i]) {
+            isWin = false;
+          }
+        });
+      } else {
+        isWin = false;
+      }
+    });
+
+    return isWin;
   }
 }
