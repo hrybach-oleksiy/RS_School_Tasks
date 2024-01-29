@@ -1,14 +1,12 @@
-import { mMatrix } from './templates';
-
 export default class Puzzle {
-  constructor(size) {
+  constructor(size, template) {
     this.puzzleArray = new Array(size)
       .fill()
       .map(() => new Array(size).fill(0));
     // this.puzzleTemplate = new Array(size)
     //   .fill()
     //   .map(() => new Array(size).fill().map(() => Math.round(Math.random())));
-    this.puzzleTemplate = mMatrix;
+    this.puzzleTemplate = template;
     this.cols = new Array(size).fill().map(() => [0]);
     this.rows = new Array(size).fill().map(() => [0]);
     this.puzzleCols = new Array(size).fill().map(() => [0]);

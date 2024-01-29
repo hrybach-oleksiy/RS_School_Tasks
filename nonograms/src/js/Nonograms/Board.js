@@ -12,7 +12,7 @@ export default class Board {
     this.boardRows = puzzle.puzzleRows;
     this.gameHandler = gameHandler;
     this.boardElement = ElementCreator.create('board');
-    this.modal = new Modal(gameHandler);
+    this.modal = null;
     this.setBoard(rootElement);
   }
 
@@ -67,7 +67,15 @@ export default class Board {
             }
 
             if (this.checkWin()) {
-              this.modal.open();
+              const modalContent = `
+                <div class="modal__text">
+                  <h3 class="modal__title">Great! You have solved the nonogram!</h3>
+                </div>
+                <button class="btn play">Play Again</button>
+              `;
+
+              const modal = new Modal(this.gameHandler, modalContent);
+              modal.open();
             }
           });
         }
