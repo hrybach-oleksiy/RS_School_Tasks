@@ -1,5 +1,6 @@
 import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
+// import clickedSound from '../../assets/sounds/clicked.mp3';
 
 export default class Board {
   constructor(puzzle, gameHandler) {
@@ -16,6 +17,12 @@ export default class Board {
     this.timer = 0;
     this.timerElement = ElementCreator.create('timer', '00 : 00');
     this.interval = null;
+    this.clickedSound = this.createAudioElement('/assets/clicked.mp3');
+    this.unClickedSound = this.createAudioElement('/assets/unclicked.mp3');
+    this.crossedSound = this.createAudioElement('/assets/crossed.mp3');
+    this.winSound = this.createAudioElement('/assets/game-win.mp3');
+    this.isSound = true;
+    this.soundElement = ElementCreator.create('sound-on');
     this.setBoard(rootElement);
   }
 
@@ -68,6 +75,11 @@ export default class Board {
             }
 
             event.target.classList.toggle('crossed');
+
+            if (this.isSound) {
+              this.crossedSound.currentTime = 0;
+              this.crossedSound.play();
+            }
           });
 
           //check cells by left mouse button
@@ -78,9 +90,18 @@ export default class Board {
               const indexes = event.target.dataset.indexes.split('-');
 
               this.board.toggleCellState(indexes[0], indexes[1]);
-
               event.target.classList.toggle('clicked');
               event.target.classList.remove('crossed');
+
+              if (this.isSound) {
+                if (event.target.classList.contains('clicked')) {
+                  this.clickedSound.currentTime = 0;
+                  this.clickedSound.play();
+                } else {
+                  this.unClickedSound.currentTime = 0;
+                  this.unClickedSound.play();
+                }
+              }
             }
 
             if (this.checkWin()) {
@@ -95,6 +116,10 @@ export default class Board {
               this.stopTimer();
               const modal = new Modal(this.gameHandler, modalContent);
               modal.open();
+
+              if (this.isSound) {
+                this.winSound.play();
+              }
             }
           });
         }
@@ -112,6 +137,13 @@ export default class Board {
     );
     const restartBtn = ElementCreator.create('btn', 'Restart', 'button');
     const btnContainer = ElementCreator.create('btn-container');
+    const soundContainerElement = ElementCreator.create('sound-container');
+
+    soundContainerElement.append(this.soundElement);
+
+    soundContainerElement.addEventListener('click', () => {
+      this.turnSound();
+    });
 
     changeGameBtn.addEventListener('click', () =>
       this.gameHandler.showInitPage(),
@@ -123,7 +155,7 @@ export default class Board {
       this.stopTimer();
     });
 
-    btnContainer.append(changeGameBtn, restartBtn);
+    btnContainer.append(changeGameBtn, restartBtn, soundContainerElement);
     rootElement.append(this.boardElement, btnContainer, this.timerElement);
   }
 
@@ -182,4 +214,24 @@ export default class Board {
       this.timer++;
     }
   };
+
+  createAudioElement(src) {
+    const audio = new Audio(src);
+
+    audio.style.display = 'none';
+    document.body.append(audio);
+    return audio;
+  }
+
+  turnSound() {
+    if (this.isSound === true) {
+      this.isSound = false;
+      this.soundElement.classList.remove('sound-on');
+      this.soundElement.classList.add('sound-off');
+    } else {
+      this.isSound = true;
+      this.soundElement.classList.add('sound-on');
+      this.soundElement.classList.remove('sound-off');
+    }
+  }
 }
