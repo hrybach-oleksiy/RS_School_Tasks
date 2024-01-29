@@ -57,6 +57,17 @@ export default class Board {
           cellElement.classList.add('cell', 'game-cell');
           cellElement.dataset.indexes = `${i - 1}-${j - 1}`;
 
+          //check cells by right mouse button
+          cellElement.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            if (event.target.classList.contains('clicked')) {
+              return;
+            }
+
+            event.target.classList.toggle('crossed');
+          });
+
+          //check cells by left mouse button
           cellElement.addEventListener('click', (event) => {
             if (!this.checkWin()) {
               const indexes = event.target.dataset.indexes.split('-');
@@ -64,6 +75,7 @@ export default class Board {
               this.board.toggleCellState(indexes[0], indexes[1]);
 
               event.target.classList.toggle('clicked');
+              event.target.classList.remove('crossed');
             }
 
             if (this.checkWin()) {
@@ -113,7 +125,7 @@ export default class Board {
     this.board.cols.forEach((col, index) => {
       if (col.length === this.boardCols[index].length) {
         col.forEach((el, i) => {
-          if (el != this.boardCols[index][i]) {
+          if (el !== this.boardCols[index][i]) {
             isWin = false;
           }
         });
@@ -125,7 +137,7 @@ export default class Board {
     this.board.rows.forEach((row, index) => {
       if (row.length === this.boardRows[index].length) {
         row.forEach((el, i) => {
-          if (el != this.boardRows[index][i]) {
+          if (el !== this.boardRows[index][i]) {
             isWin = false;
           }
         });

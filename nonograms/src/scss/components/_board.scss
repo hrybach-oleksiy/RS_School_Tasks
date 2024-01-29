@@ -33,6 +33,7 @@
 }
 
 .game-cell {
+  position: relative;
   background-color: transparent;
   transition: background-color 0.3s ease-in-out;
 }
@@ -57,6 +58,21 @@
 
 .clicked {
   background-color: $backdrop;
+}
+
+.game-cell::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  color: $backdrop;
+  font-size: 9vmin;
+  transform: translate(-50%, -50%);
+  content: "X";
+}
+
+.game-cell.crossed::before {
+  display: block;
 }
 
 .btn-container {
