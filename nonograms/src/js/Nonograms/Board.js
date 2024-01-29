@@ -13,6 +13,9 @@ export default class Board {
     this.gameHandler = gameHandler;
     this.boardElement = ElementCreator.create('board');
     this.modal = null;
+    this.timer = 0;
+    this.timerElement = ElementCreator.create('timer', '00 : 00');
+    this.interval = null;
     this.setBoard(rootElement);
   }
 
@@ -69,6 +72,8 @@ export default class Board {
 
           //check cells by left mouse button
           cellElement.addEventListener('click', (event) => {
+            this.startTimer();
+
             if (!this.checkWin()) {
               const indexes = event.target.dataset.indexes.split('-');
 
@@ -81,11 +86,13 @@ export default class Board {
             if (this.checkWin()) {
               const modalContent = `
                 <div class="modal__text">
-                  <h3 class="modal__title">Great! You have solved the nonogram!</h3>
+                  <h3 class="modal__title">Great! You have solved the nonogram in <strong>${
+                    this.timer - 1
+                  }</strong> seconds!</h3>
                 </div>
                 <button class="btn play">Play Again</button>
               `;
-
+              this.stopTimer();
               const modal = new Modal(this.gameHandler, modalContent);
               modal.open();
             }
@@ -113,10 +120,11 @@ export default class Board {
     restartBtn.addEventListener('click', () => {
       const clickedCells = document.querySelectorAll('.clicked');
       clickedCells.forEach((cell) => cell.classList.remove('clicked'));
+      this.stopTimer();
     });
 
     btnContainer.append(changeGameBtn, restartBtn);
-    rootElement.append(this.boardElement, btnContainer);
+    rootElement.append(this.boardElement, btnContainer, this.timerElement);
   }
 
   checkWin() {
@@ -148,4 +156,30 @@ export default class Board {
 
     return isWin;
   }
+
+  startTimer() {
+    if (!this.interval) {
+      this.interval = setInterval(this.formatTimer, 1000);
+    }
+  }
+
+  stopTimer = () => {
+    clearInterval(this.interval);
+    this.timerElement.textContent = '00 : 00';
+    this.interval = null;
+    this.timer = 0;
+  };
+
+  formatTimer = () => {
+    if (!this.checkWin()) {
+      const mins = Math.floor(this.timer / 60);
+      const secs = this.timer % 60;
+
+      this.timerElement.innerHTML =
+        (mins < 10 ? '0' + mins : mins) +
+        ' : ' +
+        (secs < 10 ? '0' + secs : secs);
+      this.timer++;
+    }
+  };
 }
