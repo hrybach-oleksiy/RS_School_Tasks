@@ -86,13 +86,25 @@ export default class Board {
       this.boardElement.append(rowElement);
     }
 
-    rootElement.append(this.boardElement);
+    const changeGameBtn = ElementCreator.create(
+      'btn',
+      'Change template',
+      'button',
+    );
+    const restartBtn = ElementCreator.create('btn', 'Restart', 'button');
+    const btnContainer = ElementCreator.create('btn-container');
 
-    const restartBtn = ElementCreator.create('btn', 'Restart');
+    changeGameBtn.addEventListener('click', () =>
+      this.gameHandler.showInitPage(),
+    );
 
-    restartBtn.addEventListener('click', () => this.gameHandler.showInitPage());
+    restartBtn.addEventListener('click', () => {
+      const clickedCells = document.querySelectorAll('.clicked');
+      clickedCells.forEach((cell) => cell.classList.remove('clicked'));
+    });
 
-    rootElement.append(restartBtn);
+    btnContainer.append(changeGameBtn, restartBtn);
+    rootElement.append(this.boardElement, btnContainer);
   }
 
   checkWin() {

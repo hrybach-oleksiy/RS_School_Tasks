@@ -58,3 +58,8 @@
 .clicked {
   background-color: $backdrop;
 }
+
+.btn-container {
+  display: flex;
+  gap: 30px;
+}
