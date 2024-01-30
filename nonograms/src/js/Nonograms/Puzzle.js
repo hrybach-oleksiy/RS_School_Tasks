@@ -24,10 +24,8 @@ export default class Puzzle {
   }
 
   setField(puzzleArr, rows, cols) {
-    for (let i = 0; i < puzzleArr.length; i++) {
-      for (let j = 0; j < puzzleArr.length; j++) {
-        let value = puzzleArr[i][j];
-
+    puzzleArr.forEach((row, i) => {
+      row.forEach((value, j) => {
         if (value) {
           cols[j][cols[j].length - 1]++;
           rows[i][rows[i].length - 1]++;
@@ -40,20 +38,19 @@ export default class Puzzle {
             rows[i].push(0);
           }
         }
-      }
-    }
+      });
+    });
 
-    for (const array of cols) {
-      if (array.length > 1 && !array[array.length - 1]) {
-        array.splice(-1, 1);
-      }
-    }
+    this.removeTrailingZeros(cols);
+    this.removeTrailingZeros(rows);
+  }
 
-    for (const array of rows) {
+  removeTrailingZeros(arrays) {
+    arrays.forEach((array) => {
       if (array.length > 1 && !array[array.length - 1]) {
-        array.splice(-1, 1);
+        array.pop();
       }
-    }
+    });
   }
 
   toggleCellState(row, column) {

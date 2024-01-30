@@ -1,8 +1,7 @@
 import ElementCreator from '../ElementCreator';
-
 export default class Modal {
   constructor(gameHandler, content) {
-    this.modalElement = null;
+    this.modalElement = ElementCreator.create('div', { class: 'modal hidden' });
     this.isOpen = false;
     this.closeButton = null;
     this.gameHandler = gameHandler;
@@ -12,22 +11,25 @@ export default class Modal {
   }
 
   initModal() {
-    this.modalElement = ElementCreator.create('modal');
-    this.modalElement.classList.add('hidden');
+    const rootElement = document.querySelector('.game');
+    const modalContent = ElementCreator.create('div', {
+      class: 'modal__content',
+    });
 
-    this.modalElement.innerHTML = `
-      <div class="modal__content">
-        ${this.content}      
-      </div>
-    `;
+    if (this.content instanceof HTMLElement) {
+      modalContent.append(this.content);
+    } else {
+      modalContent.innerHTML = this.content;
+    }
+
+    this.modalElement.append(modalContent);
 
     this.closeButton = this.modalElement.querySelector('.play');
+
     this.closeButton?.addEventListener('click', () => {
       this.close();
       this.gameHandler.showInitPage();
     });
-
-    const rootElement = document.querySelector('.game');
 
     rootElement.append(this.modalElement);
   }
