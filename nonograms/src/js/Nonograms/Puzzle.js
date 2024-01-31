@@ -1,17 +1,22 @@
 export default class Puzzle {
   constructor(size, template) {
-    this.puzzleArray = new Array(size)
+    this.size = size;
+    this.puzzleArray = new Array(this.size)
       .fill()
-      .map(() => new Array(size).fill(0));
+      .map(() => new Array(this.size).fill(0));
     // this.puzzleTemplate = new Array(size)
     //   .fill()
     //   .map(() => new Array(size).fill().map(() => Math.round(Math.random())));
     this.puzzleTemplate = template;
-    this.cols = new Array(size).fill().map(() => [0]);
-    this.rows = new Array(size).fill().map(() => [0]);
-    this.puzzleCols = new Array(size).fill().map(() => [0]);
-    this.puzzleRows = new Array(size).fill().map(() => [0]);
-    console.log(this.puzzleTemplate);
+    this.cols = new Array(this.size).fill().map(() => [0]);
+    this.rows = new Array(this.size).fill().map(() => [0]);
+    this.puzzleCols = new Array(this.size).fill().map(() => [0]);
+    this.puzzleRows = new Array(this.size).fill().map(() => [0]);
+    console.log('puzzle template: ', this.puzzleTemplate);
+    console.log('cols: ', this.cols);
+    console.log('rows: ', this.rows);
+    console.log('Puzzle Cols: ', this.puzzleCols);
+    console.log('Puzzle Rows: ', this.puzzleRows);
 
     this.clearField();
     this.setField(this.puzzleTemplate, this.puzzleRows, this.puzzleCols);

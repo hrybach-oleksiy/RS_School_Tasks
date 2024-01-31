@@ -8,6 +8,7 @@ import {
   sunMatrix,
   treeMatrix,
 } from './templates';
+import GameStateManager from './GameStateManager';
 export default class GameHandler {
   constructor(...sizes) {
     this.sizes = sizes;
@@ -31,8 +32,20 @@ export default class GameHandler {
       'Choose the template for the game',
     );
     const menuElement = this.createMenu();
+    const loadGameElement = ElementCreator.create(
+      'button',
+      { class: 'btn' },
+      'Load Last Game',
+    );
 
-    this.rootElement.append(titleElement, difficultyElement, menuElement);
+    loadGameElement.addEventListener('click', this.loadGame);
+
+    this.rootElement.append(
+      titleElement,
+      difficultyElement,
+      menuElement,
+      loadGameElement,
+    );
   }
 
   createMenu() {
@@ -99,6 +112,21 @@ export default class GameHandler {
     });
 
     return templatesMenu;
+  }
+
+  loadGame() {
+    const gameData = GameStateManager.loadGameState();
+
+    if (gameData) {
+      const { template, size } = gameData.puzzleState;
+      const { clicked, crossed } = gameData.cellsState;
+      console.log(clicked);
+      console.log(crossed);
+      new Game(size, template, this);
+      console.log('data loaded');
+    } else {
+      console.log('no data');
+    }
   }
 
   startGame(size, template, gameHandler) {

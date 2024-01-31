@@ -3,7 +3,7 @@ import Board from './Board';
 
 export default class Game {
   constructor(size, template, gameHandler) {
-    this.board = new Puzzle(size, template);
-    new Board(this.board, gameHandler);
+    this.puzzle = new Puzzle(size, template);
+    new Board(this.puzzle, gameHandler);
   }
 }

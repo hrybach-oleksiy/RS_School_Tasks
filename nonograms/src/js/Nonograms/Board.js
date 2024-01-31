@@ -1,5 +1,6 @@
 import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
+import GameStateManager from './GameStateManager';
 
 export default class Board {
   constructor(puzzle, gameHandler) {
@@ -115,6 +116,7 @@ export default class Board {
         this.board.toggleCellState(indexes[0], indexes[1]);
         event.target.classList.toggle('clicked');
         event.target.classList.remove('crossed');
+        // this.saveGameState();
 
         if (this.isSound) {
           if (event.target.classList.contains('clicked')) {
@@ -155,6 +157,7 @@ export default class Board {
         handler: () => this.changeDifficulty(),
       },
       { text: 'Restart', handler: () => this.restartGame() },
+      { text: 'Save Game', handler: () => this.saveGame() },
     ];
 
     buttons.forEach(({ text, handler }) => {
@@ -210,7 +213,6 @@ export default class Board {
     // });
 
     // return isWin;
-
     return (
       this.board.cols.every(
         (col, index) =>
@@ -227,6 +229,29 @@ export default class Board {
 
   changeDifficulty() {
     this.gameHandler.showInitPage();
+  }
+
+  getPuzzleState() {
+    return {
+      puzzleState: {
+        cols: this.board.cols,
+        rows: this.board.rows,
+        template: this.board.puzzleTemplate,
+        size: this.board.size,
+      },
+      cellsState: {
+        clicked: document.querySelectorAll('clicked'),
+        crossed: document.querySelectorAll('crossed'),
+      },
+    };
+  }
+
+  getTimer() {
+    return this.timer;
+  }
+
+  getSoundState() {
+    return this.isSound;
   }
 
   restartGame() {
@@ -257,16 +282,14 @@ export default class Board {
   };
 
   formatTimer = () => {
-    if (!this.checkWin()) {
-      const mins = Math.floor(this.timer / 60);
-      const secs = this.timer % 60;
+    // if (!this.checkWin()) {
+    const mins = Math.floor(this.timer / 60);
+    const secs = this.timer % 60;
 
-      this.timerElement.innerHTML =
-        (mins < 10 ? '0' + mins : mins) +
-        ' : ' +
-        (secs < 10 ? '0' + secs : secs);
-      this.timer++;
-    }
+    this.timerElement.innerHTML =
+      (mins < 10 ? '0' + mins : mins) + ' : ' + (secs < 10 ? '0' + secs : secs);
+    this.timer++;
+    // }
   };
 
   createAudioElement(src) {
@@ -289,5 +312,32 @@ export default class Board {
     this.isSound = !this.isSound;
     this.soundElement.classList.toggle('sound-on');
     this.soundElement.classList.toggle('sound-off');
+  }
+
+  // saveGameState() {
+  //   const gameData = {
+  //     puzzleState: {
+  //       cols: this.board.cols,
+  //       rows: this.board.rows,
+  //       template: this.board.puzzleTemplate,
+  //       size: this.board.size,
+  //     },
+  //     timer: this.timer,
+  //     soundState: this.isSound,
+  //     cellsState: {
+  //       clicked: document.querySelectorAll('clicked'),
+  //       crossed: document.querySelectorAll('crossed'),
+  //     },
+  //   };
+
+  //   GameStateManager.saveGameState(gameData);
+  // }
+
+  saveGame() {
+    const gameData = GameStateManager.serializeGameState(this);
+    console.log('puzzle rows after save: ', this.board.rows);
+    console.log('puzzle cols after save: ', this.board.cols);
+    GameStateManager.saveGameState(gameData);
+    console.log('data saved');
   }
 }
