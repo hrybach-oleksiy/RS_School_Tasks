@@ -256,7 +256,9 @@ export default class Board {
 
   restartGame() {
     const clickedCells = document.querySelectorAll('.clicked');
+    const crossedCells = document.querySelectorAll('.crossed');
     clickedCells.forEach((cell) => cell.classList.remove('clicked'));
+    crossedCells.forEach((cell) => cell.classList.remove('crossed'));
     this.stopTimer();
   }
 

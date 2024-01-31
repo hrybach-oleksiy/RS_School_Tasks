@@ -11,11 +11,11 @@ html {
 body {
   position: relative;
   overflow-x: hidden;
-  color: $dark;
+  color: var(--text);
   font-size: 16px;
   font-family: "Inter", sans-serif;
   line-height: 20px; /* 142.857% */
-  background-color: $body;
+  background-color: var(--body);
 }
 
 img {

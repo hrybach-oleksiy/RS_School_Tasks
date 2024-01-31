@@ -9,12 +9,16 @@ import {
   treeMatrix,
 } from './templates';
 import GameStateManager from './GameStateManager';
+import ThemeSwitcher from './ThemeSwitcher';
 export default class GameHandler {
   constructor(...sizes) {
     this.sizes = sizes;
-    this.rootElement = ElementCreator.create('div', { class: 'game' });
+    this.rootElement = ElementCreator.create('div', {
+      class: 'game',
+    });
     document.body.append(this.rootElement);
     this.templates = [mMatrix, heartMatrix, starMatrix, sunMatrix, treeMatrix];
+    this.themeSwitcher = new ThemeSwitcher();
     this.showInitPage();
   }
 
@@ -32,19 +36,36 @@ export default class GameHandler {
       'Choose the template for the game',
     );
     const menuElement = this.createMenu();
-    const loadGameElement = ElementCreator.create(
+    const loadGameBtn = ElementCreator.create(
       'button',
       { class: 'btn' },
       'Load Last Game',
     );
+    const changeThemeBtn = ElementCreator.create(
+      'button',
+      { class: 'btn', ['data-theme']: 'dark' },
+      'Change Theme',
+    );
 
-    loadGameElement.addEventListener('click', this.loadGame);
+    loadGameBtn.addEventListener('click', this.loadGame);
+
+    changeThemeBtn.addEventListener('click', (event) => {
+      let currentTheme = event.target.dataset.theme;
+      this.themeSwitcher.changeTheme(currentTheme);
+
+      if (currentTheme === 'light') {
+        event.target.dataset.theme = 'dark';
+      } else {
+        event.target.dataset.theme = 'light';
+      }
+    });
 
     this.rootElement.append(
       titleElement,
       difficultyElement,
       menuElement,
-      loadGameElement,
+      loadGameBtn,
+      changeThemeBtn,
     );
   }
 

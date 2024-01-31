@@ -18,9 +18,33 @@
   margin-bottom: 30px;
 
   // margin: 20px auto auto;
-  background-color: $light;
+  background-color: var(--light);
   box-shadow: 4px 4px 6px $shadow;
 }
+
+// @include themify($themes) {
+//   .menu {
+//     background-color: themed("bg");
+//   }
+// }
+
+// @include themify($themes) {
+//   .menu {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     width: 80vmin;
+
+//     // height: 80vmin;
+//     min-height: 300px;
+//     margin-bottom: 30px;
+
+//     // margin: 20px auto auto;
+//     background-color: themed("bg");
+//     box-shadow: 4px 4px 6px $shadow;
+//   }
+// }
 
 .menu-item {
   position: relative;
@@ -35,10 +59,10 @@
   width: 70%;
   margin: 20px;
   padding: 30px 100px;
-  color: #f0f8ff;
+  color: var(--text);
   font-weight: 900;
   font-size: 30px;
-  background-color: $backdrop;
+  background-color: var(--background);
   border-radius: 8px;
   box-shadow: 2px 2px 2px $shadow;
   cursor: pointer;
@@ -54,7 +78,7 @@
 }
 
 .menu-sizes {
-  color: $accent;
+  color: var(--primary);
 }
 
 .title {

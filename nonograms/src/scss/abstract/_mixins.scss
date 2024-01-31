@@ -69,3 +69,16 @@
     @content;
   }
 }
+
+// @mixin themify($themes: $themes) {
+//   @each $name, $values in $themes {
+//     .#{$name}-theme {
+//       $theme-map: $values !global;
+//       @content;
+//     }
+//   }
+// }
+
+// @function themed($key) {
+//   @return map-get($theme-map, $key);
+// }
