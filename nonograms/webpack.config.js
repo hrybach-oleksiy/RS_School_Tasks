@@ -109,6 +109,11 @@ module.exports = {
           from: path.resolve(__dirname, 'src/assets/images'),
           to: path.resolve(__dirname, 'dist/assets'),
         },
+
+        {
+          from: path.resolve(__dirname, 'src/assets/sounds'),
+          to: path.resolve(__dirname, 'dist/assets'),
+        },
       ],
     }),
   ],

@@ -33,6 +33,7 @@
 }
 
 .game-cell {
+  position: relative;
   background-color: transparent;
   transition: background-color 0.3s ease-in-out;
 }
@@ -57,4 +58,57 @@
 
 .clicked {
   background-color: $backdrop;
+}
+
+.game-cell::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  color: $backdrop;
+  font-size: 9vmin;
+  transform: translate(-50%, -50%);
+  content: "X";
+}
+
+.game-cell.crossed::before {
+  display: block;
+}
+
+.btn-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.timer {
+  padding: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  border-radius: 8px;
+  transition: all 500ms ease;
+}
+
+.sound-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sound-on {
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/images/sound-on.svg");
+  background-size: cover;
+}
+
+.sound-off {
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/images/sound-off.svg");
+  background-size: cover;
 }

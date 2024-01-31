@@ -1,42 +1,135 @@
 import ElementCreator from '../ElementCreator';
 import Game from './Game';
+import Modal from './Modal';
+import {
+  mMatrix,
+  heartMatrix,
+  starMatrix,
+  sunMatrix,
+  treeMatrix,
+} from './templates';
+import GameStateManager from './GameStateManager';
 export default class GameHandler {
   constructor(...sizes) {
     this.sizes = sizes;
-    this.rootElement = ElementCreator.create('game');
+    this.rootElement = ElementCreator.create('div', { class: 'game' });
     document.body.append(this.rootElement);
+    this.templates = [mMatrix, heartMatrix, starMatrix, sunMatrix, treeMatrix];
     this.showInitPage();
   }
 
   showInitPage() {
-    const rootElement = document.querySelector('.game');
-
-    rootElement.innerHTML = '';
+    this.rootElement.innerHTML = '';
 
     const titleElement = ElementCreator.create(
-      'title',
-      'Nonogram Puzzle',
       'h1',
+      { class: 'title' },
+      'Nonogram Puzzle',
     );
     const difficultyElement = ElementCreator.create(
-      'menu-choose',
-      'Choose the difficulty',
       'p',
+      { class: 'menu-choose' },
+      'Choose the template for the game',
     );
-    const boardElement = ElementCreator.create('menu', '', 'ul');
+    const menuElement = this.createMenu();
+    const loadGameElement = ElementCreator.create(
+      'button',
+      { class: 'btn' },
+      'Load Last Game',
+    );
 
-    for (const size of this.sizes) {
-      const menuElement = ElementCreator.create('menu-item', '', 'li');
+    loadGameElement.addEventListener('click', this.loadGame);
 
-      menuElement.innerHTML = `${size} &times ${size}`;
-      menuElement.addEventListener('click', () => this.startGame(size, this));
-      boardElement.append(menuElement);
-    }
-
-    rootElement.append(titleElement, difficultyElement, boardElement);
+    this.rootElement.append(
+      titleElement,
+      difficultyElement,
+      menuElement,
+      loadGameElement,
+    );
   }
 
-  startGame(size, gameHandler) {
-    new Game(size, gameHandler);
+  createMenu() {
+    const menuElement = ElementCreator.create('ul', { class: 'menu' });
+
+    for (const size of this.sizes) {
+      const menuItemElement = ElementCreator.create('li', {
+        class: 'menu-item',
+      });
+
+      menuItemElement.innerHTML = `
+      <div class="menu-text">Templates for the game</div>
+      <div class="menu-sizes"> ${size} &times ${size}</div>
+      `;
+
+      menuItemElement.addEventListener('click', () => this.chooseTemplate());
+      menuElement.append(menuItemElement);
+    }
+
+    return menuElement;
+  }
+
+  chooseTemplate() {
+    // const modalContent = `
+    // <ul class="templates-menu">
+    //   ${this.templates
+    //     .map(
+    //       (template) =>
+    //         `<li class="templates-menu__item">${template.name}</li>`,
+    //     )
+    //     .join('')}
+    // </ul>
+    // `;
+    const modalContent = this.createTemplatesMenu();
+    const modal = new Modal(this, modalContent);
+
+    modal.open();
+
+    const menuItems = document.querySelectorAll('.templates-menu__item');
+
+    menuItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        const currentItem = this.templates[index];
+        const size = currentItem.size;
+        const template = currentItem.template;
+
+        this.startGame(size, template, this);
+      });
+    });
+  }
+
+  createTemplatesMenu() {
+    const templatesMenu = ElementCreator.create('ul', {
+      class: 'templates-menu',
+    });
+
+    this.templates.forEach((template) => {
+      const templateItem = ElementCreator.create(
+        'li',
+        { class: 'templates-menu__item' },
+        template.name,
+      );
+      templatesMenu.append(templateItem);
+    });
+
+    return templatesMenu;
+  }
+
+  loadGame() {
+    const gameData = GameStateManager.loadGameState();
+
+    if (gameData) {
+      const { template, size } = gameData.puzzleState;
+      const { clicked, crossed } = gameData.cellsState;
+      console.log(clicked);
+      console.log(crossed);
+      new Game(size, template, this);
+      console.log('data loaded');
+    } else {
+      console.log('no data');
+    }
+  }
+
+  startGame(size, template, gameHandler) {
+    new Game(size, template, gameHandler);
   }
 }

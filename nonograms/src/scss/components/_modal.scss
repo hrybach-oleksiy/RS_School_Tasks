@@ -23,6 +23,24 @@
     border-radius: 40px;
     transform: translate(-50%, -50%);
 
+    .templates-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: stretch;
+      justify-content: center;
+
+      &__item {
+        padding: 30px 100px;
+        color: #f0f8ff;
+        font-weight: 900;
+        font-size: 30px;
+        background-color: $backdrop;
+        border-radius: 100px;
+        cursor: pointer;
+      }
+    }
+
     @include media-tablet {
       width: 650px;
     }
