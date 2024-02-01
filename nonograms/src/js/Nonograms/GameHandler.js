@@ -14,6 +14,7 @@ export default class GameHandler {
     this.templates = [...templates];
     this.themeSwitcher = new ThemeSwitcher();
     this.size = null;
+    console.log(this.templates);
   }
 
   showInitPage() {
@@ -40,8 +41,16 @@ export default class GameHandler {
       { class: 'btn', ['data-theme']: 'dark' },
       'Change Theme',
     );
+    const playRandomBtn = ElementCreator.create(
+      'button',
+      { class: 'btn' },
+      'Play Random Game',
+    );
 
     loadGameBtn.addEventListener('click', this.loadGame);
+    playRandomBtn.addEventListener('click', () => {
+      this.startRandomGame();
+    });
 
     changeThemeBtn.addEventListener('click', (event) => {
       let currentTheme = event.target.dataset.theme;
@@ -59,6 +68,7 @@ export default class GameHandler {
       difficultyElement,
       menuElement,
       loadGameBtn,
+      playRandomBtn,
       changeThemeBtn,
     );
   }
@@ -150,6 +160,18 @@ export default class GameHandler {
     } else {
       console.log('no data');
     }
+  }
+
+  startRandomGame() {
+    const availableSizes = [5, 10, 15];
+    const randomSizeIndex = Math.floor(Math.random() * availableSizes.length);
+    const randomSize = availableSizes[randomSizeIndex];
+    const templates = this.templates.filter(
+      (template) => template.size === randomSize,
+    );
+    const randomTemplateIndex = Math.floor(Math.random() * templates.length);
+    const randomTemplate = templates[randomTemplateIndex].template;
+    this.startGame(randomSize, randomTemplate, this);
   }
 
   startGame(size, template, gameHandler) {
