@@ -1,7 +1,6 @@
 import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
 import GameStateManager from './GameStateManager';
-
 export default class Board {
   constructor(puzzle, gameHandler) {
     this.rootElement = document.querySelector('.game');
@@ -158,6 +157,7 @@ export default class Board {
       },
       { text: 'Restart', handler: () => this.restartGame() },
       { text: 'Save Game', handler: () => this.saveGame() },
+      { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
     ];
 
     buttons.forEach(({ text, handler }) => {
@@ -341,5 +341,26 @@ export default class Board {
     console.log('puzzle cols after save: ', this.board.cols);
     GameStateManager.saveGameState(gameData);
     console.log('data saved');
+  }
+
+  getCellElement(row, column) {
+    const rowIndex = row + 1;
+    const cellSelector = `.game .row:nth-child(${rowIndex}) .cell:nth-child(${
+      column + 1
+    })`;
+    return document.querySelector(cellSelector);
+  }
+
+  handleSolutionBtnClick() {
+    const solution = this.board.getSolution();
+
+    solution.forEach((row, i) => {
+      row.forEach((value, j) => {
+        if (value === 1) {
+          const cellElement = this.getCellElement(i + 1, j + 1);
+          cellElement.classList.add('clicked');
+        }
+      });
+    });
   }
 }

@@ -14,7 +14,6 @@ export default class GameHandler {
     this.templates = [...templates];
     this.themeSwitcher = new ThemeSwitcher();
     this.size = null;
-    console.log(this.templates);
   }
 
   showInitPage() {
@@ -171,6 +170,7 @@ export default class GameHandler {
     );
     const randomTemplateIndex = Math.floor(Math.random() * templates.length);
     const randomTemplate = templates[randomTemplateIndex].template;
+
     this.startGame(randomSize, randomTemplate, this);
   }
 

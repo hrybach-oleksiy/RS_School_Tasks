@@ -63,4 +63,8 @@ export default class Puzzle {
     this.clearField();
     this.setField(this.puzzleArray, this.rows, this.cols);
   }
+
+  getSolution() {
+    return this.puzzleTemplate;
+  }
 }
