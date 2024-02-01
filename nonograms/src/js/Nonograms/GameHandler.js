@@ -1,13 +1,7 @@
 import ElementCreator from '../ElementCreator';
 import Game from './Game';
 import Modal from './Modal';
-import {
-  mMatrix,
-  heartMatrix,
-  starMatrix,
-  sunMatrix,
-  treeMatrix,
-} from './templates';
+import templates from './templates';
 import GameStateManager from './GameStateManager';
 import ThemeSwitcher from './ThemeSwitcher';
 export default class GameHandler {
@@ -17,9 +11,9 @@ export default class GameHandler {
       class: 'game',
     });
     document.body.append(this.rootElement);
-    this.templates = [mMatrix, heartMatrix, starMatrix, sunMatrix, treeMatrix];
+    this.templates = [...templates];
     this.themeSwitcher = new ThemeSwitcher();
-    this.showInitPage();
+    this.size = null;
   }
 
   showInitPage() {
@@ -75,6 +69,7 @@ export default class GameHandler {
     for (const size of this.sizes) {
       const menuItemElement = ElementCreator.create('li', {
         class: 'menu-item',
+        ['data-size']: size,
       });
 
       menuItemElement.innerHTML = `
@@ -82,11 +77,35 @@ export default class GameHandler {
       <div class="menu-sizes"> ${size} &times ${size}</div>
       `;
 
-      menuItemElement.addEventListener('click', () => this.chooseTemplate());
+      menuItemElement.addEventListener('click', (event) => {
+        this.size = Number(event.currentTarget.dataset.size);
+        this.chooseTemplate();
+      });
       menuElement.append(menuItemElement);
     }
 
     return menuElement;
+  }
+
+  createTemplatesMenu() {
+    const templatesMenu = ElementCreator.create('ul', {
+      class: 'templates-menu',
+    });
+
+    this.templates
+      .filter((template) => {
+        return template.size === this.size;
+      })
+      .forEach((template) => {
+        const templateItem = ElementCreator.create(
+          'li',
+          { class: 'templates-menu__item', ['data-id']: template.id },
+          template.name,
+        );
+        templatesMenu.append(templateItem);
+      });
+
+    return templatesMenu;
   }
 
   chooseTemplate() {
@@ -107,32 +126,15 @@ export default class GameHandler {
 
     const menuItems = document.querySelectorAll('.templates-menu__item');
 
-    menuItems.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        const currentItem = this.templates[index];
-        const size = currentItem.size;
+    menuItems.forEach((item) => {
+      item.addEventListener('click', (event) => {
+        const itemID = event.target.dataset.id;
+        const currentItem = this.templates[itemID - 1];
         const template = currentItem.template;
 
-        this.startGame(size, template, this);
+        this.startGame(this.size, template, this);
       });
     });
-  }
-
-  createTemplatesMenu() {
-    const templatesMenu = ElementCreator.create('ul', {
-      class: 'templates-menu',
-    });
-
-    this.templates.forEach((template) => {
-      const templateItem = ElementCreator.create(
-        'li',
-        { class: 'templates-menu__item' },
-        template.name,
-      );
-      templatesMenu.append(templateItem);
-    });
-
-    return templatesMenu;
   }
 
   loadGame() {

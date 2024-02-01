@@ -1,3 +1,3 @@
-import GameHandler from './GameHandler';
+import InitGame from './InitGame';
 
-new GameHandler(5);
+new InitGame();

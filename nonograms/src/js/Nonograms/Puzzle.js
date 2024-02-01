@@ -12,11 +12,11 @@ export default class Puzzle {
     this.rows = new Array(this.size).fill().map(() => [0]);
     this.puzzleCols = new Array(this.size).fill().map(() => [0]);
     this.puzzleRows = new Array(this.size).fill().map(() => [0]);
-    console.log('puzzle template: ', this.puzzleTemplate);
-    console.log('cols: ', this.cols);
-    console.log('rows: ', this.rows);
-    console.log('Puzzle Cols: ', this.puzzleCols);
-    console.log('Puzzle Rows: ', this.puzzleRows);
+    // console.log('puzzle template: ', this.puzzleTemplate);
+    // console.log('cols: ', this.cols);
+    // console.log('rows: ', this.rows);
+    // console.log('Puzzle Cols: ', this.puzzleCols);
+    // console.log('Puzzle Rows: ', this.puzzleRows);
 
     this.clearField();
     this.setField(this.puzzleTemplate, this.puzzleRows, this.puzzleCols);
