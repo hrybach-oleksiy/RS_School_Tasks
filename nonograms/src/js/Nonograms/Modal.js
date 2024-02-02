@@ -6,30 +6,26 @@ export default class Modal {
     this.closeButton = null;
     this.gameHandler = gameHandler;
     this.content = content;
+    this.modalContentElement = ElementCreator.create('div', {
+      class: 'modal__content',
+    });
 
     this.initModal();
   }
 
   initModal() {
     const rootElement = document.querySelector('.game');
-    const modalContent = ElementCreator.create('div', {
-      class: 'modal__content',
-    });
+    // const modalContent = ElementCreator.create('div', {
+    //   class: 'modal__content',
+    // });
 
     if (this.content instanceof HTMLElement) {
-      modalContent.append(this.content);
+      this.modalContentElement.append(this.content);
     } else {
-      modalContent.innerHTML = this.content;
+      this.modalContentElement.innerHTML = this.content;
     }
 
-    this.modalElement.append(modalContent);
-
-    this.closeButton = this.modalElement.querySelector('.play');
-
-    this.closeButton?.addEventListener('click', () => {
-      this.close();
-      this.gameHandler.showInitPage();
-    });
+    this.modalElement.append(this.modalContentElement);
 
     rootElement.append(this.modalElement);
   }
@@ -46,5 +42,19 @@ export default class Modal {
       this.modalElement.classList.add('hidden');
       this.isOpen = false;
     }
+  }
+
+  addCloseBtn() {
+    const closeBtn = ElementCreator.create(
+      'button',
+      { class: 'btn close' },
+      'Close',
+    );
+
+    closeBtn.addEventListener('click', () => {
+      this.close();
+      // this.gameHandler.showInitPage();
+    });
+    this.modalContentElement.append(closeBtn);
   }
 }

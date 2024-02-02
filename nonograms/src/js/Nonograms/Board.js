@@ -1,6 +1,7 @@
 import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
 import GameStateManager from './GameStateManager';
+import ResultsTable from './ResultsTable';
 export default class Board {
   constructor(puzzle, gameHandler) {
     this.rootElement = document.querySelector('.game');
@@ -25,6 +26,8 @@ export default class Board {
     ]);
     this.isSound = true;
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
+    this.resultsTable = new ResultsTable();
+    this.winningTime = null;
     this.setBoard();
     this.setControls();
   }
@@ -135,9 +138,11 @@ export default class Board {
           </div>
           <button class="btn play">Play Again</button>
         `;
-        this.stopTimer();
         const modal = new Modal(this.gameHandler, modalContent);
         modal.open();
+        this.winningTime = this.timer - 1;
+        this.saveGameResults();
+        this.stopTimer();
 
         if (this.isSound) {
           this.playSound('win');
@@ -158,6 +163,7 @@ export default class Board {
       { text: 'Restart', handler: () => this.restartGame() },
       { text: 'Save Game', handler: () => this.saveGame() },
       { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
+      // { text: 'Show Results', handler: () => this.saveGameResults() },
     ];
 
     buttons.forEach(({ text, handler }) => {
@@ -362,5 +368,15 @@ export default class Board {
         }
       });
     });
+  }
+
+  saveGameResults() {
+    const result = {
+      puzzleName: this.gameHandler.templateName,
+      difficulty: this.gameHandler.difficulty,
+      time: this.winningTime,
+    };
+
+    this.resultsTable.addResult(result);
   }
 }

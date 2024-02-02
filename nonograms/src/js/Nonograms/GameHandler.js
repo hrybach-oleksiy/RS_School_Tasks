@@ -4,6 +4,7 @@ import Modal from './Modal';
 import templates from './templates';
 import GameStateManager from './GameStateManager';
 import ThemeSwitcher from './ThemeSwitcher';
+import ResultsTable from './ResultsTable';
 export default class GameHandler {
   constructor(...sizes) {
     this.sizes = sizes;
@@ -14,6 +15,9 @@ export default class GameHandler {
     this.templates = [...templates];
     this.themeSwitcher = new ThemeSwitcher();
     this.size = null;
+    this.templateName = this.templates[0].name;
+    this.difficulty = 'easy';
+    this.results = new ResultsTable();
   }
 
   showInitPage() {
@@ -45,10 +49,18 @@ export default class GameHandler {
       { class: 'btn' },
       'Play Random Game',
     );
+    const showResultsBtn = ElementCreator.create(
+      'button',
+      { class: 'btn' },
+      'Show Results',
+    );
 
     loadGameBtn.addEventListener('click', this.loadGame);
     playRandomBtn.addEventListener('click', () => {
       this.startRandomGame();
+    });
+    showResultsBtn.addEventListener('click', () => {
+      this.showGameResults();
     });
 
     changeThemeBtn.addEventListener('click', (event) => {
@@ -69,6 +81,7 @@ export default class GameHandler {
       loadGameBtn,
       playRandomBtn,
       changeThemeBtn,
+      showResultsBtn,
     );
   }
 
@@ -76,18 +89,30 @@ export default class GameHandler {
     const menuElement = ElementCreator.create('ul', { class: 'menu' });
 
     for (const size of this.sizes) {
+      let difficulty = '';
+
+      if (size === 5) {
+        difficulty = 'easy';
+      } else if (size === 10) {
+        difficulty = 'medium';
+      } else if (size === 15) {
+        difficulty = 'hard';
+      }
+
       const menuItemElement = ElementCreator.create('li', {
         class: 'menu-item',
         ['data-size']: size,
+        ['data-difficulty']: difficulty,
       });
 
       menuItemElement.innerHTML = `
-      <div class="menu-text">Templates for the game</div>
+      <div class="menu-text">Templates for the <span class="difficulty">${difficulty}</span> game</div>
       <div class="menu-sizes"> ${size} &times ${size}</div>
       `;
 
       menuItemElement.addEventListener('click', (event) => {
         this.size = Number(event.currentTarget.dataset.size);
+        this.difficulty = event.currentTarget.dataset.difficulty;
         this.chooseTemplate();
       });
       menuElement.append(menuItemElement);
@@ -141,6 +166,8 @@ export default class GameHandler {
         const currentItem = this.templates[itemID - 1];
         const template = currentItem.template;
 
+        this.templateName = currentItem.name;
+
         this.startGame(this.size, template, this);
       });
     });
@@ -176,5 +203,60 @@ export default class GameHandler {
 
   startGame(size, template, gameHandler) {
     new Game(size, template, gameHandler);
+  }
+
+  createResultTable(results) {
+    const resultsTable = ElementCreator.create('table', {
+      class: 'results-table',
+    });
+
+    // Create table header
+    const tableHeader = ElementCreator.create('thead');
+    const headerRow = ElementCreator.create('tr');
+    const headerColumns = ['#', 'Puzzle name', 'Difficulty', 'Time'];
+
+    headerColumns.forEach((columnName) => {
+      const headerCell = ElementCreator.create('th', {}, columnName);
+      headerRow.append(headerCell);
+    });
+
+    tableHeader.append(headerRow);
+    resultsTable.append(tableHeader);
+
+    // Create table body
+    const tableBody = ElementCreator.create('tbody');
+
+    results.forEach((result, index) => {
+      const row = ElementCreator.create('tr', {
+        class: 'results-table__row',
+      });
+
+      const minutes = Math.floor(result.time / 60);
+      const seconds = result.time % 60;
+      const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      const indexCell = ElementCreator.create('td', {}, String(index + 1));
+      const puzzleNameCell = ElementCreator.create('td', {}, result.puzzleName);
+      const difficultyCell = ElementCreator.create('td', {}, result.difficulty);
+      const timeCell = ElementCreator.create('td', {}, formattedTime);
+
+      row.append(indexCell, puzzleNameCell, difficultyCell, timeCell);
+
+      tableBody.append(row);
+    });
+
+    resultsTable.append(tableBody);
+
+    return resultsTable;
+  }
+
+  showGameResults() {
+    const results = this.results.getResults();
+
+    const modalContent = this.createResultTable(results);
+    const modal = new Modal(this, modalContent);
+    modal.addCloseBtn();
+
+    modal.open();
   }
 }
