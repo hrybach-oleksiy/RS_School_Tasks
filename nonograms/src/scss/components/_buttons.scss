@@ -3,10 +3,12 @@
 
   width: 200px;
   padding: 10px;
+  color: var(--text);
   font-weight: 600;
   font-size: 16px;
   line-height: 150%;
-  border: 1px solid $backdrop;
+  background-color: var(--button);
+  border: 1px solid var(--border);
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;

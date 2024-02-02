@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    background-color: $body;
+    background-color: var(--light);
     border-radius: 40px;
     transform: translate(-50%, -50%);
 
@@ -32,10 +32,10 @@
 
       &__item {
         padding: 30px 100px;
-        color: #f0f8ff;
+        color: var(--text);
         font-weight: 900;
         font-size: 30px;
-        background-color: $backdrop;
+        background-color: var(--background);
         border-radius: 100px;
         cursor: pointer;
       }

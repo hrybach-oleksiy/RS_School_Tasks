@@ -4,8 +4,8 @@
   width: 50vmin;
   height: 50vmin;
   margin: 20px auto;
-  background-color: $light;
-  border: 2px solid $dark;
+  background-color: var(--light);
+  border: 2px solid var(--border);
   box-shadow: 4px 4px 6px $shadow;
   user-select: none;
 }
@@ -57,7 +57,7 @@
 }
 
 .clicked {
-  background-color: $backdrop;
+  background-color: var(--border);
 }
 
 .game-cell::before {
@@ -65,7 +65,7 @@
   top: 50%;
   left: 50%;
   display: none;
-  color: $backdrop;
+  color: var(--border);
   font-size: 9vmin;
   transform: translate(-50%, -50%);
   content: "X";
