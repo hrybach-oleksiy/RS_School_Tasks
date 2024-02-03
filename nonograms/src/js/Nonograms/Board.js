@@ -2,6 +2,7 @@ import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
 import GameStateManager from './GameStateManager';
 import ResultsTable from './ResultsTable';
+import Game from './Game';
 export default class Board {
   constructor(puzzle, gameHandler) {
     this.rootElement = document.querySelector('.game');
@@ -28,8 +29,10 @@ export default class Board {
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
     this.resultsTable = new ResultsTable();
     this.winningTime = null;
+    this.isGameLoaded = true;
     this.setBoard();
     this.setControls();
+    // this.applyGameState();
   }
 
   createRowElement(i) {
@@ -161,7 +164,7 @@ export default class Board {
         handler: () => this.changeDifficulty(),
       },
       { text: 'Restart', handler: () => this.restartGame() },
-      { text: 'Save Game', handler: () => this.saveGame() },
+      { text: 'Save Game', handler: () => this.saveGameState() },
       { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
       // { text: 'Show Results', handler: () => this.saveGameResults() },
     ];
@@ -341,12 +344,74 @@ export default class Board {
   //   GameStateManager.saveGameState(gameData);
   // }
 
-  saveGame() {
-    const gameData = GameStateManager.serializeGameState(this);
-    console.log('puzzle rows after save: ', this.board.rows);
-    console.log('puzzle cols after save: ', this.board.cols);
-    GameStateManager.saveGameState(gameData);
-    console.log('data saved');
+  // saveGame() {
+  //   const gameData = GameStateManager.serializeGameState(this);
+  //   console.log('puzzle rows after save: ', this.board.rows);
+  //   console.log('puzzle cols after save: ', this.board.cols);
+  //   GameStateManager.saveGameState(gameData);
+  //   console.log('data saved');
+  // }
+
+  saveGameState() {
+    const gameState = {
+      puzzleState: {
+        cols: this.board.cols,
+        rows: this.board.rows,
+        template: this.board.puzzleTemplate,
+        size: this.board.size,
+      },
+      timer: this.timer,
+      soundState: this.isSound,
+      cellsState: this.getCellsState(),
+    };
+
+    GameStateManager.saveGameState(gameState);
+  }
+
+  getCellsState() {
+    const clickedCells = Array.from(document.querySelectorAll('.clicked'));
+    const crossedCells = Array.from(document.querySelectorAll('.crossed'));
+
+    const cellsState = {
+      clicked: clickedCells.map((cell) => cell.dataset.indexes),
+      crossed: crossedCells.map((cell) => cell.dataset.indexes),
+    };
+
+    return cellsState;
+  }
+
+  restoreCellsState(cellsState) {
+    cellsState.clicked.forEach((indexes) => {
+      const [row, col] = indexes.split('-');
+      console.log(row);
+      console.log(col);
+      const cellElement = this.getCellElement(parseInt(row), parseInt(col));
+      console.log(cellElement);
+      cellElement.classList.add('clicked');
+    });
+
+    cellsState.crossed.forEach((indexes) => {
+      const [row, col] = indexes.split('-');
+      const cellElement = this.getCellElement(parseInt(row), parseInt(col));
+      cellElement.classList.add('crossed');
+    });
+  }
+
+  applyGameState() {
+    if (this.isGameLoaded) {
+      const gameState = this.gameHandler.loadGame();
+      this.board.cols = gameState.puzzleState.cols;
+      this.board.rows = gameState.puzzleState.rows;
+      this.board.puzzleTemplate = gameState.puzzleState.template;
+      this.board.size = gameState.puzzleState.size;
+
+      this.restoreCellsState(gameState.cellsState);
+
+      this.timer = gameState.timer;
+      this.isSound = gameState.soundState;
+
+      new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
+    }
   }
 
   getCellElement(row, column) {
@@ -354,13 +419,16 @@ export default class Board {
     const cellSelector = `.game .row:nth-child(${rowIndex}) .cell:nth-child(${
       column + 1
     })`;
+    console.log(cellSelector);
     return document.querySelector(cellSelector);
   }
 
   handleSolutionBtnClick() {
-    const solution = this.board.getSolution();
+    const solutionPuzzle = this.board.getSolution();
+    const clickedCells = document.querySelectorAll('.clicked');
+    clickedCells?.forEach((cell) => cell.classList.remove('clicked'));
 
-    solution.forEach((row, i) => {
+    solutionPuzzle.forEach((row, i) => {
       row.forEach((value, j) => {
         if (value === 1) {
           const cellElement = this.getCellElement(i + 1, j + 1);

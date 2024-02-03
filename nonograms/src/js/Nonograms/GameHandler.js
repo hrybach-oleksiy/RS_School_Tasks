@@ -174,18 +174,21 @@ export default class GameHandler {
   }
 
   loadGame() {
-    const gameData = GameStateManager.loadGameState();
+    const gameState = GameStateManager.loadGameState();
+    console.log('game loaded');
 
-    if (gameData) {
-      const { template, size } = gameData.puzzleState;
-      const { clicked, crossed } = gameData.cellsState;
-      console.log(clicked);
-      console.log(crossed);
-      new Game(size, template, this);
-      console.log('data loaded');
-    } else {
-      console.log('no data');
-    }
+    return gameState;
+
+    // if (gameState) {
+    //   const { template, size } = gameData.puzzleState;
+    //   const { clicked, crossed } = gameData.cellsState;
+    //   console.log(clicked);
+    //   console.log(crossed);
+    //   new Game(size, template, this);
+    //   console.log('data loaded');
+    // } else {
+    //   console.log('no data');
+    // }
   }
 
   startRandomGame() {
