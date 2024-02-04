@@ -19,7 +19,6 @@ export default class GameHandler {
     this.difficulty = 'easy';
     this.results = new ResultsTable();
     this.isGameLoaded = false;
-    console.log(this.rootElement);
   }
 
   showInitPage() {
@@ -183,39 +182,6 @@ export default class GameHandler {
     const template = gameState.puzzleState.template;
 
     this.startGame(size, template, this, true);
-
-    // return {
-    //   colsState: gameState.puzzleState.cols,
-    //   rowsState: gameState.puzzleState.rows,
-    //   currentTemplate: gameState.puzzleState.template,
-    //   size: gameState.puzzleState.size,
-    //   cellState: gameState.cellsState,
-    //   timerState: gameState.timer,
-    //   soundState: gameState.soundState,
-    // };
-
-    // this.board.cols = gameState.puzzleState.cols;
-    // this.board.rows = gameState.puzzleState.rows;
-    // this.board.puzzleTemplate = gameState.puzzleState.template;
-    // this.board.size = gameState.puzzleState.size;
-
-    // resotreCells(gameState.cellsState);
-
-    // this.timer = gameState.timer;
-    // this.isSound = gameState.soundState;
-    // console.log('game loaded');
-    // return gameState;
-
-    // if (gameState) {
-    //   const { template, size } = gameData.puzzleState;
-    //   const { clicked, crossed } = gameData.cellsState;
-    //   console.log(clicked);
-    //   console.log(crossed);
-    //   new Game(size, template, this);
-    //   console.log('data loaded');
-    // } else {
-    //   console.log('no data');
-    // }
   }
 
   //   applyGameState() {

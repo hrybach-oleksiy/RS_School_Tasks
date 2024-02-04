@@ -124,7 +124,6 @@ export default class Board {
         this.board.toggleCellState(indexes[0], indexes[1]);
         event.target.classList.toggle('clicked');
         event.target.classList.remove('crossed');
-        // this.saveGameState();
 
         if (this.isSound) {
           if (event.target.classList.contains('clicked')) {
@@ -199,34 +198,8 @@ export default class Board {
   }
 
   checkWin() {
-    // let isWin = true;
-
-    // this.board.cols.forEach((col, index) => {
-    //   if (col.length === this.boardCols[index].length) {
-    //     col.forEach((el, i) => {
-    //       if (el !== this.boardCols[index][i]) {
-    //         isWin = false;
-    //       }
-    //     });
-    //   } else {
-    //     isWin = false;
-    //   }
-    // });
-
-    // this.board.rows.forEach((row, index) => {
-    //   if (row.length === this.boardRows[index].length) {
-    //     row.forEach((el, i) => {
-    //       if (el !== this.boardRows[index][i]) {
-    //         isWin = false;
-    //       }
-    //     });
-    //   } else {
-    //     isWin = false;
-    //   }
-    // });
-
-    // return isWin;
-    console.log(this.board.cols);
+    console.log('cols:', this.board.cols);
+    console.log('boardCols: ', this.boardCols);
     return (
       this.board.cols.every(
         (col, index) =>
@@ -243,29 +216,6 @@ export default class Board {
 
   changeDifficulty() {
     this.gameHandler.showInitPage();
-  }
-
-  //   getPuzzleState() {
-  //     return {
-  //       puzzleState: {
-  //         cols: this.board.cols,
-  //         rows: this.board.rows,
-  //         template: this.board.puzzleTemplate,
-  //         size: this.board.size,
-  //       },
-  //       cellsState: {
-  //         clicked: document.querySelectorAll('clicked'),
-  //         crossed: document.querySelectorAll('crossed'),
-  //       },
-  //     };
-  //   }
-
-  getTimer() {
-    return this.timer;
-  }
-
-  getSoundState() {
-    return this.isSound;
   }
 
   restartGame() {
@@ -335,33 +285,6 @@ export default class Board {
     this.soundElement.classList.toggle('sound-off');
   }
 
-  // saveGameState() {
-  //   const gameData = {
-  //     puzzleState: {
-  //       cols: this.board.cols,
-  //       rows: this.board.rows,
-  //       template: this.board.puzzleTemplate,
-  //       size: this.board.size,
-  //     },
-  //     timer: this.timer,
-  //     soundState: this.isSound,
-  //     cellsState: {
-  //       clicked: document.querySelectorAll('clicked'),
-  //       crossed: document.querySelectorAll('crossed'),
-  //     },
-  //   };
-
-  //   GameStateManager.saveGameState(gameData);
-  // }
-
-  // saveGame() {
-  //   const gameData = GameStateManager.serializeGameState(this);
-  //   console.log('puzzle rows after save: ', this.board.rows);
-  //   console.log('puzzle cols after save: ', this.board.cols);
-  //   GameStateManager.saveGameState(gameData);
-  //   console.log('data saved');
-  // }
-
   saveGameState() {
     const gameState = {
       puzzleState: {
@@ -391,43 +314,40 @@ export default class Board {
   }
 
   restoreCellsState(cellsState) {
+    const allCells = document.querySelectorAll('.cell');
+    allCells.forEach((cell) => {
+      cell.classList.remove('clicked', 'crossed');
+    });
+
     cellsState.clicked.forEach((indexes) => {
       const [row, col] = indexes.split('-');
-      const cellElement = this.getCellElement(parseInt(row), parseInt(col));
-      //   console.log(cellElement);
-      cellElement.classList.add('clicked');
+      const clickedCell = document.querySelector(
+        `.game .row:nth-child(${Number(row) + 2}) .cell:nth-child(${
+          Number(col) + 2
+        })`,
+      );
+      clickedCell.classList.add('clicked');
     });
 
     cellsState.crossed.forEach((indexes) => {
       const [row, col] = indexes.split('-');
-      const cellElement = this.getCellElement(parseInt(row), parseInt(col));
-      cellElement.classList.add('crossed');
+      const crossedCell = document.querySelector(
+        `.game .row:nth-child(${Number(row) + 2}) .cell:nth-child(${
+          Number(col) + 2
+        })`,
+      );
+      crossedCell.classList.add('crossed');
     });
+
+    // this.board.cols = this.gameState.puzzleState.cols;
+    // this.board.rows = this.gameState.puzzleState.rows;
   }
 
-  //   applyGameState() {
-  //     if (this.isGameLoaded) {
-  //       const gameState = this.gameHandler.loadGame();
-  //       this.board.cols = gameState.puzzleState.cols;
-  //       this.board.rows = gameState.puzzleState.rows;
-  //       this.board.puzzleTemplate = gameState.puzzleState.template;
-  //       this.board.size = gameState.puzzleState.size;
-
-  //       this.restoreCellsState(gameState.cellsState);
-
-  //       this.timer = gameState.timer;
-  //       this.isSound = gameState.soundState;
-
-  //       new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
-  //     }
-  //   }
-
   getCellElement(row, column) {
-    const rowIndex = row + 2;
+    const rowIndex = row + 1;
     const cellSelector = `.game .row:nth-child(${rowIndex}) .cell:nth-child(${
-      column + 2
+      column + 1
     })`;
-    // console.log(cellSelector);
     return document.querySelector(cellSelector);
   }
 

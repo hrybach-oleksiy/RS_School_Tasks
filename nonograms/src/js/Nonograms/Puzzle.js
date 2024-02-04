@@ -25,8 +25,8 @@ export default class Puzzle {
     console.log('puzzle template: ', this.puzzleTemplate);
     // console.log('cols: ', this.cols);
     // console.log('rows: ', this.rows);
-    // console.log('Puzzle Cols: ', this.puzzleCols);
-    // console.log('Puzzle Rows: ', this.puzzleRows);
+    console.log('Puzzle Cols: ', this.puzzleCols);
+    console.log('Puzzle Rows: ', this.puzzleRows);
 
     this.clearField();
     this.setField(this.puzzleTemplate, this.puzzleRows, this.puzzleCols);
