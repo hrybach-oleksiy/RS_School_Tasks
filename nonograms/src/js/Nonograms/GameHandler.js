@@ -18,6 +18,8 @@ export default class GameHandler {
     this.templateName = this.templates[0].name;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
+    this.isGameLoaded = false;
+    console.log(this.rootElement);
   }
 
   showInitPage() {
@@ -55,7 +57,9 @@ export default class GameHandler {
       'Show Results',
     );
 
-    loadGameBtn.addEventListener('click', this.loadGame);
+    loadGameBtn.addEventListener('click', () => {
+      this.loadGame();
+    });
     playRandomBtn.addEventListener('click', () => {
       this.startRandomGame();
     });
@@ -175,9 +179,32 @@ export default class GameHandler {
 
   loadGame() {
     const gameState = GameStateManager.loadGameState();
-    console.log('game loaded');
+    const size = gameState.puzzleState.size;
+    const template = gameState.puzzleState.template;
 
-    return gameState;
+    this.startGame(size, template, this, true);
+
+    // return {
+    //   colsState: gameState.puzzleState.cols,
+    //   rowsState: gameState.puzzleState.rows,
+    //   currentTemplate: gameState.puzzleState.template,
+    //   size: gameState.puzzleState.size,
+    //   cellState: gameState.cellsState,
+    //   timerState: gameState.timer,
+    //   soundState: gameState.soundState,
+    // };
+
+    // this.board.cols = gameState.puzzleState.cols;
+    // this.board.rows = gameState.puzzleState.rows;
+    // this.board.puzzleTemplate = gameState.puzzleState.template;
+    // this.board.size = gameState.puzzleState.size;
+
+    // resotreCells(gameState.cellsState);
+
+    // this.timer = gameState.timer;
+    // this.isSound = gameState.soundState;
+    // console.log('game loaded');
+    // return gameState;
 
     // if (gameState) {
     //   const { template, size } = gameData.puzzleState;
@@ -190,6 +217,24 @@ export default class GameHandler {
     //   console.log('no data');
     // }
   }
+
+  //   applyGameState() {
+  //     if (this.isGameLoaded) {
+  //       const gameState = this.gameHandler.loadGame();
+
+  //       this.board.cols = gameState.puzzleState.cols;
+  //       this.board.rows = gameState.puzzleState.rows;
+  //       this.board.puzzleTemplate = gameState.puzzleState.template;
+  //       this.board.size = gameState.puzzleState.size;
+
+  //       this.restoreCellsState(gameState.cellsState);
+
+  //       this.timer = gameState.timer;
+  //       this.isSound = gameState.soundState;
+
+  //       new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
+  //     }
+  //   }
 
   startRandomGame() {
     const availableSizes = [5, 10, 15];
@@ -204,8 +249,8 @@ export default class GameHandler {
     this.startGame(randomSize, randomTemplate, this);
   }
 
-  startGame(size, template, gameHandler) {
-    new Game(size, template, gameHandler);
+  startGame(size, template, gameHandler, isGameloaded) {
+    new Game(size, template, gameHandler, isGameloaded);
   }
 
   createResultTable(results) {
@@ -258,7 +303,7 @@ export default class GameHandler {
 
     const modalContent = this.createResultTable(results);
     const modal = new Modal(this, modalContent);
-    modal.addCloseBtn();
+    modal.addCloseBtn('Close');
 
     modal.open();
   }

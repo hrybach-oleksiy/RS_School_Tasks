@@ -2,17 +2,19 @@ import ElementCreator from '../ElementCreator';
 import Modal from './Modal';
 import GameStateManager from './GameStateManager';
 import ResultsTable from './ResultsTable';
-import Game from './Game';
+
 export default class Board {
-  constructor(puzzle, gameHandler) {
+  constructor(puzzle, gameHandler, isGameloaded) {
+    this.isGameLoaded = isGameloaded;
+    this.gameHandler = gameHandler;
+    this.gameState = GameStateManager.loadGameState();
     this.rootElement = document.querySelector('.game');
     this.board = puzzle;
     this.boardCols = puzzle.puzzleCols;
     this.boardRows = puzzle.puzzleRows;
-    this.gameHandler = gameHandler;
     this.boardElement = ElementCreator.create('div', { class: 'board' });
     this.modal = null;
-    this.timer = 0;
+    this.timer = this.isGameLoaded ? this.gameState.timer : 0;
     this.timerElement = ElementCreator.create(
       'div',
       { class: 'timer' },
@@ -25,14 +27,15 @@ export default class Board {
       ['crossed', this.createAudioElement('/assets/crossed.mp3')],
       ['win', this.createAudioElement('/assets/game-win.mp3')],
     ]);
-    this.isSound = true;
+    this.isSound = this.isGameLoaded ? this.gameState.soundState : true;
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
     this.resultsTable = new ResultsTable();
     this.winningTime = null;
-    this.isGameLoaded = true;
     this.setBoard();
     this.setControls();
-    // this.applyGameState();
+    if (this.isGameLoaded) {
+      this.restoreCellsState(this.gameState.cellsState);
+    }
   }
 
   createRowElement(i) {
@@ -139,10 +142,11 @@ export default class Board {
               this.timer - 1
             }</strong> seconds!</h3>
           </div>
-          <button class="btn play">Play Again</button>
         `;
         const modal = new Modal(this.gameHandler, modalContent);
         modal.open();
+        modal.addCloseBtn('Play Again', true);
+
         this.winningTime = this.timer - 1;
         this.saveGameResults();
         this.stopTimer();
@@ -222,6 +226,7 @@ export default class Board {
     // });
 
     // return isWin;
+    console.log(this.board.cols);
     return (
       this.board.cols.every(
         (col, index) =>
@@ -240,20 +245,20 @@ export default class Board {
     this.gameHandler.showInitPage();
   }
 
-  getPuzzleState() {
-    return {
-      puzzleState: {
-        cols: this.board.cols,
-        rows: this.board.rows,
-        template: this.board.puzzleTemplate,
-        size: this.board.size,
-      },
-      cellsState: {
-        clicked: document.querySelectorAll('clicked'),
-        crossed: document.querySelectorAll('crossed'),
-      },
-    };
-  }
+  //   getPuzzleState() {
+  //     return {
+  //       puzzleState: {
+  //         cols: this.board.cols,
+  //         rows: this.board.rows,
+  //         template: this.board.puzzleTemplate,
+  //         size: this.board.size,
+  //       },
+  //       cellsState: {
+  //         clicked: document.querySelectorAll('clicked'),
+  //         crossed: document.querySelectorAll('crossed'),
+  //       },
+  //     };
+  //   }
 
   getTimer() {
     return this.timer;
@@ -273,7 +278,7 @@ export default class Board {
 
   startTimer() {
     if (!this.interval) {
-      this.interval = setInterval(this.formatTimer, 1000);
+      this.interval = setInterval(() => this.handleTimer(), 1000);
     }
   }
 
@@ -283,6 +288,11 @@ export default class Board {
       sound.currentTime = 0;
       sound.play();
     }
+  }
+
+  handleTimer() {
+    this.formatTimer();
+    this.timer++;
   }
 
   stopTimer = () => {
@@ -299,7 +309,7 @@ export default class Board {
 
     this.timerElement.innerHTML =
       (mins < 10 ? '0' + mins : mins) + ' : ' + (secs < 10 ? '0' + secs : secs);
-    this.timer++;
+    // this.timer++;
     // }
   };
 
@@ -383,10 +393,8 @@ export default class Board {
   restoreCellsState(cellsState) {
     cellsState.clicked.forEach((indexes) => {
       const [row, col] = indexes.split('-');
-      console.log(row);
-      console.log(col);
       const cellElement = this.getCellElement(parseInt(row), parseInt(col));
-      console.log(cellElement);
+      //   console.log(cellElement);
       cellElement.classList.add('clicked');
     });
 
@@ -397,29 +405,29 @@ export default class Board {
     });
   }
 
-  applyGameState() {
-    if (this.isGameLoaded) {
-      const gameState = this.gameHandler.loadGame();
-      this.board.cols = gameState.puzzleState.cols;
-      this.board.rows = gameState.puzzleState.rows;
-      this.board.puzzleTemplate = gameState.puzzleState.template;
-      this.board.size = gameState.puzzleState.size;
+  //   applyGameState() {
+  //     if (this.isGameLoaded) {
+  //       const gameState = this.gameHandler.loadGame();
+  //       this.board.cols = gameState.puzzleState.cols;
+  //       this.board.rows = gameState.puzzleState.rows;
+  //       this.board.puzzleTemplate = gameState.puzzleState.template;
+  //       this.board.size = gameState.puzzleState.size;
 
-      this.restoreCellsState(gameState.cellsState);
+  //       this.restoreCellsState(gameState.cellsState);
 
-      this.timer = gameState.timer;
-      this.isSound = gameState.soundState;
+  //       this.timer = gameState.timer;
+  //       this.isSound = gameState.soundState;
 
-      new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
-    }
-  }
+  //       new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
+  //     }
+  //   }
 
   getCellElement(row, column) {
-    const rowIndex = row + 1;
+    const rowIndex = row + 2;
     const cellSelector = `.game .row:nth-child(${rowIndex}) .cell:nth-child(${
-      column + 1
+      column + 2
     })`;
-    console.log(cellSelector);
+    // console.log(cellSelector);
     return document.querySelector(cellSelector);
   }
 

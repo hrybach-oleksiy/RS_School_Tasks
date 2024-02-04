@@ -1,5 +1,9 @@
+import GameStateManager from './GameStateManager';
+
 export default class Puzzle {
-  constructor(size, template) {
+  constructor(size, template, isGameloaded) {
+    this.isGameloaded = isGameloaded;
+    this.gameState = GameStateManager.loadGameState();
     this.size = size;
     this.puzzleArray = new Array(this.size)
       .fill()
@@ -8,10 +12,16 @@ export default class Puzzle {
     //   .fill()
     //   .map(() => new Array(size).fill().map(() => Math.round(Math.random())));
     this.puzzleTemplate = template;
-    this.cols = new Array(this.size).fill().map(() => [0]);
-    this.rows = new Array(this.size).fill().map(() => [0]);
+    this.cols = this.isGameloaded
+      ? this.gameState.puzzleState.cols
+      : new Array(this.size).fill().map(() => [0]);
+    this.rows = this.isGameloaded
+      ? this.gameState.puzzleState.rows
+      : new Array(this.size).fill().map(() => [0]);
     this.puzzleCols = new Array(this.size).fill().map(() => [0]);
     this.puzzleRows = new Array(this.size).fill().map(() => [0]);
+    // console.log('current rows:', this.rows);
+    // console.log('current cols:', this.cols);
     console.log('puzzle template: ', this.puzzleTemplate);
     // console.log('cols: ', this.cols);
     // console.log('rows: ', this.rows);
