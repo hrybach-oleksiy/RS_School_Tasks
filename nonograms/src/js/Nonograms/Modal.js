@@ -44,17 +44,20 @@ export default class Modal {
     }
   }
 
-  addCloseBtn() {
+  addCloseBtn(text, isNewGame = false) {
     const closeBtn = ElementCreator.create(
       'button',
       { class: 'btn close' },
-      'Close',
+      `${text}`,
     );
 
     closeBtn.addEventListener('click', () => {
       this.close();
-      // this.gameHandler.showInitPage();
+      if (isNewGame) {
+        this.gameHandler.showInitPage();
+      }
     });
+
     this.modalContentElement.append(closeBtn);
   }
 }

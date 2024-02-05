@@ -1,21 +1,11 @@
 export default class GameStateManager {
-  static serializeGameState(board) {
-    return JSON.stringify({
-      puzzleState: board.getPuzzleState(),
-      timer: board.getTimer(),
-      soundEnabled: board.getSoundState(),
-    });
-  }
-
-  static saveGameState(data) {
-    localStorage.setItem('savedGameState', data);
+  static saveGameState(gameState) {
+    const serializedState = JSON.stringify(gameState);
+    localStorage.setItem('gameState', serializedState);
   }
 
   static loadGameState() {
-    const savedData = localStorage.getItem('savedGameState');
-    if (savedData) {
-      return JSON.parse(savedData);
-    }
-    return null;
+    const serializedState = localStorage.getItem('gameState');
+    return serializedState ? JSON.parse(serializedState) : null;
   }
 }
