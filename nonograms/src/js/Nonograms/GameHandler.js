@@ -18,17 +18,36 @@ export default class GameHandler {
     this.templateName = this.templates[0].name;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
+    this.gameState = new GameStateManager();
     this.isGameLoaded = false;
+    this.loadBtnElement = ElementCreator.create(
+      'button',
+      {
+        class: 'btn',
+      },
+      'Load Last Game',
+    );
+    this.showResultBtnElement = ElementCreator.create(
+      'button',
+      {
+        class: 'btn',
+      },
+      'Show Results',
+    );
+    this.titleElement = ElementCreator.create(
+      'h1',
+      { class: 'title' },
+      'Nonogram Puzzle',
+    );
+    this.loadBtnElement.disabled = localStorage.getItem('gameState')
+      ? false
+      : true;
+    this.showResultBtnElement.disabled = this.results.results.length === 0;
   }
 
   showInitPage() {
     this.rootElement.innerHTML = '';
 
-    const titleElement = ElementCreator.create(
-      'h1',
-      { class: 'title' },
-      'Nonogram Puzzle',
-    );
     const difficultyElement = ElementCreator.create(
       'p',
       { class: 'menu-choose' },
@@ -38,11 +57,6 @@ export default class GameHandler {
     const buttonContainer = ElementCreator.create('div', {
       class: 'btn-container',
     });
-    const loadGameBtn = ElementCreator.create(
-      'button',
-      { class: 'btn' },
-      'Load Last Game',
-    );
     const changeThemeBtn = ElementCreator.create(
       'button',
       { class: 'btn', ['data-theme']: 'dark' },
@@ -53,19 +67,14 @@ export default class GameHandler {
       { class: 'btn' },
       'Random Game',
     );
-    const showResultsBtn = ElementCreator.create(
-      'button',
-      { class: 'btn' },
-      'Show Results',
-    );
 
-    loadGameBtn.addEventListener('click', () => {
+    this.loadBtnElement.addEventListener('click', () => {
       this.loadGame();
     });
     playRandomBtn.addEventListener('click', () => {
       this.startRandomGame();
     });
-    showResultsBtn.addEventListener('click', () => {
+    this.showResultBtnElement.addEventListener('click', () => {
       this.showGameResults();
     });
 
@@ -82,13 +91,13 @@ export default class GameHandler {
 
     buttonContainer.append(
       playRandomBtn,
-      loadGameBtn,
+      this.loadBtnElement,
       changeThemeBtn,
-      showResultsBtn,
+      this.showResultBtnElement,
     );
 
     this.rootElement.append(
-      titleElement,
+      this.titleElement,
       difficultyElement,
       menuElement,
       buttonContainer,
@@ -153,16 +162,6 @@ export default class GameHandler {
   }
 
   chooseTemplate() {
-    // const modalContent = `
-    // <ul class="templates-menu">
-    //   ${this.templates
-    //     .map(
-    //       (template) =>
-    //         `<li class="templates-menu__item">${template.name}</li>`,
-    //     )
-    //     .join('')}
-    // </ul>
-    // `;
     const modalContent = this.createTemplatesMenu();
     const modal = new Modal(this, modalContent);
 
@@ -185,29 +184,12 @@ export default class GameHandler {
 
   loadGame() {
     const gameState = GameStateManager.loadGameState();
+    console.log(gameState);
     const size = gameState.puzzleState.size;
     const template = gameState.puzzleState.template;
 
     this.startGame(size, template, this, true);
   }
-
-  //   applyGameState() {
-  //     if (this.isGameLoaded) {
-  //       const gameState = this.gameHandler.loadGame();
-
-  //       this.board.cols = gameState.puzzleState.cols;
-  //       this.board.rows = gameState.puzzleState.rows;
-  //       this.board.puzzleTemplate = gameState.puzzleState.template;
-  //       this.board.size = gameState.puzzleState.size;
-
-  //       this.restoreCellsState(gameState.cellsState);
-
-  //       this.timer = gameState.timer;
-  //       this.isSound = gameState.soundState;
-
-  //       new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
-  //     }
-  //   }
 
   startRandomGame() {
     const availableSizes = [5, 10, 15];
@@ -218,6 +200,7 @@ export default class GameHandler {
     );
     const randomTemplateIndex = Math.floor(Math.random() * templates.length);
     const randomTemplate = templates[randomTemplateIndex].template;
+    this.templateName = templates[randomTemplateIndex].name;
 
     this.startGame(randomSize, randomTemplate, this);
   }

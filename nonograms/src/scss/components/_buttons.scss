@@ -13,4 +13,11 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   user-select: none;
+
+  &:disabled {
+    background-color: rgba(239, 239, 239, 0.3);
+    color: rgba(56, 55, 55, 0.3);
+    border-color: rgba(0, 0, 0, 0.3);
+    cursor: auto;
+  }
 }

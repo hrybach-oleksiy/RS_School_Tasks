@@ -31,6 +31,9 @@ export default class Board {
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
     this.resultsTable = new ResultsTable();
     this.winningTime = null;
+    this.gameTitleElement = ElementCreator.create('p', {
+      class: 'game-title',
+    });
     this.setBoard();
     this.setControls();
     if (this.isGameLoaded) {
@@ -96,14 +99,33 @@ export default class Board {
       this.boardElement.append(rowElement);
     }
 
-    this.rootElement.append(this.boardElement);
+    this.gameTitleElement.textContent = `Game - ${this.gameHandler.templateName}`;
+
+    this.rootElement.append(
+      this.gameHandler.titleElement,
+      this.gameTitleElement,
+      this.boardElement,
+    );
   }
 
   handleRightClick(cell) {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+      //   if (event.target.classList.contains('clicked')) {
+      //     return;
+      //   }
+      const indexes = event.target.dataset.indexes;
+      const [row, col] = indexes.split('-');
+
       if (event.target.classList.contains('clicked')) {
-        return;
+        event.target.classList.remove('clicked');
+        this.board.puzzleArray[row][col] = 0;
+        this.board.clearField();
+        this.board.setField(
+          this.board.puzzleArray,
+          this.board.rows,
+          this.board.cols,
+        );
       }
 
       event.target.classList.toggle('crossed');
@@ -149,6 +171,7 @@ export default class Board {
         this.winningTime = this.timer - 1;
         this.saveGameResults();
         this.stopTimer();
+        this.gameHandler.showResultBtnElement.disabled = false;
 
         if (this.isSound) {
           this.playSound('win');
@@ -169,7 +192,6 @@ export default class Board {
       { text: 'Restart Game', handler: () => this.restartGame() },
       { text: 'Save Game', handler: () => this.saveGameState() },
       { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
-      // { text: 'Show Results', handler: () => this.saveGameResults() },
     ];
 
     buttons.forEach(({ text, handler }) => {
@@ -187,26 +209,26 @@ export default class Board {
     const soundContainerElement = ElementCreator.create('div', {
       class: 'sound-container',
     });
-    const bottomContainer = ElementCreator.create('div', {
-      class: 'game-bottom-container',
+    const topContainer = ElementCreator.create('div', {
+      class: 'game-top-container',
     });
+    const boardElement = document.querySelector('.board');
 
     soundContainerElement.append(this.soundElement);
     soundContainerElement.addEventListener('click', () => {
       this.turnSound();
     });
 
-    bottomContainer.append(
+    topContainer.append(
       btnContainerElement,
-      soundContainerElement,
       this.timerElement,
+      soundContainerElement,
     );
-    this.rootElement.append(bottomContainer);
+    boardElement.insertAdjacentElement('beforebegin', topContainer);
+    this.rootElement.append(btnContainerElement);
   }
 
   checkWin() {
-    // console.log('cols:', this.board.cols);
-    // console.log('boardCols: ', this.boardCols);
     return (
       this.board.cols.every(
         (col, index) =>
@@ -310,6 +332,7 @@ export default class Board {
     }, 1000);
 
     GameStateManager.saveGameState(gameState);
+    this.gameHandler.loadBtnElement.disabled = false;
   }
 
   getCellsState() {
