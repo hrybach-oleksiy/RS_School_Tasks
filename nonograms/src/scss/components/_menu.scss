@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  //   height: 100vh;
+  padding: 50px 15px;
 }
 
 .menu {
@@ -11,13 +12,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80vmin;
-
-  // height: 80vmin;
+  gap: 15px;
+  width: 100vmin;
+  padding: 20px 0;
   min-height: 300px;
-  margin-bottom: 30px;
-
-  // margin: 20px auto auto;
+  margin-bottom: 20px;
   background-color: var(--light);
   box-shadow: 4px 4px 6px $shadow;
 }
@@ -51,20 +50,20 @@
   top: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 
   // flex: 1;
   align-items: center;
   justify-content: center;
   width: 70%;
-  margin: 20px;
-  padding: 30px 100px;
+  padding: 15px;
   color: var(--text);
   font-weight: 900;
   font-size: 30px;
   background-color: var(--background);
   border-radius: 8px;
   box-shadow: 2px 2px 2px $shadow;
+  line-height: 1.2;
   cursor: pointer;
   transition: top 0.2s ease-in-out;
 
@@ -75,6 +74,7 @@
 
 .menu-text {
   font-size: 20px;
+  text-align: center;
 }
 
 .menu-sizes {
@@ -82,12 +82,15 @@
 }
 
 .title {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .menu-choose {
-  margin-bottom: 30px;
-  font-size: 40px;
+  margin-bottom: 25px;
+  line-height: 1.1;
+  font-size: 30px;
+  text-align: center;
 }
 
 .difficulty {

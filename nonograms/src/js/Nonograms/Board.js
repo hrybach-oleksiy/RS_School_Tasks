@@ -59,7 +59,7 @@ export default class Board {
     }
 
     if (i === 0 && j === 0) {
-      cellElement.classList.add('cell');
+      cellElement.classList.add('cell', 'empty-cell');
     } else if (j === 0) {
       cellElement.classList.add('cell', 'header-row-cell');
       this.boardRows[i - 1].forEach((value) => {
@@ -166,7 +166,7 @@ export default class Board {
         text: 'Change template',
         handler: () => this.changeDifficulty(),
       },
-      { text: 'Restart', handler: () => this.restartGame() },
+      { text: 'Restart Game', handler: () => this.restartGame() },
       { text: 'Save Game', handler: () => this.saveGameState() },
       { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
       // { text: 'Show Results', handler: () => this.saveGameResults() },
@@ -187,14 +187,21 @@ export default class Board {
     const soundContainerElement = ElementCreator.create('div', {
       class: 'sound-container',
     });
+    const bottomContainer = ElementCreator.create('div', {
+      class: 'game-bottom-container',
+    });
 
     soundContainerElement.append(this.soundElement);
     soundContainerElement.addEventListener('click', () => {
       this.turnSound();
     });
 
-    btnContainerElement.append(soundContainerElement);
-    this.rootElement.append(btnContainerElement, this.timerElement);
+    bottomContainer.append(
+      btnContainerElement,
+      soundContainerElement,
+      this.timerElement,
+    );
+    this.rootElement.append(bottomContainer);
   }
 
   checkWin() {

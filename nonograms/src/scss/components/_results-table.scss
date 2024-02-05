@@ -1,24 +1,25 @@
 .results-table {
   width: 100%;
-  margin-top: 20px;
+  margin: 15px 0;
   border-collapse: collapse;
+  cursor: pointer;
 }
 
 .results-table th,
 .results-table td {
-  padding: 8px;
+  padding: 6px;
   text-align: left;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
 }
 
 .results-table th {
-  background-color: #f2f2f2;
+  background-color: var(--light);
 }
 
-.results-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+.results-table tbody tr:nth-child(odd) {
+  background-color: var(--background);
 }
 
 .results-table tbody tr:hover {
-  background-color: #f5f5f5;
+  background-color: var(--body);
 }

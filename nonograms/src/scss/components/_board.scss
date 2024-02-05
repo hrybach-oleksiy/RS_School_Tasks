@@ -1,11 +1,12 @@
 .board {
   display: flex;
   flex-direction: column;
-  width: 50vmin;
-  height: 50vmin;
+  width: 100vmin;
+  height: 86vmin;
   margin: 20px auto;
   background-color: var(--light);
-  border: 2px solid var(--border);
+  border-top: 2px solid var(--border);
+  border-left: 2px solid var(--border);
   box-shadow: 4px 4px 6px $shadow;
   user-select: none;
 }
@@ -30,6 +31,7 @@
 
 .header-row-cell {
   align-items: center;
+  flex: 3;
 }
 
 .game-cell {
@@ -56,6 +58,10 @@
   }
 }
 
+.empty-cell {
+  flex: 3;
+}
+
 .clicked {
   background-color: var(--border);
 }
@@ -75,10 +81,19 @@
   display: block;
 }
 
+.game-bottom-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn-container {
   display: flex;
-  gap: 30px;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
 }
 
 .timer {
@@ -93,8 +108,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   padding: 10px;
   cursor: pointer;
 }

@@ -35,6 +35,9 @@ export default class GameHandler {
       'Choose the template for the game',
     );
     const menuElement = this.createMenu();
+    const buttonContainer = ElementCreator.create('div', {
+      class: 'btn-container',
+    });
     const loadGameBtn = ElementCreator.create(
       'button',
       { class: 'btn' },
@@ -48,7 +51,7 @@ export default class GameHandler {
     const playRandomBtn = ElementCreator.create(
       'button',
       { class: 'btn' },
-      'Play Random Game',
+      'Random Game',
     );
     const showResultsBtn = ElementCreator.create(
       'button',
@@ -77,15 +80,21 @@ export default class GameHandler {
       }
     });
 
+    buttonContainer.append(
+      playRandomBtn,
+      loadGameBtn,
+      changeThemeBtn,
+      showResultsBtn,
+    );
+
     this.rootElement.append(
       titleElement,
       difficultyElement,
       menuElement,
-      loadGameBtn,
-      playRandomBtn,
-      changeThemeBtn,
-      showResultsBtn,
+      buttonContainer,
     );
+
+    this.containerElement.append(this.rootElement);
   }
 
   createMenu() {
