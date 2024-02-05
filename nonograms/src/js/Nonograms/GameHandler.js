@@ -29,16 +29,16 @@ export default class GameHandler {
       { class: 'btn', disabled: 'true' },
       'Show Results',
     );
+    this.titleElement = ElementCreator.create(
+      'h1',
+      { class: 'title' },
+      'Nonogram Puzzle',
+    );
   }
 
   showInitPage() {
     this.rootElement.innerHTML = '';
 
-    const titleElement = ElementCreator.create(
-      'h1',
-      { class: 'title' },
-      'Nonogram Puzzle',
-    );
     const difficultyElement = ElementCreator.create(
       'p',
       { class: 'menu-choose' },
@@ -48,11 +48,6 @@ export default class GameHandler {
     const buttonContainer = ElementCreator.create('div', {
       class: 'btn-container',
     });
-    // const loadGameBtn = ElementCreator.create(
-    //   'button',
-    //   { class: 'btn', disabled: 'true' },
-    //   'Load Last Game',
-    // );
     const changeThemeBtn = ElementCreator.create(
       'button',
       { class: 'btn', ['data-theme']: 'dark' },
@@ -63,11 +58,6 @@ export default class GameHandler {
       { class: 'btn' },
       'Random Game',
     );
-    // const showResultsBtn = ElementCreator.create(
-    //   'button',
-    //   { class: 'btn', disabled: 'true' },
-    //   'Show Results',
-    // );
 
     this.loadBtnElement.addEventListener('click', () => {
       this.loadGame();
@@ -98,7 +88,7 @@ export default class GameHandler {
     );
 
     this.rootElement.append(
-      titleElement,
+      this.titleElement,
       difficultyElement,
       menuElement,
       buttonContainer,
@@ -163,16 +153,6 @@ export default class GameHandler {
   }
 
   chooseTemplate() {
-    // const modalContent = `
-    // <ul class="templates-menu">
-    //   ${this.templates
-    //     .map(
-    //       (template) =>
-    //         `<li class="templates-menu__item">${template.name}</li>`,
-    //     )
-    //     .join('')}
-    // </ul>
-    // `;
     const modalContent = this.createTemplatesMenu();
     const modal = new Modal(this, modalContent);
 
@@ -201,24 +181,6 @@ export default class GameHandler {
     this.startGame(size, template, this, true);
   }
 
-  //   applyGameState() {
-  //     if (this.isGameLoaded) {
-  //       const gameState = this.gameHandler.loadGame();
-
-  //       this.board.cols = gameState.puzzleState.cols;
-  //       this.board.rows = gameState.puzzleState.rows;
-  //       this.board.puzzleTemplate = gameState.puzzleState.template;
-  //       this.board.size = gameState.puzzleState.size;
-
-  //       this.restoreCellsState(gameState.cellsState);
-
-  //       this.timer = gameState.timer;
-  //       this.isSound = gameState.soundState;
-
-  //       new Game(this.board.size, this.board.puzzleTemplate, this.gameHandler);
-  //     }
-  //   }
-
   startRandomGame() {
     const availableSizes = [5, 10, 15];
     const randomSizeIndex = Math.floor(Math.random() * availableSizes.length);
@@ -228,6 +190,7 @@ export default class GameHandler {
     );
     const randomTemplateIndex = Math.floor(Math.random() * templates.length);
     const randomTemplate = templates[randomTemplateIndex].template;
+    this.templateName = templates[randomTemplateIndex].name;
 
     this.startGame(randomSize, randomTemplate, this);
   }

@@ -31,6 +31,9 @@ export default class Board {
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
     this.resultsTable = new ResultsTable();
     this.winningTime = null;
+    this.gameTitleElement = ElementCreator.create('p', {
+      class: 'game-title',
+    });
     this.setBoard();
     this.setControls();
     if (this.isGameLoaded) {
@@ -96,7 +99,13 @@ export default class Board {
       this.boardElement.append(rowElement);
     }
 
-    this.rootElement.append(this.boardElement);
+    this.gameTitleElement.textContent = `Game - ${this.gameHandler.templateName}`;
+
+    this.rootElement.append(
+      this.gameHandler.titleElement,
+      this.gameTitleElement,
+      this.boardElement,
+    );
   }
 
   handleRightClick(cell) {
@@ -170,7 +179,6 @@ export default class Board {
       { text: 'Restart Game', handler: () => this.restartGame() },
       { text: 'Save Game', handler: () => this.saveGameState() },
       { text: 'Solution', handler: () => this.handleSolutionBtnClick() },
-      // { text: 'Show Results', handler: () => this.saveGameResults() },
     ];
 
     buttons.forEach(({ text, handler }) => {
@@ -188,21 +196,23 @@ export default class Board {
     const soundContainerElement = ElementCreator.create('div', {
       class: 'sound-container',
     });
-    const bottomContainer = ElementCreator.create('div', {
-      class: 'game-bottom-container',
+    const topContainer = ElementCreator.create('div', {
+      class: 'game-top-container',
     });
+    const boardElement = document.querySelector('.board');
 
     soundContainerElement.append(this.soundElement);
     soundContainerElement.addEventListener('click', () => {
       this.turnSound();
     });
 
-    bottomContainer.append(
+    topContainer.append(
       btnContainerElement,
-      soundContainerElement,
       this.timerElement,
+      soundContainerElement,
     );
-    this.rootElement.append(bottomContainer);
+    boardElement.insertAdjacentElement('beforebegin', topContainer);
+    this.rootElement.append(btnContainerElement);
   }
 
   checkWin() {
