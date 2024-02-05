@@ -149,6 +149,7 @@ export default class Board {
         this.winningTime = this.timer - 1;
         this.saveGameResults();
         this.stopTimer();
+        this.gameHandler.showResultBtnElement.disabled = false;
 
         if (this.isSound) {
           this.playSound('win');
@@ -205,8 +206,6 @@ export default class Board {
   }
 
   checkWin() {
-    // console.log('cols:', this.board.cols);
-    // console.log('boardCols: ', this.boardCols);
     return (
       this.board.cols.every(
         (col, index) =>
@@ -310,6 +309,7 @@ export default class Board {
     }, 1000);
 
     GameStateManager.saveGameState(gameState);
+    this.gameHandler.loadBtnElement.disabled = false;
   }
 
   getCellsState() {

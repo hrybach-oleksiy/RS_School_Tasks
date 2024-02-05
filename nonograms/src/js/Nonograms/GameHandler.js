@@ -19,6 +19,16 @@ export default class GameHandler {
     this.difficulty = 'easy';
     this.results = new ResultsTable();
     this.isGameLoaded = false;
+    this.loadBtnElement = ElementCreator.create(
+      'button',
+      { class: 'btn', disabled: 'true' },
+      'Load Last Game',
+    );
+    this.showResultBtnElement = ElementCreator.create(
+      'button',
+      { class: 'btn', disabled: 'true' },
+      'Show Results',
+    );
   }
 
   showInitPage() {
@@ -38,11 +48,11 @@ export default class GameHandler {
     const buttonContainer = ElementCreator.create('div', {
       class: 'btn-container',
     });
-    const loadGameBtn = ElementCreator.create(
-      'button',
-      { class: 'btn' },
-      'Load Last Game',
-    );
+    // const loadGameBtn = ElementCreator.create(
+    //   'button',
+    //   { class: 'btn', disabled: 'true' },
+    //   'Load Last Game',
+    // );
     const changeThemeBtn = ElementCreator.create(
       'button',
       { class: 'btn', ['data-theme']: 'dark' },
@@ -53,19 +63,19 @@ export default class GameHandler {
       { class: 'btn' },
       'Random Game',
     );
-    const showResultsBtn = ElementCreator.create(
-      'button',
-      { class: 'btn' },
-      'Show Results',
-    );
+    // const showResultsBtn = ElementCreator.create(
+    //   'button',
+    //   { class: 'btn', disabled: 'true' },
+    //   'Show Results',
+    // );
 
-    loadGameBtn.addEventListener('click', () => {
+    this.loadBtnElement.addEventListener('click', () => {
       this.loadGame();
     });
     playRandomBtn.addEventListener('click', () => {
       this.startRandomGame();
     });
-    showResultsBtn.addEventListener('click', () => {
+    this.showResultBtnElement.addEventListener('click', () => {
       this.showGameResults();
     });
 
@@ -82,9 +92,9 @@ export default class GameHandler {
 
     buttonContainer.append(
       playRandomBtn,
-      loadGameBtn,
+      this.loadBtnElement,
       changeThemeBtn,
-      showResultsBtn,
+      this.showResultBtnElement,
     );
 
     this.rootElement.append(
