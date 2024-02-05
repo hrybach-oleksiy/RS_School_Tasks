@@ -205,8 +205,8 @@ export default class Board {
   }
 
   checkWin() {
-    console.log('cols:', this.board.cols);
-    console.log('boardCols: ', this.boardCols);
+    // console.log('cols:', this.board.cols);
+    // console.log('boardCols: ', this.boardCols);
     return (
       this.board.cols.every(
         (col, index) =>
@@ -260,14 +260,11 @@ export default class Board {
   };
 
   formatTimer = () => {
-    // if (!this.checkWin()) {
     const mins = Math.floor(this.timer / 60);
     const secs = this.timer % 60;
 
     this.timerElement.innerHTML =
       (mins < 10 ? '0' + mins : mins) + ' : ' + (secs < 10 ? '0' + secs : secs);
-    // this.timer++;
-    // }
   };
 
   createAudioElement(src) {
@@ -305,16 +302,25 @@ export default class Board {
       cellsState: this.getCellsState(),
     };
 
+    const modal = new Modal(this.gameHandler, 'Game Saved');
+    modal.open();
+
+    setTimeout(() => {
+      modal.close();
+    }, 1000);
+
     GameStateManager.saveGameState(gameState);
   }
 
   getCellsState() {
     const clickedCells = Array.from(document.querySelectorAll('.clicked'));
     const crossedCells = Array.from(document.querySelectorAll('.crossed'));
+    const emptyCells = Array.from(document.querySelectorAll('.game-cell'));
 
     const cellsState = {
       clicked: clickedCells.map((cell) => cell.dataset.indexes),
       crossed: crossedCells.map((cell) => cell.dataset.indexes),
+      empty: emptyCells.map((cell) => cell.dataset.indexes),
     };
 
     return cellsState;
@@ -326,6 +332,11 @@ export default class Board {
       cell.classList.remove('clicked', 'crossed');
     });
 
+    cellsState.empty.forEach((indexes) => {
+      const [row, col] = indexes.split('-');
+      this.board.puzzleArray[row][col] = 0;
+    });
+
     cellsState.clicked.forEach((indexes) => {
       const [row, col] = indexes.split('-');
       const clickedCell = document.querySelector(
@@ -334,6 +345,7 @@ export default class Board {
         })`,
       );
       clickedCell.classList.add('clicked');
+      this.board.puzzleArray[row][col] = 1;
     });
 
     cellsState.crossed.forEach((indexes) => {
@@ -346,8 +358,14 @@ export default class Board {
       crossedCell.classList.add('crossed');
     });
 
-    // this.board.cols = this.gameState.puzzleState.cols;
-    // this.board.rows = this.gameState.puzzleState.rows;
+    this.formatTimer();
+
+    this.board.clearField();
+    this.board.setField(
+      this.board.puzzleArray,
+      this.board.rows,
+      this.board.cols,
+    );
   }
 
   getCellElement(row, column) {

@@ -93,8 +93,6 @@ export default class GameHandler {
       menuElement,
       buttonContainer,
     );
-
-    this.containerElement.append(this.rootElement);
   }
 
   createMenu() {
