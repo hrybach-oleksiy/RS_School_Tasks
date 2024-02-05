@@ -214,7 +214,6 @@ export default class GameHandler {
       class: 'results-table',
     });
 
-    // Create table header
     const tableHeader = ElementCreator.create('thead');
     const headerRow = ElementCreator.create('tr');
     const headerColumns = ['#', 'Puzzle name', 'Difficulty', 'Time'];
@@ -227,7 +226,6 @@ export default class GameHandler {
     tableHeader.append(headerRow);
     resultsTable.append(tableHeader);
 
-    // Create table body
     const tableBody = ElementCreator.create('tbody');
 
     results.forEach((result, index) => {
@@ -255,7 +253,7 @@ export default class GameHandler {
   }
 
   showGameResults() {
-    const results = this.results.getResults();
+    const results = new ResultsTable().getResults();
 
     const modalContent = this.createResultTable(results);
     const modal = new Modal(this, modalContent);
