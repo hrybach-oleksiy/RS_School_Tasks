@@ -22,10 +22,10 @@ export default class Board {
     );
     this.interval = null;
     this.sounds = new Map([
-      ['clicked', this.createAudioElement('/assets/clicked.mp3')],
-      ['unClicked', this.createAudioElement('/assets/unclicked.mp3')],
-      ['crossed', this.createAudioElement('/assets/crossed.mp3')],
-      ['win', this.createAudioElement('/assets/game-win.mp3')],
+      ['clicked', this.createAudioElement('assets/clicked.mp3')],
+      ['unClicked', this.createAudioElement('assets/unclicked.mp3')],
+      ['crossed', this.createAudioElement('assets/crossed.mp3')],
+      ['win', this.createAudioElement('assets/game-win.mp3')],
     ]);
     this.isSound = this.isGameLoaded ? this.gameState.soundState : true;
     this.soundElement = ElementCreator.create('div', { class: 'sound-on' });
