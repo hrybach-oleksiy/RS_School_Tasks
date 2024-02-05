@@ -18,7 +18,6 @@ export default class GameHandler {
     this.templateName = this.templates[0].name;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
-    console.log(this.results.results.length);
     this.gameState = new GameStateManager();
     this.isGameLoaded = false;
     this.loadBtnElement = ElementCreator.create(

@@ -111,8 +111,21 @@ export default class Board {
   handleRightClick(cell) {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+      //   if (event.target.classList.contains('clicked')) {
+      //     return;
+      //   }
+      const indexes = event.target.dataset.indexes;
+      const [row, col] = indexes.split('-');
+
       if (event.target.classList.contains('clicked')) {
-        return;
+        event.target.classList.remove('clicked');
+        this.board.puzzleArray[row][col] = 0;
+        this.board.clearField();
+        this.board.setField(
+          this.board.puzzleArray,
+          this.board.rows,
+          this.board.cols,
+        );
       }
 
       event.target.classList.toggle('crossed');
