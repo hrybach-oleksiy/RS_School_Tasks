@@ -18,15 +18,21 @@ export default class GameHandler {
     this.templateName = this.templates[0].name;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
+    console.log(this.results.results.length);
+    this.gameState = new GameStateManager();
     this.isGameLoaded = false;
     this.loadBtnElement = ElementCreator.create(
       'button',
-      { class: 'btn', disabled: 'true' },
+      {
+        class: 'btn',
+      },
       'Load Last Game',
     );
     this.showResultBtnElement = ElementCreator.create(
       'button',
-      { class: 'btn', disabled: 'true' },
+      {
+        class: 'btn',
+      },
       'Show Results',
     );
     this.titleElement = ElementCreator.create(
@@ -34,6 +40,10 @@ export default class GameHandler {
       { class: 'title' },
       'Nonogram Puzzle',
     );
+    this.loadBtnElement.disabled = localStorage.getItem('gameState')
+      ? false
+      : true;
+    this.showResultBtnElement.disabled = this.results.results.length === 0;
   }
 
   showInitPage() {
@@ -175,6 +185,7 @@ export default class GameHandler {
 
   loadGame() {
     const gameState = GameStateManager.loadGameState();
+    console.log(gameState);
     const size = gameState.puzzleState.size;
     const template = gameState.puzzleState.template;
 
