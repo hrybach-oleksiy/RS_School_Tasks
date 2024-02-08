@@ -253,6 +253,12 @@ export default class Board {
     clickedCells.forEach((cell) => cell.classList.remove('clicked'));
     crossedCells.forEach((cell) => cell.classList.remove('crossed'));
     this.stopTimer();
+    this.gameHandler.startGame(
+      this.gameHandler.size,
+      this.gameHandler.currentTemplate,
+      this.gameHandler,
+      false,
+    );
   }
 
   startTimer() {

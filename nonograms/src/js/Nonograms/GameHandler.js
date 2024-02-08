@@ -16,6 +16,7 @@ export default class GameHandler {
     this.themeSwitcher = new ThemeSwitcher();
     this.size = null;
     this.templateName = this.templates[0].name;
+    this.currentTemplate = null;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
     this.gameState = new GameStateManager();
@@ -176,6 +177,7 @@ export default class GameHandler {
         const template = currentItem.template;
 
         this.templateName = currentItem.name;
+        this.currentTemplate = template;
 
         this.startGame(this.size, template, this);
       });
