@@ -113,6 +113,8 @@ export default class Board {
       event.preventDefault();
       if (this.timer === 0) {
         this.startTimer();
+      } else if (this.isGameLoaded) {
+        this.startTimer();
       }
       //   if (event.target.classList.contains('clicked')) {
       //     return;
@@ -142,6 +144,8 @@ export default class Board {
   handleLeftClick(cell) {
     cell.addEventListener('click', (event) => {
       if (this.timer === 0) {
+        this.startTimer();
+      } else if (this.isGameLoaded) {
         this.startTimer();
       }
 
