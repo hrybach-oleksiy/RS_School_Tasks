@@ -111,6 +111,9 @@ export default class Board {
   handleRightClick(cell) {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+      if (this.timer === 0) {
+        this.startTimer();
+      }
       //   if (event.target.classList.contains('clicked')) {
       //     return;
       //   }
@@ -138,7 +141,9 @@ export default class Board {
 
   handleLeftClick(cell) {
     cell.addEventListener('click', (event) => {
-      this.startTimer();
+      if (this.timer === 0) {
+        this.startTimer();
+      }
 
       if (!this.checkWin()) {
         const indexes = event.target.dataset.indexes.split('-');
