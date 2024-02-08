@@ -14,9 +14,9 @@ export default class GameHandler {
     document.body.append(this.rootElement);
     this.templates = [...templates];
     this.themeSwitcher = new ThemeSwitcher();
-    this.size = null;
+    this.size = 5;
     this.templateName = this.templates[0].name;
-    this.currentTemplate = null;
+    this.currentTemplate = this.templates[0].template;
     this.difficulty = 'easy';
     this.results = new ResultsTable();
     this.gameState = new GameStateManager();
@@ -178,6 +178,7 @@ export default class GameHandler {
 
         this.templateName = currentItem.name;
         this.currentTemplate = template;
+        this.size = currentItem.size;
 
         this.startGame(this.size, template, this);
       });
@@ -255,6 +256,10 @@ export default class GameHandler {
   }
 
   showGameResults() {
+    const existingModal = document.querySelector('.modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
     const results = new ResultsTable().getResults();
 
     const modalContent = this.createResultTable(results);
