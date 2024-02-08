@@ -255,6 +255,10 @@ export default class GameHandler {
   }
 
   showGameResults() {
+    const existingModal = document.querySelector('.modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
     const results = new ResultsTable().getResults();
 
     const modalContent = this.createResultTable(results);
