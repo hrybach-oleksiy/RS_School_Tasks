@@ -259,8 +259,7 @@ export default class GameHandler {
 
     const modalContent = this.createResultTable(results);
     const modal = new Modal(this, modalContent);
-    modal.addCloseBtn('Close');
-
     modal.open();
+    modal.addCloseBtn('Close');
   }
 }
