@@ -4,14 +4,14 @@
 
 Here are the achievements I earned while completing the "Build JavaScript applications using TypeScript" path:
 
-1. **Getting Started with TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/U8XNET53?sharingId=F52FB0FB3F52D589))
+1. **Getting Started with TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/U8XNET53?sharingId=F52FB0FB3F52D589)
 2. **Declare Variable Types in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/NRLGN5MF?sharingId=F52FB0FB3F52D589)
-3. **Implement Interfaces in TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/C3NWN4L9?sharingId=F52FB0FB3F52D589))
-4. **Develop Typed Functions in TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/J6QJP8WT?sharingId=F52FB0FB3F52D589))
-5. **Declare and Instantiate Classes in TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23AP8QY?sharingId=F52FB0FB3F52D589))
-6. **Define generics in TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/DGQGVWHJ?sharingId=F52FB0FB3F52D589))
-7. **Access external libraries from TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23VUXAY?sharingId=F52FB0FB3F52D589))
-8. **Organize Code with Namespaces in TypeScript**: [Badge]([badge-link](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23V8TTY?sharingId=F52FB0FB3F52D589))
+3. **Implement Interfaces in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/C3NWN4L9?sharingId=F52FB0FB3F52D589)
+4. **Develop Typed Functions in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/J6QJP8WT?sharingId=F52FB0FB3F52D589)
+5. **Declare and Instantiate Classes in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23AP8QY?sharingId=F52FB0FB3F52D589)
+6. **Define generics in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/DGQGVWHJ?sharingId=F52FB0FB3F52D589)
+7. **Access external libraries from TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23VUXAY?sharingId=F52FB0FB3F52D589)
+8. **Organize Code with Namespaces in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/OleksiyHrybach-4639/X23V8TTY?sharingId=F52FB0FB3F52D589)
 
 ## TypeScript Module Reflections
 
