@@ -1,4 +1,4 @@
-import News from './news/news';
+import News from './news/news.ts';
 import Sources from './sources/sources';
 
 export class AppView {
