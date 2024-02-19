@@ -10,3 +10,24 @@ export interface NewsItem {
     url: string;
     urlToImage: string;
 }
+
+export interface SourceItem {
+    category: string;
+    country: string;
+    description: string;
+    id: string;
+    language: string;
+    name: string;
+    url: string;
+}
+
+export interface NewsData {
+    status: string;
+    totalResults: number;
+    articles: NewsItem[];
+}
+
+export interface SourceData {
+    status: string;
+    sources: SourceItem[];
+}
