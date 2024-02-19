@@ -26,8 +26,10 @@ export interface NewsData {
     totalResults: number;
     articles: NewsItem[];
 }
-
 export interface SourceData {
     status: string;
     sources: SourceItem[];
+}
+export interface LoaderOptions {
+    [key: string]: string | undefined;
 }
