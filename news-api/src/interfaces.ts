@@ -1,11 +1,11 @@
-import { NewsSource } from './types';
+import { NewsSourceItem } from './types';
 
-export interface NewsData {
+export interface NewsItem {
     author: string;
     content: string;
     description: string;
     publishedAt: string;
-    source: NewsSource;
+    source: NewsSourceItem;
     title: string;
     url: string;
     urlToImage: string;

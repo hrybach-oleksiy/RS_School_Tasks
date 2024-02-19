@@ -1,4 +1,4 @@
-export type NewsSource = {
+export type NewsSourceItem = {
     id: string;
     name: string;
 };
