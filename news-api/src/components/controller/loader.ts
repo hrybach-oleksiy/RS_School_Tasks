@@ -1,4 +1,4 @@
-import { NewsItem, LoaderOptions } from '../../interfaces';
+import { LoaderOptions } from '../../interfaces';
 import { Endpoints } from '../../enums';
 
 class Loader {
@@ -7,13 +7,13 @@ class Loader {
         private options: LoaderOptions
     ) {}
 
-    getResponse(
+    getResponse<T>(
         { endpoint, options = {} }: { endpoint: Endpoints; options?: LoaderOptions },
-        callback = () => {
+        callback: (data: T) => void = () => {
             console.error('No callback for GET response');
         }
     ) {
-        this.load<NewsItem[]>('GET', endpoint, callback, options);
+        this.load<T>('GET', endpoint, callback, options);
     }
 
     private errorHandler(res: Response) {
