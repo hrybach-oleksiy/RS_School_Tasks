@@ -1,5 +1,9 @@
-import { NewsSourceItem } from './types';
+import { ResponseStatus } from './enums';
 
+export interface NewsSourceItem {
+    id: string;
+    name: string;
+}
 export interface NewsItem {
     author: string;
     content: string;
@@ -10,7 +14,6 @@ export interface NewsItem {
     url: string;
     urlToImage: string;
 }
-
 export interface SourceItem {
     category: string;
     country: string;
@@ -20,16 +23,15 @@ export interface SourceItem {
     name: string;
     url: string;
 }
-
 export interface NewsData {
-    status: string;
+    status: ResponseStatus;
     totalResults: number;
     articles: NewsItem[];
 }
 export interface SourceData {
-    status: string;
+    status: ResponseStatus;
     sources: SourceItem[];
 }
-export interface LoaderOptions {
-    [key: string]: string | undefined;
-}
+// export interface LoaderOptions {
+//     [key: string]: string | undefined;
+// }

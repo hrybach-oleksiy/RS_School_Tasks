@@ -1,5 +1,5 @@
-import { LoaderOptions } from '../../interfaces';
-import { Endpoints } from '../../enums';
+import { Endpoint, HTTPMethod } from '../../enums';
+import { LoaderOptions } from '../../types';
 
 class Loader {
     constructor(
@@ -7,13 +7,13 @@ class Loader {
         private options: LoaderOptions
     ) {}
 
-    getResponse<T>(
-        { endpoint, options = {} }: { endpoint: Endpoints; options?: LoaderOptions },
+    protected getResponse<T>(
+        { endpoint, options = {} }: { endpoint: Endpoint; options?: LoaderOptions },
         callback: (data: T) => void = () => {
             console.error('No callback for GET response');
         }
     ) {
-        this.load<T>('GET', endpoint, callback, options);
+        this.load<T>(HTTPMethod.GET, endpoint, callback, options);
     }
 
     private errorHandler(res: Response) {
@@ -26,7 +26,7 @@ class Loader {
         return res;
     }
 
-    private makeUrl(endpoint: Endpoints, options: LoaderOptions) {
+    private makeUrl(endpoint: Endpoint, options: LoaderOptions) {
         const urlOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
@@ -37,7 +37,7 @@ class Loader {
         return url.slice(0, -1);
     }
 
-    private load<T>(method: string, endpoint: Endpoints, callback: (data: T) => void, options = {}) {
+    private load<T>(method: HTTPMethod, endpoint: Endpoint, callback: (data: T) => void, options = {}) {
         fetch(this.makeUrl(endpoint, options), { method })
             .then(this.errorHandler)
             .then((res) => res.json())

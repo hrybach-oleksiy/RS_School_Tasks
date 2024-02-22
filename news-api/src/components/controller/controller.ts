@@ -1,10 +1,10 @@
 import AppLoader from './appLoader';
-import { Endpoints } from '../../enums';
+import { Endpoint } from '../../enums';
 import { NewsData, SourceData } from '../../interfaces';
 
 class AppController extends AppLoader {
     getSources(callback: (data: SourceData) => void) {
-        super.getResponse<SourceData>({ endpoint: Endpoints.SOURCES }, callback);
+        super.getResponse<SourceData>({ endpoint: Endpoint.SOURCES }, callback);
     }
 
     getNews(event: Event, callback: (data: NewsData) => void) {
@@ -18,7 +18,7 @@ class AppController extends AppLoader {
                 if (sourceId) {
                     if (newsContainer.getAttribute('data-source') !== sourceId) {
                         newsContainer.setAttribute('data-source', sourceId);
-                        super.getResponse({ endpoint: Endpoints.EVERYTHING, options: { sources: sourceId } }, callback);
+                        super.getResponse({ endpoint: Endpoint.EVERYTHING, options: { sources: sourceId } }, callback);
                     }
                 }
 

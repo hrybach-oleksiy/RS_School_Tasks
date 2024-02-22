@@ -1,8 +1,13 @@
-export enum LoadingStatus {
+export enum ResponseStatus {
     SUCCESS = 'ok',
+    ERROR = 'error',
 }
 
-export enum Endpoints {
+export enum Endpoint {
     EVERYTHING = 'everything',
     SOURCES = 'sources',
+}
+
+export enum HTTPMethod {
+    GET = 'GET',
 }
