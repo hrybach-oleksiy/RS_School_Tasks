@@ -44,3 +44,8 @@
         padding: 5px 10px;
     }
 }
+
+.show-more {
+    overflow: visible;
+    height: auto;
+}

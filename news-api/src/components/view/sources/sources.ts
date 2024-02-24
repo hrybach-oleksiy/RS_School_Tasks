@@ -65,17 +65,21 @@ class Sources {
     }
 
     showMore() {
-        const showMoreBtn = document.querySelector<HTMLElement>('.show-more');
+        const showMoreBtn = document.querySelector<HTMLElement>('.show-more-btn');
+
         assertIsDefined(showMoreBtn);
+
         showMoreBtn.addEventListener('click', () => {
-            console.log('showed more');
             const sourceBlock = document.querySelector<HTMLElement>('.sources');
             assertIsDefined(sourceBlock);
 
-            sourceBlock.style.overflow = 'visible';
-            sourceBlock.style.height = 'auto';
+            sourceBlock.classList.toggle('show-more');
 
-            showMoreBtn.remove();
+            if (sourceBlock.classList.contains('show-more')) {
+                showMoreBtn.textContent = 'Show less News Sources';
+            } else {
+                showMoreBtn.textContent = 'Show more News Sources';
+            }
         });
     }
 }
