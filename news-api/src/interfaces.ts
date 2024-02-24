@@ -32,6 +32,10 @@ export interface SourceData {
     status: ResponseStatus;
     sources: SourceItem[];
 }
+
+// interface SourceCategory {
+
+// }
 // export interface LoaderOptions {
 //     [key: string]: string | undefined;
 // }
