@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotenvWebpackPlugin = require('dotenv-webpack');
 const EslintPlugin = require('eslint-webpack-plugin');
+// const CopyPlugin = require('copy-webpack-plugin');
 
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index.ts'),
@@ -19,6 +20,18 @@ const baseConfig = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+            // {
+            //     test: /\.(png|jpg|jpeg|gif|webp|svg)$/i,
+            //     type: 'asset/resource',
+            // },
+            // {
+            //     test: /\.(png|jpe?g|gif)$/i,
+            //     use: [
+            //         {
+            //             loader: 'file-loader',
+            //         },
+            //     ],
+            // },
         ],
     },
     resolve: {
@@ -36,6 +49,14 @@ const baseConfig = {
         }),
         new CleanWebpackPlugin(),
         new EslintPlugin({ extensions: 'ts' }),
+        // new CopyPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.resolve(__dirname, 'src/assets'),
+        //             to: path.resolve(__dirname, 'dist/assets'),
+        //         },
+        //     ],
+        // }),
     ],
 };
 

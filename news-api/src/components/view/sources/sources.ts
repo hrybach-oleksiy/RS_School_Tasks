@@ -1,21 +1,22 @@
 import './sources.css';
-import { NewsSourceItem } from '../../../interfaces';
+import { SourceItem } from '../../../interfaces';
 import { assertIsDefined } from '../../../utils';
 
 class Sources {
-    draw(data: readonly NewsSourceItem[]) {
+    draw(data: readonly SourceItem[]) {
         const fragment = document.createDocumentFragment();
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
 
         assertIsDefined(sourceItemTemp);
         assertIsDefined(sourceBlock);
+        // console.log(data);
 
         data.forEach((item) => {
+            // console.log(item.country);
             const sourceClone = sourceItemTemp.content.cloneNode(true) as HTMLElement;
             const sourceName = sourceClone.querySelector<HTMLElement>('.source__item-name');
             const sourceItem = sourceClone.querySelector<HTMLElement>('.source__item');
-
             assertIsDefined(sourceName);
             assertIsDefined(sourceItem);
 
