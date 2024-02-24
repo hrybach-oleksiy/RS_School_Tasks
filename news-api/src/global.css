@@ -20,7 +20,10 @@ footer {
     justify-content: center;
 }
 footer .copyright {
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 24px;
     color: #333;
     text-align: center;
 }
