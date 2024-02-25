@@ -82,6 +82,12 @@ class Sources {
             }
         });
 
+        if (window.innerWidth <= 886) {
+            showMoreBtn.classList.remove('hidden');
+        } else {
+            showMoreBtn.classList.add('hidden');
+        }
+
         window.addEventListener('resize', () => {
             if (window.innerWidth <= 886 && data.length > 74) {
                 showMoreBtn.classList.remove('hidden');
