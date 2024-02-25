@@ -3,11 +3,20 @@ import { SourceItem } from '../../../interfaces';
 import { assertIsDefined } from '../../../utils';
 
 class Sources {
-    sourceCategory: SourceItem['category'] = 'general';
-    sourcesLength: number = 100;
+    sourceCategories: SourceItem['category'][] = [
+        'business',
+        'entertainment',
+        'general',
+        'health',
+        'science',
+        'sports',
+        'technology',
+    ];
+    // currentSourceCategory: SourceItem['category'] = 'general';
 
     constructor() {
         this.showMore();
+        this.createSourceSelect();
     }
 
     draw(data: readonly SourceItem[]) {
@@ -16,28 +25,20 @@ class Sources {
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
         const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
 
-        const filteredSources = data
-            .filter((item) => item.category === this.sourceCategory)
-            .slice(0, this.sourcesLength);
-        this.sourcesLength = filteredSources.length;
+        // const sourceCategories = data.map((item) => item.category);
+        // const uniqueCategories = new Set(sourceCategories);
 
-        // if (window.innerWidth <= 640 && !isLoadingMore && itemsNumber > 4) {
-        //   filteredSources = filteredSources.slice(0, 4);
-        //     showLoadMoreBtn();
-        // }
+        // this.sourceCategories = Array.from(uniqueCategories);
 
-        //       <select name="select">
-        //   <!--Supplement an id here instead of using 'name'-->
-        //   <option value="value1">Значение 1</option>
-        //   <option value="value2" selected>Значение 2</option>
-        //   <option value="value3">Значение 3</option>
-        // </select>
+        // const filteredSources = data.filter((item) => item.category === this.currentSourceCategory);
 
         assertIsDefined(sourceItemTemp);
         assertIsDefined(sourceBlock);
         assertIsDefined(sourceSelectBlock);
 
-        filteredSources.forEach((item) => {
+        sourceBlock.innerHTML = '';
+
+        data.forEach((item) => {
             const sourceClone = sourceItemTemp.content.cloneNode(true) as HTMLElement;
             const sourceName = sourceClone.querySelector<HTMLElement>('.source__item-name');
             const sourceItem = sourceClone.querySelector<HTMLElement>('.source__item');
@@ -64,7 +65,25 @@ class Sources {
         sourceBlock.append(fragment);
     }
 
-    showMore() {
+    private createSourceSelect() {
+        const sourceSelect = document.querySelector<HTMLElement>('.categories');
+        assertIsDefined(sourceSelect);
+
+        sourceSelect.innerHTML = '';
+
+        this.sourceCategories.forEach((category) => {
+            const selectOption = new Option(category, category);
+
+            if (category === 'general') {
+                selectOption.selected = true;
+            }
+            sourceSelect.append(selectOption);
+        });
+
+        // this.currentSourceCategory = this.sourceCategories[0];
+    }
+
+    private showMore() {
         const showMoreBtn = document.querySelector<HTMLElement>('.show-more-btn');
 
         assertIsDefined(showMoreBtn);
@@ -79,6 +98,18 @@ class Sources {
                 showMoreBtn.textContent = 'Show less News Sources';
             } else {
                 showMoreBtn.textContent = 'Show more News Sources';
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 640) {
+                console.log('less than 640px');
+                showMoreBtn.classList.remove('hidden');
+            }
+
+            if (window.innerWidth > 640) {
+                console.log('more than 640px');
+                showMoreBtn.classList.add('hidden');
             }
         });
     }

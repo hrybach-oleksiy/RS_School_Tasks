@@ -31,6 +31,10 @@ header h1 {
     align-self: center;
 }
 
+.hidden {
+    display: none;
+}
+
 main {
     display: flex;
     flex-direction: column;
