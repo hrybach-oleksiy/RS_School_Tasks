@@ -5,15 +5,6 @@ export interface NewsSourceItem {
     name: string;
 }
 
-// export interface SourceCategories {
-//     business: string;
-//     entertainment: string;
-//     general: string;
-//     health: string;
-//     science: string;
-//     sports: string;
-//     technology: string;
-// }
 export interface NewsItem {
     author: string;
     content: string;

@@ -12,28 +12,23 @@ class Sources {
         'sports',
         'technology',
     ];
-    // currentSourceCategory: SourceItem['category'] = 'general';
 
     constructor() {
-        this.createSourceSelect();
+        // uncomment for https://newsapi.org
+        // this.createSourceSelect();
     }
 
     draw(data: readonly SourceItem[]) {
         const fragment = document.createDocumentFragment();
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
-        const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
-        console.log(data.length);
-        // const sourceCategories = data.map((item) => item.category);
-        // const uniqueCategories = new Set(sourceCategories);
-
-        // this.sourceCategories = Array.from(uniqueCategories);
-
-        // const filteredSources = data.filter((item) => item.category === this.currentSourceCategory);
+        // uncomment for https://newsapi.org
+        // const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
 
         assertIsDefined(sourceItemTemp);
         assertIsDefined(sourceBlock);
-        assertIsDefined(sourceSelectBlock);
+        // uncomment for https://newsapi.org
+        // assertIsDefined(sourceSelectBlock);
 
         sourceBlock.innerHTML = '';
 
@@ -47,20 +42,9 @@ class Sources {
             sourceName.textContent = item.name;
             sourceItem.setAttribute('data-source-id', item.id);
 
-            // if (sourceName) {
-            //     sourceName.textContent = item.name;
-            // }
-
-            // if (sourceItem) {
-            //     sourceItem.setAttribute('data-source-id', item.id);
-            // }
-
             fragment.append(sourceClone);
         });
 
-        // if (sourceBlock) {
-        //     sourceBlock.append(fragment);
-        // }
         sourceBlock.append(fragment);
         this.showMore(data);
     }
@@ -79,8 +63,6 @@ class Sources {
             }
             sourceSelect.append(selectOption);
         });
-
-        // this.currentSourceCategory = this.sourceCategories[0];
     }
 
     private showMore(data: readonly SourceItem[]) {
@@ -101,7 +83,6 @@ class Sources {
         });
 
         window.addEventListener('resize', () => {
-            console.log(data.length);
             if (window.innerWidth <= 886 && data.length > 74) {
                 showMoreBtn.classList.remove('hidden');
                 sourceBlock.classList.remove('show-more');

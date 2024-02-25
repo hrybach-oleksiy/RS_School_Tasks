@@ -4,7 +4,7 @@ import { LoaderOptions } from '../../types';
 class Loader {
     constructor(
         private baseLink: string | undefined,
-        private options: LoaderOptions
+        private options?: LoaderOptions
     ) {}
 
     protected getResponse<T>(

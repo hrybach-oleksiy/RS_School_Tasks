@@ -10,13 +10,6 @@ class AppController extends AppLoader {
         super.getResponse<SourceData>({ endpoint: Endpoint.SOURCES, options: { category: sourceCategory } }, callback);
     }
 
-    // getSources(callback: (data: SourceData) => void) {
-    //     // const target = event.target as HTMLOptionElement;
-    //     // const sourceCategory = target.value;
-
-    //     super.getResponse<SourceData>({ endpoint: Endpoint.SOURCES }, callback);
-    // }
-
     getNews(event: Event, callback: (data: NewsData) => void) {
         let target = event.target as HTMLElement;
         const newsContainer = event.currentTarget as HTMLElement;
