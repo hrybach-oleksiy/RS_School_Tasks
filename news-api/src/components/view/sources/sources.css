@@ -1,10 +1,11 @@
 .sources {
     display: flex;
     flex-wrap: wrap;
-    align-content: center;
+    align-content: flex-start;
     width: 100%;
     height: auto;
     margin-bottom: 20px;
+    padding: 50px 0 0;
     align-items: center;
     font:
         300 1em 'Fira Sans',
@@ -17,7 +18,7 @@
     font: inherit;
     line-height: 1;
     margin: 0.5em;
-    padding: 1em 2em;
+    padding: 5px 10px;
     color: #70d6ff;
     transition: 0.25s;
     cursor: pointer;
@@ -52,13 +53,10 @@ select option {
     color: #30c5ff;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 886px) {
     .sources {
         height: 325px;
         overflow: hidden;
-    }
-    .source__item {
-        padding: 5px 10px;
     }
 }
 

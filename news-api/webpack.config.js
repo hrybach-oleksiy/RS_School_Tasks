@@ -20,18 +20,14 @@ const baseConfig = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
-            // {
-            //     test: /\.(png|jpg|jpeg|gif|webp|svg)$/i,
-            //     type: 'asset/resource',
-            // },
-            // {
-            //     test: /\.(png|jpe?g|gif)$/i,
-            //     use: [
-            //         {
-            //             loader: 'file-loader',
-            //         },
-            //     ],
-            // },
+            {
+                test: /\.(png|jpg|jpeg|gif|webp|svg)$/i,
+                type: 'asset/resource',
+            },
+            {
+                test: /\.html$/i,
+                loader: 'html-loader',
+            },
         ],
     },
     resolve: {

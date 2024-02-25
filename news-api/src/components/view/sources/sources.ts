@@ -15,7 +15,6 @@ class Sources {
     // currentSourceCategory: SourceItem['category'] = 'general';
 
     constructor() {
-        this.showMore();
         this.createSourceSelect();
     }
 
@@ -24,7 +23,7 @@ class Sources {
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
         const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
-
+        console.log(data.length);
         // const sourceCategories = data.map((item) => item.category);
         // const uniqueCategories = new Set(sourceCategories);
 
@@ -63,6 +62,7 @@ class Sources {
         //     sourceBlock.append(fragment);
         // }
         sourceBlock.append(fragment);
+        this.showMore(data);
     }
 
     private createSourceSelect() {
@@ -83,15 +83,14 @@ class Sources {
         // this.currentSourceCategory = this.sourceCategories[0];
     }
 
-    private showMore() {
+    private showMore(data: readonly SourceItem[]) {
         const showMoreBtn = document.querySelector<HTMLElement>('.show-more-btn');
+        const sourceBlock = document.querySelector<HTMLElement>('.sources');
 
+        assertIsDefined(sourceBlock);
         assertIsDefined(showMoreBtn);
 
         showMoreBtn.addEventListener('click', () => {
-            const sourceBlock = document.querySelector<HTMLElement>('.sources');
-            assertIsDefined(sourceBlock);
-
             sourceBlock.classList.toggle('show-more');
 
             if (sourceBlock.classList.contains('show-more')) {
@@ -102,14 +101,18 @@ class Sources {
         });
 
         window.addEventListener('resize', () => {
-            if (window.innerWidth <= 640) {
-                console.log('less than 640px');
+            console.log(data.length);
+            if (window.innerWidth <= 886 && data.length > 74) {
                 showMoreBtn.classList.remove('hidden');
+                sourceBlock.classList.remove('show-more');
+            } else if (window.innerWidth <= 886 && data.length < 74) {
+                showMoreBtn.classList.add('hidden');
+                sourceBlock.classList.add('show-more');
             }
 
-            if (window.innerWidth > 640) {
-                console.log('more than 640px');
+            if (window.innerWidth > 886) {
                 showMoreBtn.classList.add('hidden');
+                sourceBlock.classList.add('show-more');
             }
         });
     }
