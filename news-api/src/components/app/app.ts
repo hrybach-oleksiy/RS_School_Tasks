@@ -12,10 +12,17 @@ class App {
 
     start() {
         const sourcesBlock = document.querySelector<HTMLElement>('.sources');
+        const sourceSelectBlock = document.querySelector<HTMLElement>('.categories');
 
         if (sourcesBlock) {
             sourcesBlock.addEventListener('click', (event) => {
                 this.controller.getNews(event, (data) => this.view.drawNews(data));
+            });
+        }
+
+        if (sourceSelectBlock) {
+            sourceSelectBlock.addEventListener('change', (event) => {
+                this.controller.getSources((data) => this.view.drawSources(data), event);
             });
         }
 

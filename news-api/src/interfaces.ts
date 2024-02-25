@@ -4,6 +4,16 @@ export interface NewsSourceItem {
     id: string;
     name: string;
 }
+
+// export interface SourceCategories {
+//     business: string;
+//     entertainment: string;
+//     general: string;
+//     health: string;
+//     science: string;
+//     sports: string;
+//     technology: string;
+// }
 export interface NewsItem {
     author: string;
     content: string;
@@ -32,6 +42,10 @@ export interface SourceData {
     status: ResponseStatus;
     sources: SourceItem[];
 }
+
+// interface SourceCategory {
+
+// }
 // export interface LoaderOptions {
 //     [key: string]: string | undefined;
 // }
