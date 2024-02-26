@@ -3,7 +3,7 @@ import { SourceItem } from '../../../interfaces';
 import { assertIsDefined } from '../../../utils';
 
 class Sources {
-    sourceCategories: SourceItem['category'][] = [
+    readonly sourceCategories: SourceItem['category'][] = [
         'business',
         'entertainment',
         'general',
@@ -17,7 +17,7 @@ class Sources {
         this.createSourceSelect();
     }
 
-    draw(data: readonly SourceItem[]) {
+    public draw(data: readonly SourceItem[]) {
         const fragment = document.createDocumentFragment();
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');

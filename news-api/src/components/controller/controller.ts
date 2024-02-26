@@ -3,14 +3,14 @@ import { Endpoint } from '../../enums';
 import { NewsData, SourceData } from '../../interfaces';
 
 class AppController extends AppLoader {
-    getSources(callback: (data: SourceData) => void, event?: Event) {
+    public getSources(callback: (data: Readonly<SourceData>) => void, event?: Event) {
         const target = event?.target as HTMLOptionElement;
         const sourceCategory = target ? target.value : 'general';
 
         super.getResponse<SourceData>({ endpoint: Endpoint.SOURCES, options: { category: sourceCategory } }, callback);
     }
 
-    getNews(event: Event, callback: (data: NewsData) => void) {
+    public getNews(event: Event, callback: (data: Readonly<NewsData>) => void) {
         let target = event.target as HTMLElement;
         const newsContainer = event.currentTarget as HTMLElement;
 

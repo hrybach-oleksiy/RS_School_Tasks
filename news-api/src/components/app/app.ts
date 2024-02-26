@@ -11,7 +11,7 @@ class App {
         this.view = new AppView();
     }
 
-    start() {
+    public start() {
         const sourcesBlock = document.querySelector<HTMLElement>('.sources');
         const sourceSelectBlock = document.querySelector<HTMLElement>('.categories');
         const newsBlock = document.querySelector<HTMLElement>('.news');

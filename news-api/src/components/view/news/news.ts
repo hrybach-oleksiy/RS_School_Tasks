@@ -4,7 +4,7 @@ import { assertIsDefined } from '../../../utils';
 import imagePlaceholder from '../../../assets/news-placeholder.jpg';
 
 class News {
-    draw(data: readonly NewsItem[]) {
+    public draw(data: readonly NewsItem[]) {
         const news = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
 
         const fragment = document.createDocumentFragment();
