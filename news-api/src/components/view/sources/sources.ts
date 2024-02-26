@@ -14,23 +14,23 @@ class Sources {
     ];
 
     constructor() {
-        // uncomment for https://newsapi.org
-        // this.createSourceSelect();
+        this.createSourceSelect();
     }
 
     draw(data: readonly SourceItem[]) {
         const fragment = document.createDocumentFragment();
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
-        // uncomment for https://newsapi.org
-        // const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
+        const sourceSelectBlock = document.querySelector<HTMLElement>('.source-select');
+        const newsTitle = document.querySelector<HTMLElement>('.news-title');
 
         assertIsDefined(sourceItemTemp);
         assertIsDefined(sourceBlock);
-        // uncomment for https://newsapi.org
-        // assertIsDefined(sourceSelectBlock);
+        assertIsDefined(sourceSelectBlock);
+        assertIsDefined(newsTitle);
 
         sourceBlock.innerHTML = '';
+        newsTitle.classList.add('hidden');
 
         data.forEach((item) => {
             const sourceClone = sourceItemTemp.content.cloneNode(true) as HTMLElement;
@@ -82,10 +82,12 @@ class Sources {
             }
         });
 
-        if (window.innerWidth <= 886) {
-            showMoreBtn.classList.remove('hidden');
-        } else {
+        if (window.innerWidth >= 886 || data.length < 74) {
             showMoreBtn.classList.add('hidden');
+            sourceBlock.classList.add('show-more');
+        } else {
+            showMoreBtn.classList.remove('hidden');
+            sourceBlock.classList.remove('show-more');
         }
 
         window.addEventListener('resize', () => {

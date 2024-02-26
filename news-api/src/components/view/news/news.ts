@@ -10,9 +10,11 @@ class News {
         const fragment = document.createDocumentFragment();
         const newsItemTemp = document.querySelector<HTMLTemplateElement>('#newsItemTemp');
         const newsBlock = document.querySelector<HTMLElement>('.news');
+        const newsTitle = document.querySelector<HTMLElement>('.news-title');
 
         assertIsDefined(newsItemTemp);
         assertIsDefined(newsBlock);
+        assertIsDefined(newsTitle);
 
         news.forEach((item, idx) => {
             const newsClone = newsItemTemp.content.cloneNode(true) as HTMLElement;

@@ -130,6 +130,14 @@
     left: 0%;
 }
 
+.news-title {
+    text-align: center;
+}
+
+.news-title-source {
+    color: #30c5ff;
+}
+
 @media (min-width: 640px) {
     .news__item {
         flex-direction: row;

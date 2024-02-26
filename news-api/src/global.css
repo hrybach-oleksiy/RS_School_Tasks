@@ -75,7 +75,7 @@ footer img {
     width: 80px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 886px) {
     footer .copyright {
         flex-direction: column;
         gap: 15px;
