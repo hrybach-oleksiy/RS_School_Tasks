@@ -1,6 +1,6 @@
 import AppLoader from './appLoader';
-import { Endpoint } from '../../enums';
-import { NewsData, SourceData } from '../../interfaces';
+import { Endpoint } from '../../types/enums';
+import { NewsData, SourceData } from '../../types/interfaces';
 
 class AppController extends AppLoader {
     public getSources(callback: (data: Readonly<SourceData>) => void, event?: Event) {

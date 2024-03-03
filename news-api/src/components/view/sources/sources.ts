@@ -1,16 +1,17 @@
 import './sources.css';
-import { SourceItem } from '../../../interfaces';
-import { assertIsDefined } from '../../../utils';
+import { SourceItem } from '../../../types/interfaces';
+import { SourceCategories } from '../../../types/enums';
+import { assertIsDefined } from '../../../utils/utils';
 
 class Sources {
-    readonly sourceCategories: SourceItem['category'][] = [
-        'business',
-        'entertainment',
-        'general',
-        'health',
-        'science',
-        'sports',
-        'technology',
+    readonly sourceCategories: SourceCategories[] = [
+        SourceCategories.BUSINESS,
+        SourceCategories.ENTERTAINMENT,
+        SourceCategories.GENERAL,
+        SourceCategories.HEALTH,
+        SourceCategories.SCIENCE,
+        SourceCategories.SPORTS,
+        SourceCategories.TECHNOLOGY,
     ];
 
     constructor() {
@@ -68,6 +69,7 @@ class Sources {
     private showMore(data: readonly SourceItem[]) {
         const showMoreBtn = document.querySelector<HTMLElement>('.show-more-btn');
         const sourceBlock = document.querySelector<HTMLElement>('.sources');
+        const showMoreBtnRenderCondition = window.innerWidth >= 886 || data.length < 74;
 
         assertIsDefined(sourceBlock);
         assertIsDefined(showMoreBtn);
@@ -75,20 +77,14 @@ class Sources {
         showMoreBtn.addEventListener('click', () => {
             sourceBlock.classList.toggle('show-more');
 
+            showMoreBtn.textContent = 'Show more News Sources';
             if (sourceBlock.classList.contains('show-more')) {
                 showMoreBtn.textContent = 'Show less News Sources';
-            } else {
-                showMoreBtn.textContent = 'Show more News Sources';
             }
         });
 
-        if (window.innerWidth >= 886 || data.length < 74) {
-            showMoreBtn.classList.add('hidden');
-            sourceBlock.classList.add('show-more');
-        } else {
-            showMoreBtn.classList.remove('hidden');
-            sourceBlock.classList.remove('show-more');
-        }
+        showMoreBtn.classList.toggle('hidden', showMoreBtnRenderCondition);
+        showMoreBtn.classList.toggle('show-more', showMoreBtnRenderCondition);
 
         window.addEventListener('resize', () => {
             if (window.innerWidth <= 886 && data.length > 74) {

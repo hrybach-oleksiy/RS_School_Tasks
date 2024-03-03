@@ -1,10 +1,10 @@
 import AppController from '../controller/controller';
 import { AppView } from '../view/appView';
-import { assertIsDefined } from '../../utils';
+import { assertIsDefined } from '../../utils/utils';
 
 class App {
-    private controller;
-    private view;
+    private controller: AppController;
+    private view: AppView;
 
     constructor() {
         this.controller = new AppController();

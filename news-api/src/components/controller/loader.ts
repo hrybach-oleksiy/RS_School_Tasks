@@ -1,9 +1,9 @@
-import { Endpoint, HTTPMethod } from '../../enums';
-import { LoaderOptions } from '../../types';
+import { Endpoint, HTTPMethod } from '../../types/enums';
+import { LoaderOptions } from '../../types/types';
 
 class Loader {
     constructor(
-        private baseLink: string | undefined,
+        private baseLink?: string,
         private options?: LoaderOptions
     ) {}
 
@@ -17,12 +17,10 @@ class Loader {
     }
 
     private errorHandler(res: Response) {
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 404)
-                console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
+        if (!res.ok || res.status === 401 || res.status === 404) {
+            console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
             throw Error(res.statusText);
         }
-
         return res;
     }
 
