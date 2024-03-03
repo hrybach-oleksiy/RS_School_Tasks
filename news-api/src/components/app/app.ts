@@ -1,6 +1,6 @@
 import AppController from '../controller/controller';
 import { AppView } from '../view/appView';
-import { assertIsDefined } from '../../utils/utils';
+import { assertIsDefined } from '../../utils/assertIsDefined';
 
 class App {
     private controller: AppController;

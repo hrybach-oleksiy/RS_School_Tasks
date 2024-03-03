@@ -1,7 +1,7 @@
 import './sources.css';
 import { SourceItem } from '../../../types/interfaces';
 import { SourceCategories } from '../../../types/enums';
-import { assertIsDefined } from '../../../utils/utils';
+import { assertIsDefined } from '../../../utils/assertIsDefined';
 
 class Sources {
     readonly sourceCategories: SourceCategories[] = [
