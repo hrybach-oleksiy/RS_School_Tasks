@@ -1,4 +1,4 @@
-import { ResponseStatus } from './enums';
+import { ResponseStatus, SourceCategories } from './enums';
 
 export interface NewsSourceItem {
     id: string;
@@ -16,7 +16,7 @@ export interface NewsItem {
     urlToImage: string;
 }
 export interface SourceItem {
-    category: string;
+    category: SourceCategories;
     country: string;
     description: string;
     id: string;
@@ -33,10 +33,3 @@ export interface SourceData {
     status: ResponseStatus;
     sources: SourceItem[];
 }
-
-// interface SourceCategory {
-
-// }
-// export interface LoaderOptions {
-//     [key: string]: string | undefined;
-// }

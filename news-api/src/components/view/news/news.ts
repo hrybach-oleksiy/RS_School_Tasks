@@ -1,6 +1,6 @@
 import './news.css';
-import { NewsItem } from '../../../interfaces';
-import { assertIsDefined } from '../../../utils';
+import { NewsItem } from '../../../types/interfaces';
+import { assertIsDefined } from '../../../utils/assertIsDefined';
 import imagePlaceholder from '../../../assets/news-placeholder.jpg';
 
 class News {
