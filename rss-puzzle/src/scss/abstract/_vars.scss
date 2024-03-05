@@ -1,0 +1,78 @@
+// colors
+$accent: #b0907a;
+$light: #ebeae9;
+$dark: #0f0e0e;
+
+// backgrounds
+$body: #e1d4c9;
+$container: #665f55;
+$backdrop: #383838;
+$shadow: rgb(0 0 0 / 34.2%);
+
+// border
+$border-light: #c1b6ad;
+$border-dark: #665f55;
+
+// themes
+// $themes: (
+//   light: (
+//     text: $backdrop,
+//     // bg: $light,
+//     bg: red,
+//     accent: $accent,
+//   ),
+//   dark: (
+//     text: $light,
+//     // bg: $backdrop,
+//     bg: blue,
+//     accent: #abcabc,
+//   ),
+// );
+
+// TODO: Export themes to separate file
+$themes: (
+    "light": (
+        "primary": $container,
+        "light": $light,
+        "background": $border-light,
+        "border": $backdrop,
+        "text": $dark,
+        "shadow": $shadow,
+        "body": $body,
+        "button": $body,
+    ),
+    "dark": (
+        "primary": $accent,
+        "light": $border-dark,
+        "background": $backdrop,
+        "border": $body,
+        "text": $light,
+        "shadow": $shadow,
+        "body": $backdrop,
+        "button": $container,
+    ),
+);
+
+@each $theme-name, $properties in $themes {
+    body[data-theme="#{$theme-name}"] {
+        // define a css variable for each property
+        @each $name, $property in $properties {
+            --#{$name}: #{$property};
+        }
+    }
+}
+
+// media
+$desktop-width: 1441px;
+$laptop-width: 1200px;
+$big-tablet-width: 992px;
+$tablet-width: 768px;
+$small-tablet-width: 680px;
+$mobile-width: 440px;
+$small-mobile-width: 320px;
+
+// sizes
+$page-width: 1440; // for adaptive font mixin need specify without px
+$content-width: 1360px;
+$container-offset: 40px;
+$container-width: calc($content-width + ($container-offset * 2));

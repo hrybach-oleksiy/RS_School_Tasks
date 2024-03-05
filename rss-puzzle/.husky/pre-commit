@@ -1,0 +1,4 @@
+# This pre-commit file
+#!/bin/bash
+
+npm run ci:format
