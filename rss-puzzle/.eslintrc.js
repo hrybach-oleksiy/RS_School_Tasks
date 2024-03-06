@@ -29,8 +29,15 @@ module.exports = {
             },
         ],
         'no-undef': 'warn',
-        '@typescript-eslint/no-unused-vars': 'warn',
+        '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
         '@typescript-eslint/no-var-requires': 0,
     },
+    ignorePatterns: ['.eslintrc.js'],
 };
+
+//{
+  //     "*.ts": ["prettier --check .", "eslint ./src"],
+  //     "*.html": ["eslint", "prettier --write"],
+  //     "*.scss": "prettier --write"
+  // }

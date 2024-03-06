@@ -1,2 +1,5 @@
-#!/usr/bin/env sh
-. "${0%/*}/h"
+#rss-puzzle/.husky/pre-commit
+
+cd rss-puzzle
+
+npx validate-branch-name 

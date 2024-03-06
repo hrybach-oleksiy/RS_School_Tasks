@@ -13,3 +13,4 @@ out/
 !**/*.ts
 
 .eslintrc.js
+lint-staged.js

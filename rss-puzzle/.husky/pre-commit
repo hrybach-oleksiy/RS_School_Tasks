@@ -1,4 +1,5 @@
-# This pre-commit file
-#!/bin/bash
+#rss-puzzle/.husky/pre-commit
 
-npm run ci:format
+cd rss-puzzle
+
+npx lint-staged
