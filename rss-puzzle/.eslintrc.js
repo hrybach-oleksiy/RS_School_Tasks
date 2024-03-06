@@ -32,12 +32,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
         '@typescript-eslint/no-var-requires': 0,
+        'no-console': 'off',
     },
     ignorePatterns: ['.eslintrc.js'],
 };
-
-//{
-  //     "*.ts": ["prettier --check .", "eslint ./src"],
-  //     "*.html": ["eslint", "prettier --write"],
-  //     "*.scss": "prettier --write"
-  // }

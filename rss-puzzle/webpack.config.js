@@ -4,10 +4,9 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const EslintPlugin = require('eslint-webpack-plugin');
 
-let isDev = process.env.NODE_ENV === 'development';
-let isProd = !isDev;
-const fileName = (ext) =>
-    isDev ? `[name]${ext}` : `[name].[contenthash:8]${ext}`;
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = !isDev;
+const fileName = (ext) => (isDev ? `[name]${ext}` : `[name].[contenthash:8]${ext}`);
 
 module.exports = {
     entry: {
@@ -98,6 +97,9 @@ module.exports = {
         }),
         new EslintPlugin({ extensions: 'ts' }),
     ],
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
     devServer: {
         watchFiles: path.join(__dirname, 'src'),
         port: 9000,

@@ -1,3 +1,5 @@
 {
-    "*.{json,js,ts,scss,html}": ["prettier --check", "eslint ./src"]
+    "*.ts": ["eslint ./src"],
+    "*.html": ["eslint", "prettier --check"],
+    "*.scss": "prettier --check"
 }
