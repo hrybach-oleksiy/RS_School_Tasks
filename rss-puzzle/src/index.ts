@@ -2,6 +2,5 @@ import './scss/styles.scss';
 import './index.html';
 import App from './app/app';
 
-const app = new App();
-
-console.log(app);
+// eslint-disable-next-line no-new
+new App();

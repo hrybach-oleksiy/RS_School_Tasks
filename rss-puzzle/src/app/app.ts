@@ -1,8 +1,8 @@
 import BaseComponent from './components/BaseComponent';
 import { div } from './components/HTMLComponents';
 
-import Header from './view/header/Header';
-import Footer from './view/footer/Footer';
+// import Header from './view/header/Header';
+// import Footer from './view/footer/Footer';
 import Main from './view/main/Main';
 
 export default class App {
@@ -10,14 +10,15 @@ export default class App {
 
     constructor() {
         document.body.append(this.root.getNode());
+        document.body.setAttribute('data-theme', 'light');
         this.createLayout();
     }
 
     createLayout() {
-        const header = new Header();
+        // const header = new Header();
         const main = new Main();
-        const footer = new Footer();
+        // const footer = new Footer();
 
-        this.root.appendChildren([header, main, footer]);
+        this.root.appendChildren([main]);
     }
 }
