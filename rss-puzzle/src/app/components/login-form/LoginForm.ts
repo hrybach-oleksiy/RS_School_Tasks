@@ -23,6 +23,11 @@ export default class LoginForm extends BaseComponent {
         });
         this.setAttribute(FormAttribute.ACTION, '');
         this.setForm();
+        this.addListener('submit', (event) => {
+            event.preventDefault();
+            this.saveFormData();
+            this.clearForm();
+        });
     }
 
     private setForm() {
@@ -93,7 +98,6 @@ export default class LoginForm extends BaseComponent {
 
     private validateName(event: Event) {
         const inputElement = event.target as HTMLInputElement;
-        console.log(inputElement.name);
         const isValid = LoginForm.validateForm(inputElement, `.${styles['name-error']}`, 3);
 
         this.toggleInputState(isValid, inputElement, inputElement.name);
@@ -157,5 +161,24 @@ export default class LoginForm extends BaseComponent {
         const messageElem = errorMessageElement;
         errorMessageElement.classList.add(styles.hidden);
         messageElem.textContent = '';
+    }
+
+    private saveFormData() {
+        const nameInput = this.nameInput?.getNode() as HTMLInputElement;
+        const surnameInput = this.surnameInput?.getNode() as HTMLInputElement;
+
+        assertIsDefined(nameInput);
+        assertIsDefined(surnameInput);
+
+        const userData = { name: nameInput.value, surname: surnameInput.value };
+        const userDataJSON = JSON.stringify(userData);
+
+        localStorage.setItem('userData', userDataJSON);
+    }
+
+    private clearForm() {
+        (this.getNode() as HTMLFormElement).reset();
+        this.nameInput?.removeClass(styles.valid);
+        this.surnameInput?.removeClass(styles.valid);
     }
 }

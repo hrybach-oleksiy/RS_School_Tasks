@@ -61,6 +61,14 @@ export default class BaseComponent {
         this.node.removeAttribute(attribute);
     }
 
+    public addClass(className: string): void {
+        this.node.classList.add(className);
+    }
+
+    public removeClass(className: string): void {
+        this.node.classList.remove(className);
+    }
+
     public toggleClass(className: string) {
         this.node.classList.toggle(className);
     }
