@@ -1,3 +1,6 @@
 {
-    "eslint.workingDirectories": ["src"]
+    "eslint.workingDirectories": ["src"],
+    
+    // "typescript.tsserver.pluginPaths": ["typescript-plugin-css-modules"]
+
 }

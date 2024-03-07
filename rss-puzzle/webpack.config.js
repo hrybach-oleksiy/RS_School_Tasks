@@ -30,9 +30,41 @@ module.exports = {
             },
             {
                 test: /\.(sa|sc|c)ss$/,
+                exclude: /\.module\.(sa|sc|c)ss$/,
                 use: [
                     isProd ? MiniCssExtractPlugin.loader : 'style-loader',
                     'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            browsers: 'last 2 versions',
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
+            {
+                test: /\.module\.(sa|sc|c)ss$/,
+                use: [
+                    isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[name]_[local]_[hash:base64:6]',
+                                exportLocalsConvention: 'camelCase',
+                            },
+                        },
+                    },
                     {
                         loader: 'postcss-loader',
                         options: {

@@ -12,6 +12,9 @@
         "sourceMap": true,
         "strict": true,
         "typeRoots": ["node_modules/@types", "src/@types/custom.d.ts"],
-        "plugins": [{ "name": "typescript-plugin-css-modules" }],
+        "plugins": [
+          { "name": "typescript-plugin-css-modules"},
+          
+        ],
     }
 }
