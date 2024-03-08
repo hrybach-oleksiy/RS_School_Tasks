@@ -8,6 +8,8 @@ import { UserData } from '../../../types/interfaces';
 export default class Main extends BaseComponent {
     private userData;
 
+    // private currentPage: BaseComponent = new LoginForm();
+
     constructor(userData: UserData | null) {
         super({
             tag: 'main',
@@ -20,7 +22,7 @@ export default class Main extends BaseComponent {
 
     public setPage() {
         if (this.userData) {
-            const startScreen = new StartScreen();
+            const startScreen = new StartScreen(this.userData);
             this.append(startScreen);
         } else {
             const form = new LoginForm();

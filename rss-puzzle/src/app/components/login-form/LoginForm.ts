@@ -3,6 +3,7 @@ import StartScreen from '../../pages/StartScreen';
 import { h1, input, button, div, label } from '../HTMLComponents';
 import FormAttribute from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
+import { UserData } from '../../../types/interfaces';
 
 import styles from './LoginForm.module.scss';
 
@@ -16,6 +17,8 @@ export default class LoginForm extends BaseComponent {
     private isNameValid: boolean = false;
 
     private isSurnameValid: boolean = false;
+
+    private userData: UserData | null = null;
 
     constructor() {
         super({
@@ -174,6 +177,7 @@ export default class LoginForm extends BaseComponent {
 
         const userData = { name: nameInput.value, surname: surnameInput.value };
         const userDataJSON = JSON.stringify(userData);
+        this.userData = userData;
 
         localStorage.setItem('userData', userDataJSON);
     }
@@ -188,7 +192,7 @@ export default class LoginForm extends BaseComponent {
         this.destroy();
 
         const parent = document.querySelector<HTMLElement>('.main');
-        const startScreen = new StartScreen();
+        const startScreen = new StartScreen(this.userData);
         assertIsDefined(parent);
 
         parent.append(startScreen.getNode());

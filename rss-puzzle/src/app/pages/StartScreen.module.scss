@@ -1,7 +1,8 @@
 .start-screen {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 200px;
+    height: 100%;
     padding: 40px;
 }
 
@@ -12,6 +13,22 @@
 
 .description {
     color: #fff8dc;
+    text-align: center;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-title {
+    display: flex;
+    flex-grow: 1;
+    align-self: center;
+    justify-content: center;
+    color: #faebd7;
+    font-size: 36px;
     text-align: center;
 }
 
@@ -27,4 +44,21 @@
     background-color: rgb(0 0 0 / 80%);
     content: "";
     inset: 0;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fade-in ease-in 1;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
