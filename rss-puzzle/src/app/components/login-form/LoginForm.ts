@@ -1,4 +1,5 @@
 import BaseComponent from '../BaseComponent';
+import StartScreen from '../../pages/StartScreen';
 import { h1, input, button, div, label } from '../HTMLComponents';
 import FormAttribute from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
@@ -6,11 +7,11 @@ import assertIsDefined from '../../../utilities/assertIsDefined';
 import styles from './LoginForm.module.scss';
 
 export default class LoginForm extends BaseComponent {
-    private loginButton: BaseComponent = button(['button', 'btn'], 'Login');
-
     private nameInput?: BaseComponent;
 
     private surnameInput?: BaseComponent;
+
+    private loginButton: BaseComponent = button(['button', 'btn'], 'Login');
 
     private isNameValid: boolean = false;
 
@@ -27,6 +28,7 @@ export default class LoginForm extends BaseComponent {
             event.preventDefault();
             this.saveFormData();
             this.clearForm();
+            this.deleteForm();
         });
     }
 
@@ -151,13 +153,13 @@ export default class LoginForm extends BaseComponent {
         return true;
     }
 
-    private static showErrorMessage(errorMessageElement: HTMLElement, message: string) {
+    static showErrorMessage(errorMessageElement: HTMLElement, message: string) {
         const messageElem = errorMessageElement;
         errorMessageElement.classList.remove(styles.hidden);
         messageElem.textContent = message;
     }
 
-    private static hideErrorMessage(errorMessageElement: HTMLElement) {
+    static hideErrorMessage(errorMessageElement: HTMLElement) {
         const messageElem = errorMessageElement;
         errorMessageElement.classList.add(styles.hidden);
         messageElem.textContent = '';
@@ -180,5 +182,15 @@ export default class LoginForm extends BaseComponent {
         (this.getNode() as HTMLFormElement).reset();
         this.nameInput?.removeClass(styles.valid);
         this.surnameInput?.removeClass(styles.valid);
+    }
+
+    private deleteForm() {
+        this.destroy();
+
+        const parent = document.querySelector<HTMLElement>('.main');
+        const startScreen = new StartScreen();
+        assertIsDefined(parent);
+
+        parent.append(startScreen.getNode());
     }
 }

@@ -1,8 +1,8 @@
 .footer {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 100px;
     margin-bottom: 20px;
-    padding: 15px;
     color: $light;
     background-color: $container;
     border-radius: 40px;
@@ -32,16 +32,16 @@
         }
     }
 
-    // @include media-big-tablet {
-    //     grid-template-columns: 1fr;
-    // }
+    @include media-big-tablet {
+        grid-template-columns: 1fr;
+    }
 
-    // @include media-tablet {
-    //     padding: 100px 60px 106px;
-    // }
+    @include media-tablet {
+        padding: 100px 60px 106px;
+    }
 
-    // @include media-small-tablet {
-    //     gap: 40px;
-    //     padding: 60px 16px 64px;
-    // }
+    @include media-small-tablet {
+        gap: 40px;
+        padding: 60px 16px 64px;
+    }
 }

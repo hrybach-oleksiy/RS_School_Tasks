@@ -1,9 +1,11 @@
 .header {
     @include flex-between;
 
-    padding: 20px 0;
+    margin-top: 20px;
+    padding: 15px;
     font-weight: 600;
     line-height: 150%;
+    border: 1px solid $container;
 
     &__link {
         @include flex-center;

@@ -1,0 +1,30 @@
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px;
+}
+
+.title {
+    color: #f0f8ff;
+    text-align: center;
+}
+
+.description {
+    color: #fff8dc;
+    text-align: center;
+}
+
+.background {
+    background-image: url("../../assets/images/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.background::before {
+    position: absolute;
+    z-index: -2;
+    background-color: rgb(0 0 0 / 80%);
+    content: "";
+    inset: 0;
+}
