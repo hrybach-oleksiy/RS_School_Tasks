@@ -1,6 +1,8 @@
-import BaseComponent from '../components/BaseComponent';
-import { h1, p, div } from '../components/HTMLComponents';
-import { UserData } from '../../types/interfaces';
+import BaseComponent from '../../components/BaseComponent';
+import { h1, p, div, button } from '../../components/HTMLComponents';
+import { UserData } from '../../../types/interfaces';
+import assertIsDefined from '../../../utilities/assertIsDefined';
+import MainPage from '../main-page/MainPage';
 
 import styles from './StartScreen.module.scss';
 
@@ -15,10 +17,18 @@ export default class StartScreen extends BaseComponent {
         this.SetPage();
     }
 
+    //   <div class="button" id="button-7">
+    //   <div id="dub-arrow"><img src="https://github.com/atloomer/atloomer.github.io/blob/master/img/iconmonstr-arrow-48-240.png?raw=true" alt="" /></div>
+    //   <a href="#">Let's Go!</a>
+    // </div>
+
     private SetPage() {
         const descriptionText =
             'RSS Puzzle is an interactive mini-game aimed at enhancing English language skills. Players assemble sentences from jumbled words. The game integrates various levels of difficulty, hint options, and a unique puzzle-like experience with artwork.';
         const title = h1([styles.title], 'RSS PUZZLE GAME');
+        const startGameButton = button(['btn', styles.button], 'Start Game', () => {
+            this.startGame();
+        });
         const description = p([styles.description], descriptionText);
         const user = this.getUserData();
         const userTitle = p([styles['user-title'], styles['fade-in']], `Hello ${user.surname} ${user.name}!`);
@@ -26,7 +36,7 @@ export default class StartScreen extends BaseComponent {
 
         document.body.classList.add(styles.background);
 
-        this.appendChildren([wrapperElement, userTitle]);
+        this.appendChildren([wrapperElement, userTitle, startGameButton]);
     }
 
     private getUserData() {
@@ -37,5 +47,15 @@ export default class StartScreen extends BaseComponent {
             name: userName,
             surname: userSurname,
         };
+    }
+
+    private startGame() {
+        this.destroy();
+
+        const parent = document.querySelector<HTMLElement>('.main');
+        const mainPage = new MainPage();
+        assertIsDefined(parent);
+
+        parent.append(mainPage.getNode());
     }
 }

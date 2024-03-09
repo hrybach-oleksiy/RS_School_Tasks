@@ -1,6 +1,6 @@
 import BaseComponent from '../../components/BaseComponent';
 import LoginForm from '../../components/login-form/LoginForm';
-import StartScreen from '../../pages/StartScreen';
+import StartScreen from '../../pages/start-screen/StartScreen';
 import { UserData } from '../../../types/interfaces';
 
 // import styles from './Main.module.scss';
@@ -16,7 +16,6 @@ export default class Main extends BaseComponent {
             classNames: ['main'],
         });
         this.userData = userData;
-
         this.setPage();
     }
 

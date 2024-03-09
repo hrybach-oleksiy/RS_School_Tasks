@@ -1,5 +1,5 @@
 import BaseComponent from '../BaseComponent';
-import StartScreen from '../../pages/StartScreen';
+import StartScreen from '../../pages/start-screen/StartScreen';
 import { h1, input, button, div, label } from '../HTMLComponents';
 import FormAttribute from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
