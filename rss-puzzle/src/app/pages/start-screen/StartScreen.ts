@@ -1,7 +1,7 @@
 import BaseComponent from '../../components/BaseComponent';
 import { h1, p, div, button } from '../../components/HTMLComponents';
 import { UserData } from '../../../types/interfaces';
-import assertIsDefined from '../../../utilities/assertIsDefined';
+// import assertIsDefined from '../../../utilities/assertIsDefined';
 import MainPage from '../main-page/MainPage';
 
 import styles from './StartScreen.module.scss';
@@ -9,18 +9,17 @@ import styles from './StartScreen.module.scss';
 export default class StartScreen extends BaseComponent {
     userData?: UserData | null;
 
-    constructor(userData?: UserData | null) {
+    onButtonStart?: (page: BaseComponent) => void;
+
+    constructor(userData?: UserData | null, onButtonStart?: (page: BaseComponent) => void) {
         super({
             classNames: [styles['start-screen']],
         });
         this.userData = userData;
+
+        this.onButtonStart = onButtonStart;
         this.SetPage();
     }
-
-    //   <div class="button" id="button-7">
-    //   <div id="dub-arrow"><img src="https://github.com/atloomer/atloomer.github.io/blob/master/img/iconmonstr-arrow-48-240.png?raw=true" alt="" /></div>
-    //   <a href="#">Let's Go!</a>
-    // </div>
 
     private SetPage() {
         const descriptionText =
@@ -50,12 +49,8 @@ export default class StartScreen extends BaseComponent {
     }
 
     private startGame() {
-        this.destroy();
-
-        const parent = document.querySelector<HTMLElement>('.main');
-        const mainPage = new MainPage();
-        assertIsDefined(parent);
-
-        parent.append(mainPage.getNode());
+        if (this.onButtonStart) {
+            this.onButtonStart(new MainPage());
+        }
     }
 }

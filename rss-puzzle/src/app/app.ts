@@ -16,13 +16,13 @@ export default class App {
         document.body.append(this.root.getNode());
         document.body.setAttribute('data-theme', 'light');
         this.getUserData();
-        this.createLayout();
+        // this.createLayout();
     }
 
-    private createLayout() {
+    public createLayout() {
         const header = new Header();
         const main = new Main(this.userData);
-        const footer = new Footer();
+        const footer = new Footer(App.handleFooterButtonClick);
 
         this.root.appendChildren([header, main, footer]);
     }
@@ -37,5 +37,9 @@ export default class App {
                 surname: userData.surname,
             };
         }
+    }
+
+    static handleFooterButtonClick() {
+        console.log('Кнопка в футері була натиснута');
     }
 }

@@ -4,6 +4,7 @@ import { h1, input, button, div, label } from '../HTMLComponents';
 import FormAttribute from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
 import { UserData } from '../../../types/interfaces';
+// import Header from '../../view/header/Header';
 
 import styles from './LoginForm.module.scss';
 
@@ -20,7 +21,7 @@ export default class LoginForm extends BaseComponent {
 
     private userData: UserData | null = null;
 
-    constructor() {
+    constructor(onFormSubmit?: (page: BaseComponent) => void) {
         super({
             tag: 'form',
             classNames: [styles.form],
@@ -31,7 +32,11 @@ export default class LoginForm extends BaseComponent {
             event.preventDefault();
             this.saveFormData();
             this.clearForm();
-            this.deleteForm();
+            this.destroy();
+
+            if (onFormSubmit) {
+                onFormSubmit(new StartScreen(this.userData));
+            }
         });
     }
 
@@ -186,15 +191,5 @@ export default class LoginForm extends BaseComponent {
         (this.getNode() as HTMLFormElement).reset();
         this.nameInput?.removeClass(styles.valid);
         this.surnameInput?.removeClass(styles.valid);
-    }
-
-    private deleteForm() {
-        this.destroy();
-
-        const parent = document.querySelector<HTMLElement>('.main');
-        const startScreen = new StartScreen(this.userData);
-        assertIsDefined(parent);
-
-        parent.append(startScreen.getNode());
     }
 }

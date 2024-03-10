@@ -23,13 +23,6 @@ export default class BaseComponent {
         }
     }
 
-    // private createElement(params: BaseComponentProps) {
-    //     const node = document.createElement(params.tag);
-    //     node.className = params.className;
-    //     node.textContent = params.text;
-    //     this.node = node;
-    // }
-
     public append(child: BaseComponent) {
         this.children.push(child);
         this.node.append(child.getNode());

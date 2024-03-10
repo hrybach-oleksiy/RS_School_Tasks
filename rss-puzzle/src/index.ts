@@ -3,4 +3,4 @@ import './index.html';
 import App from './app/app';
 
 // eslint-disable-next-line no-new
-new App();
+new App().createLayout();

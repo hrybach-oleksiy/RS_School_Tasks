@@ -1,6 +1,7 @@
 import BaseComponent from '../../components/BaseComponent';
 import LoginForm from '../../components/login-form/LoginForm';
 import StartScreen from '../../pages/start-screen/StartScreen';
+// import MainPage from '../../pages/main-page/MainPage';
 import { UserData } from '../../../types/interfaces';
 
 // import styles from './Main.module.scss';
@@ -8,7 +9,7 @@ import { UserData } from '../../../types/interfaces';
 export default class Main extends BaseComponent {
     private userData;
 
-    // private currentPage: BaseComponent = new LoginForm();
+    private currentPage: BaseComponent = new LoginForm();
 
     constructor(userData: UserData | null) {
         super({
@@ -16,16 +17,24 @@ export default class Main extends BaseComponent {
             classNames: ['main'],
         });
         this.userData = userData;
+        this.setCurrentChild(this.currentPage);
         this.setPage();
     }
 
-    public setPage() {
+    private setPage() {
         if (this.userData) {
-            const startScreen = new StartScreen(this.userData);
-            this.append(startScreen);
+            this.currentPage = new StartScreen(this.userData, this.setCurrentChild.bind(this));
+            this.setCurrentChild(this.currentPage);
         } else {
-            const form = new LoginForm();
-            this.append(form);
+            this.currentPage = new LoginForm(this.setCurrentChild.bind(this));
+            this.setCurrentChild(this.currentPage);
         }
+    }
+
+    private setCurrentChild(page: BaseComponent) {
+        this.destroyChildren();
+        this.currentPage = page;
+        this.append(this.currentPage);
+        // this.layoutCreator();
     }
 }
