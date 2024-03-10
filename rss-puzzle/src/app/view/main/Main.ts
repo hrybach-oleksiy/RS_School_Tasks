@@ -35,6 +35,5 @@ export default class Main extends BaseComponent {
         this.destroyChildren();
         this.currentPage = page;
         this.append(this.currentPage);
-        // this.layoutCreator();
     }
 }

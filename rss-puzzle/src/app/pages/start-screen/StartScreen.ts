@@ -19,6 +19,7 @@ export default class StartScreen extends BaseComponent {
 
         this.onButtonStart = onButtonStart;
         this.SetPage();
+        this.startGame();
     }
 
     private SetPage() {
@@ -33,7 +34,7 @@ export default class StartScreen extends BaseComponent {
         const userTitle = p([styles['user-title'], styles['fade-in']], `Hello ${user.surname} ${user.name}!`);
         const wrapperElement = div([styles.wrapper], title, description);
 
-        document.body.classList.add(styles.background);
+        document.body.classList.add('background');
 
         this.appendChildren([wrapperElement, userTitle, startGameButton]);
     }

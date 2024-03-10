@@ -20,7 +20,8 @@ export default class App {
     }
 
     public createLayout() {
-        const header = new Header();
+        this.root.destroyChildren();
+        const header = new Header(this.handleLogoutButtonClick.bind(this));
         const main = new Main(this.userData);
         const footer = new Footer(App.handleFooterButtonClick);
 
@@ -36,10 +37,20 @@ export default class App {
                 name: userData.name,
                 surname: userData.surname,
             };
+        } else {
+            this.userData = null;
         }
     }
 
     static handleFooterButtonClick() {
         console.log('Кнопка в футері була натиснута');
+    }
+
+    private handleLogoutButtonClick() {
+        // console.log(localStorage);
+        // localStorage.clear();
+        // console.log(localStorage);
+        this.getUserData();
+        this.createLayout();
     }
 }

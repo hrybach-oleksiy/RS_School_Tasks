@@ -78,19 +78,19 @@
     }
 }
 
-.background {
-    background-image: url("../../../assets/images/background.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+// .background {
+//     background-image: url("../../../assets/images/background.png");
+//     background-repeat: no-repeat;
+//     background-size: cover;
+// }
 
-.background::before {
-    position: absolute;
-    z-index: -2;
-    background-color: rgb(0 0 0 / 80%);
-    content: "";
-    inset: 0;
-}
+// .background::before {
+//     position: absolute;
+//     z-index: -2;
+//     background-color: rgb(0 0 0 / 80%);
+//     content: "";
+//     inset: 0;
+// }
 
 .fade-in {
     opacity: 0;
