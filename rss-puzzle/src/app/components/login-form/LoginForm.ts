@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent';
 import StartScreen from '../../pages/start-screen/StartScreen';
 import { h1, input, button, div, label } from '../HTMLComponents';
-import FormAttribute from '../../../types/enums';
+import { FormAttribute, AppPage } from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
 import { UserData } from '../../../types/interfaces';
 // import Header from '../../view/header/Header';
@@ -21,12 +21,15 @@ export default class LoginForm extends BaseComponent {
 
     private userData: UserData | null = null;
 
-    constructor(onFormSubmit?: (page: BaseComponent) => void) {
+    // private setAppState?: (page: string) => void;
+
+    constructor(setAppState?: (page: string) => void, onFormSubmit?: (page: BaseComponent) => void) {
         super({
             tag: 'form',
             classNames: [styles.form],
         });
         this.setAttribute(FormAttribute.ACTION, '');
+
         this.setForm();
         this.addListener('submit', (event) => {
             event.preventDefault();
@@ -36,6 +39,10 @@ export default class LoginForm extends BaseComponent {
 
             if (onFormSubmit) {
                 onFormSubmit(new StartScreen(this.userData));
+            }
+
+            if (setAppState) {
+                setAppState(AppPage.START_PAGE);
             }
         });
     }

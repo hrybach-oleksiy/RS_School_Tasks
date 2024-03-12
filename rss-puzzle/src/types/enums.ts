@@ -9,4 +9,10 @@ enum FormAttribute {
     DISABLED = 'disabled',
 }
 
-export default FormAttribute;
+enum AppPage {
+    LOGIN = 'login',
+    START_PAGE = 'start page',
+    MAIN_PAGE = 'main page',
+}
+
+export { FormAttribute, AppPage };

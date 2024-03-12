@@ -1,5 +1,5 @@
 // import assertIsDefined from '../../utilities/assertIsDefined';
-import FormAttribute from '../../types/enums';
+import { FormAttribute } from '../../types/enums';
 
 interface BaseComponentProps {
     tag?: string;

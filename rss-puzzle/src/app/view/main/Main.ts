@@ -1,39 +1,46 @@
 import BaseComponent from '../../components/BaseComponent';
 import LoginForm from '../../components/login-form/LoginForm';
 import StartScreen from '../../pages/start-screen/StartScreen';
-// import MainPage from '../../pages/main-page/MainPage';
+import MainPage from '../../pages/main-page/MainPage';
 import { UserData } from '../../../types/interfaces';
+import { AppPage } from '../../../types/enums';
 
 // import styles from './Main.module.scss';
 
 export default class Main extends BaseComponent {
     private userData;
 
-    private currentPage: BaseComponent = new LoginForm();
+    private setAppState: (page: string) => void;
 
-    constructor(userData: UserData | null) {
+    private page: string;
+
+    constructor(userData: UserData | null, setAppState: (page: string) => void, page: string) {
         super({
             tag: 'main',
             classNames: ['main'],
         });
         this.userData = userData;
-        this.setCurrentChild(this.currentPage);
+        this.setAppState = setAppState;
+        this.page = page;
         this.setPage();
     }
 
     private setPage() {
-        if (this.userData) {
-            this.currentPage = new StartScreen(this.userData, this.setCurrentChild.bind(this));
-            this.setCurrentChild(this.currentPage);
-        } else {
-            this.currentPage = new LoginForm(this.setCurrentChild.bind(this));
-            this.setCurrentChild(this.currentPage);
-        }
-    }
-
-    private setCurrentChild(page: BaseComponent) {
         this.destroyChildren();
-        this.currentPage = page;
-        this.append(this.currentPage);
+
+        if (this.page === AppPage.START_PAGE) {
+            const startScreen = new StartScreen(this.userData, this.setAppState);
+            this.append(startScreen);
+        }
+
+        if (this.page === AppPage.LOGIN) {
+            const loginPage = new LoginForm(this.setAppState);
+            this.append(loginPage);
+        }
+
+        if (this.page === AppPage.MAIN_PAGE) {
+            const mainPage = new MainPage();
+            this.append(mainPage);
+        }
     }
 }

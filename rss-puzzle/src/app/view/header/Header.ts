@@ -1,13 +1,16 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button } from '../../components/HTMLComponents';
-import LoginForm from '../../components/login-form/LoginForm';
+// import LoginForm from '../../components/login-form/LoginForm';
+import { AppPage } from '../../../types/enums';
 
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
-    private onButtonClick: (page: BaseComponent) => void;
+    private setAppState: (page: string) => void;
 
-    constructor(onButtonClick: (page: BaseComponent) => void) {
+    private currentPage: string;
+
+    constructor(setAppState: (page: string) => void, currentPage: string) {
         super(
             {
                 tag: 'header',
@@ -16,16 +19,20 @@ export default class Header extends BaseComponent {
             p(['header-title'], 'RSS Puzzle'),
         );
 
-        this.onButtonClick = onButtonClick;
+        this.setAppState = setAppState;
+        this.currentPage = currentPage;
         this.setContent();
     }
 
     setContent() {
         const logoutButton = button(['btn', styles.button], 'Log out', () => {
             document.body.classList.remove('background');
-            this.onButtonClick(new LoginForm());
+            localStorage.clear();
+            this.setAppState(AppPage.LOGIN);
         });
 
-        this.append(logoutButton);
+        if (this.currentPage !== AppPage.LOGIN) {
+            this.append(logoutButton);
+        }
     }
 }

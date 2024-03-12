@@ -5,24 +5,30 @@ import Header from './view/header/Header';
 import Footer from './view/footer/Footer';
 import Main from './view/main/Main';
 
-import { UserData } from '../types/interfaces';
+import { UserData, AppState } from '../types/interfaces';
+import { AppPage } from '../types/enums';
 
 export default class App {
     private root: BaseComponent = div(['app', 'container']);
 
     private userData: UserData | null = null;
 
+    private appState: AppState = { currentPage: AppPage.LOGIN };
+
     constructor() {
         document.body.append(this.root.getNode());
         document.body.setAttribute('data-theme', 'light');
         this.getUserData();
-        // this.createLayout();
+
+        if (this.userData) {
+            this.appState.currentPage = AppPage.START_PAGE;
+        }
     }
 
     public createLayout() {
         this.root.destroyChildren();
-        const header = new Header(this.handleLogoutButtonClick.bind(this));
-        const main = new Main(this.userData);
+        const header = new Header(this.handleAppState, this.appState.currentPage);
+        const main = new Main(this.userData, this.handleAppState, this.appState.currentPage);
         const footer = new Footer(App.handleFooterButtonClick);
 
         this.root.appendChildren([header, main, footer]);
@@ -46,11 +52,9 @@ export default class App {
         console.log('Кнопка в футері була натиснута');
     }
 
-    private handleLogoutButtonClick() {
-        // console.log(localStorage);
-        // localStorage.clear();
-        // console.log(localStorage);
+    private handleAppState = (page: string) => {
+        this.appState.currentPage = page;
         this.getUserData();
         this.createLayout();
-    }
+    };
 }

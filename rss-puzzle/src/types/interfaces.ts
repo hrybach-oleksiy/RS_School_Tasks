@@ -32,3 +32,7 @@ export interface GameData {
     rounds: Level[];
     roundsCount: number;
 }
+
+export interface AppState {
+    currentPage: string;
+}

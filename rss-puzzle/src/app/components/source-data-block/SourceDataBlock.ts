@@ -2,7 +2,7 @@ import BaseComponent from '../BaseComponent';
 import data from '../../../api/wordsCollectionLevel1.json';
 import { GameData } from '../../../types/interfaces';
 import { span } from '../HTMLComponents';
-import FormAttribute from '../../../types/enums';
+import { FormAttribute } from '../../../types/enums';
 // import assertIsDefined from '../../../utilities/assertIsDefined';
 
 import styles from './SourceDataBlock.module.scss';

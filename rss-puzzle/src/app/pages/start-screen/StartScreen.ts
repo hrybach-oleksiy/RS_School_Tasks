@@ -2,24 +2,24 @@ import BaseComponent from '../../components/BaseComponent';
 import { h1, p, div, button } from '../../components/HTMLComponents';
 import { UserData } from '../../../types/interfaces';
 // import assertIsDefined from '../../../utilities/assertIsDefined';
-import MainPage from '../main-page/MainPage';
+// import MainPage from '../main-page/MainPage';
 
 import styles from './StartScreen.module.scss';
+import { AppPage } from '../../../types/enums';
 
 export default class StartScreen extends BaseComponent {
-    userData?: UserData | null;
+    userData: UserData | null;
 
-    onButtonStart?: (page: BaseComponent) => void;
+    private setAppState?: (page: string) => void;
 
-    constructor(userData?: UserData | null, onButtonStart?: (page: BaseComponent) => void) {
+    constructor(userData: UserData | null, setAppState?: (page: string) => void) {
         super({
             classNames: [styles['start-screen']],
         });
         this.userData = userData;
 
-        this.onButtonStart = onButtonStart;
+        this.setAppState = setAppState;
         this.SetPage();
-        this.startGame();
     }
 
     private SetPage() {
@@ -50,8 +50,8 @@ export default class StartScreen extends BaseComponent {
     }
 
     private startGame() {
-        if (this.onButtonStart) {
-            this.onButtonStart(new MainPage());
+        if (this.setAppState) {
+            this.setAppState(AppPage.MAIN_PAGE);
         }
     }
 }

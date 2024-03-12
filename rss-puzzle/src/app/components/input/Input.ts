@@ -1,5 +1,5 @@
 import BaseComponent from '../BaseComponent';
-import FormAttribute from '../../../types/enums';
+import { FormAttribute } from '../../../types/enums';
 
 interface InputProps {
     classNames?: string[];
