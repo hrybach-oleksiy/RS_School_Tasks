@@ -16,5 +16,7 @@
           { "name": "typescript-plugin-css-modules"},
           
         ],
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
     }
 }

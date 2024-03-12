@@ -66,19 +66,11 @@ export default class BaseComponent {
         this.node.classList.toggle(className);
     }
 
-    public addListener(
-        event: string,
-        listener: EventListenerOrEventListenerObject,
-        options: boolean | AddEventListenerOptions = false,
-    ) {
+    public addListener(event: string, listener: EventListener, options: boolean | AddEventListenerOptions = false) {
         this.node.addEventListener(event, listener, options);
     }
 
-    public removeListener(
-        event: string,
-        listener: EventListenerOrEventListenerObject,
-        options: boolean | EventListenerOptions = false,
-    ) {
+    public removeListener(event: string, listener: EventListener, options: boolean | EventListenerOptions = false) {
         this.node.removeEventListener(event, listener, options);
     }
 

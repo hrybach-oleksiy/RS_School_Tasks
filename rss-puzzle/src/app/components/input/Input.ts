@@ -8,10 +8,10 @@ interface InputProps {
     name: string;
     placeholder: string;
     required?: string;
-    onChange?: EventListenerOrEventListenerObject;
+    onChange?: EventListener;
 }
 export default class Input extends BaseComponent {
-    private onChange?: EventListenerOrEventListenerObject;
+    private onChange?: EventListener;
 
     constructor({ classNames, id, type = 'text', name, placeholder, required, onChange }: InputProps) {
         super({ tag: 'input', classNames });

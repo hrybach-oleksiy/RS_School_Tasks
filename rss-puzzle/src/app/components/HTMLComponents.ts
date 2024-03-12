@@ -2,7 +2,7 @@ import BaseComponent from './BaseComponent';
 import Input from './input/Input';
 import Button from './button/Button';
 
-type EventCallback = EventListenerOrEventListenerObject;
+type EventCallback = EventListener;
 
 const div = (classNames: string[], ...children: BaseComponent[]) =>
     new BaseComponent({ tag: 'div', classNames }, ...children);
@@ -10,6 +10,8 @@ const div = (classNames: string[], ...children: BaseComponent[]) =>
 const p = (classNames: string[], text: string) => new BaseComponent({ tag: 'p', classNames, text });
 
 const h1 = (classNames: string[], text: string) => new BaseComponent({ tag: 'h1', classNames, text });
+
+const span = (classNames: string[], text: string) => new BaseComponent({ tag: 'span', classNames, text });
 
 const input = (
     classNames: string[],
@@ -25,4 +27,4 @@ const label = (classNames: string[], text: string) => new BaseComponent({ tag: '
 const button = (classNames: string[], text?: string, onClick?: EventCallback) =>
     new Button({ classNames, text, onClick });
 
-export { div, p, h1, input, button, label };
+export { div, p, h1, input, button, label, span };

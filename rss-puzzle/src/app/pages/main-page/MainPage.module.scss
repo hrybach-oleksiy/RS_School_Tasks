@@ -1,5 +1,14 @@
 .main-page {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
     color: #faebd7;
     font-size: 36px;
     text-align: center;
+}
+
+.remove-animation {
+    transform: scale(0.5);
+    opacity: 0;
 }

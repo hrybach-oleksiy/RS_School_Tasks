@@ -3,10 +3,10 @@ import BaseComponent from '../BaseComponent';
 interface ButtonProps {
     classNames?: string[];
     text?: string;
-    onClick?: EventListenerOrEventListenerObject;
+    onClick?: EventListener;
 }
 export default class Button extends BaseComponent {
-    private onClick?: EventListenerOrEventListenerObject;
+    private onClick?: EventListener;
 
     constructor({ classNames, text, onClick }: ButtonProps) {
         super({ tag: 'button', classNames, text });
