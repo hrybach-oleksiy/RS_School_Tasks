@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent';
 import data from '../../../api/wordsCollectionLevel1.json';
 import { GameData } from '../../../types/interfaces';
-import { span } from '../HTMLComponents';
+import { span, div } from '../HTMLComponents';
 import { FormAttribute } from '../../../types/enums';
 // import assertIsDefined from '../../../utilities/assertIsDefined';
 
@@ -24,26 +24,26 @@ export default class SourceDataBlock extends BaseComponent {
 
         this.setAttribute(FormAttribute.ID, 'source');
         this.words = words;
-        this.addWordsToBlock();
+        this.addTemplates();
+        // this.addWordsToBlock();
     }
 
-    private addWordsToBlock() {
-        this.words.forEach((word) => {
-            const sentencePartElement = span([styles.part, 'part'], word);
-            this.append(sentencePartElement);
+    private createParts() {
+        return this.words.map((word, index) => {
+            const part = span([styles.part, 'part'], word);
+            part.setAttribute(FormAttribute.ID, `part-${String(index + 1)}`);
+            return part;
         });
     }
 
-    // private moveWordsToResultBlock() {
-    //     const sentencePartElements = this.getChildren();
+    private addTemplates() {
+        const parts = this.createParts();
 
-    //     sentencePartElements.forEach((part) => {
-    //         const singleWord = part.getNode();
-    //         const wordClickEvent = new CustomEvent('wordClick', { detail: part, bubbles: true });
-
-    //         singleWord.addEventListener('click', () => {
-    //             singleWord.dispatchEvent(wordClickEvent);
-    //         });
-    //     });
-    // }
+        for (let i = 0; i < this.words.length; i += 1) {
+            const template = div(['source-template']);
+            template.setAttribute(FormAttribute.ID, `template-${String(i + 1)}`);
+            template.append(parts[i]);
+            this.append(template);
+        }
+    }
 }

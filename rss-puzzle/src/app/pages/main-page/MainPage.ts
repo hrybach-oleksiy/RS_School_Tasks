@@ -5,6 +5,7 @@ import { GameData } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import assertIsDefined from '../../../utilities/assertIsDefined';
+import { FormAttribute } from '../../../types/enums';
 
 export default class MainPage extends BaseComponent {
     gameData: GameData = data;
@@ -19,6 +20,8 @@ export default class MainPage extends BaseComponent {
 
     sourceBlock?: BaseComponent;
 
+    stringLength: number = 0;
+
     constructor() {
         super({
             tag: 'section',
@@ -31,7 +34,7 @@ export default class MainPage extends BaseComponent {
     }
 
     private setPage() {
-        this.resultBlock = new ResultBlock();
+        this.resultBlock = new ResultBlock(this.stringLength);
         this.sourceBlock = new SourceDataBlock(this.words);
 
         this.appendChildren([this.resultBlock, this.sourceBlock]);
@@ -57,22 +60,41 @@ export default class MainPage extends BaseComponent {
         }
 
         this.words = words;
+        this.stringLength = words.length;
     }
 
     private handleWordClick = (event: Event) => {
         const currentWord = event.target as HTMLElement;
         const resultBlock = this.resultBlock?.getNode();
         const sourceBlock = this.sourceBlock?.getNode();
+        const resultBlockTemplates = document.querySelectorAll('.result-template');
+        const sourceBlockTemplates = document.querySelectorAll('.source-template');
+        const currentTemplateId = Number(currentWord.getAttribute(FormAttribute.ID)?.slice(-1));
+        let count = 0;
+
         assertIsDefined(resultBlock);
         assertIsDefined(sourceBlock);
 
-        // if (currentWord.closest('#result') && currentWord.classList.contains('part')) {
-        //     sourceBlock.append(currentWord);
-        // }
-
-        if (currentWord.closest('#source') && currentWord.classList.contains('part')) {
+        if (currentWord.closest('#result') && currentWord.classList.contains('part')) {
             currentWord.classList.add(styles['remove-animation']);
-            resultBlock.append(currentWord);
+
+            sourceBlockTemplates.forEach((template) => {
+                const sourceBlockTemplateId = Number(template.getAttribute(FormAttribute.ID)?.slice(-1));
+
+                if (currentTemplateId === sourceBlockTemplateId) {
+                    sourceBlockTemplates[sourceBlockTemplateId - 1].append(currentWord);
+                }
+            });
+
+            setTimeout(() => {
+                currentWord.classList.remove(styles['remove-animation']);
+            }, 0);
+        } else if (currentWord.closest('#source') && currentWord.classList.contains('part')) {
+            currentWord.classList.add(styles['remove-animation']);
+            resultBlockTemplates[count].append(currentWord);
+            count += 1;
+            if (count === this.stringLength) count = 0;
+
             setTimeout(() => {
                 currentWord.classList.remove(styles['remove-animation']);
             }, 0);
