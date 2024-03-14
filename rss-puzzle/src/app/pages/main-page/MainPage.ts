@@ -4,7 +4,6 @@ import data from '../../../api/wordsCollectionLevel1.json';
 import { GameData } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
-// import assertIsDefined from '../../../utilities/assertIsDefined';
 import { FormAttribute } from '../../../types/enums';
 import { button, div } from '../../components/HTMLComponents';
 
@@ -31,8 +30,6 @@ export default class MainPage extends BaseComponent {
 
     guessedSentences: string[][] = [];
 
-    continueButton: BaseComponent = button(['continue-btn', 'btn'], 'Continue');
-
     checkButton: BaseComponent = button(['check-btn', 'btn'], 'Check Answer');
 
     guessedElements: HTMLElement[] = [];
@@ -50,14 +47,15 @@ export default class MainPage extends BaseComponent {
 
     private setPage() {
         const btnWrapper = div([styles['btn-wrapper']]);
+
         this.destroyChildren();
-        this.continueButton.setAttribute(FormAttribute.DISABLED, 'true');
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
-        this.continueButton.addListener('click', this.handleContinueButton);
+        this.checkButton.setTextContent('Check Answer');
         this.checkButton.addListener('click', this.checkGuess);
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
         this.sourceBlock = new SourceDataBlock(this.words);
-        btnWrapper.appendChildren([this.checkButton, this.continueButton]);
+
+        btnWrapper.appendChildren([this.checkButton]);
         this.appendChildren([this.resultBlock, this.sourceBlock, btnWrapper]);
     }
 
@@ -89,16 +87,11 @@ export default class MainPage extends BaseComponent {
 
     private handleWordClick = (event: Event) => {
         const currentWord = event.target as HTMLElement;
-        // const resultBlock = this.resultBlock?.getNode();
-        // const sourceBlock = this.sourceBlock?.getNode();
         const resultBlockTemplates = document.querySelectorAll(`#row-${this.sentence + 1} .result-template`);
         const sourceBlockTemplates = document.querySelectorAll('.source-template');
 
         const currentTemplateId = Number(currentWord.getAttribute(FormAttribute.ID)?.slice(-1));
         let count = 0;
-
-        // assertIsDefined(resultBlock);
-        // assertIsDefined(sourceBlock);
 
         currentWord.classList.remove('match');
         currentWord.classList.remove('mismatch');
@@ -136,7 +129,11 @@ export default class MainPage extends BaseComponent {
                 currentWord.classList.remove(styles['remove-animation']);
             }, 0);
         }
-        this.checkWin();
+
+        if (!currentWord.classList.contains('btn')) {
+            this.checkWin();
+        }
+
         this.enableCheckButton();
     };
 
@@ -164,7 +161,6 @@ export default class MainPage extends BaseComponent {
 
         this.isOrderCorrect = this.correctWordOrder.every((value, index) => value === this.guessedWordOrder[index]);
         this.addGuessedSentences();
-        MainPage.changeButtonState(this.continueButton, this.isOrderCorrect);
     }
 
     private checkGuess = () => {
@@ -174,18 +170,19 @@ export default class MainPage extends BaseComponent {
             const currentElement = this.guessedElements[i];
 
             if (word1 === word2) {
-                console.log(`word ${this.correctWordOrder[i]} match ${this.guessedWordOrder[i]}`);
-
                 currentElement.classList.add('match');
                 currentElement.classList.remove('mismatch');
             } else {
-                console.log(`word ${this.correctWordOrder[i]} DOES NOT match ${this.guessedWordOrder[i]}`);
                 currentElement.classList.remove('match');
                 currentElement.classList.add('mismatch');
             }
         }
 
-        console.log(this.guessedSentences);
+        if (this.isOrderCorrect) {
+            this.checkButton.removeListener('click', this.checkGuess);
+            this.checkButton.setTextContent('Continue');
+            this.checkButton.addListener('click', this.handleContinueButton);
+        }
     };
 
     private enableCheckButton() {
@@ -221,6 +218,7 @@ export default class MainPage extends BaseComponent {
 
         this.guessedElements = [];
         this.guessedWordOrder = [];
+        this.checkButton.removeListener('click', this.handleContinueButton);
         this.shuffleWords();
         this.setPage();
     };

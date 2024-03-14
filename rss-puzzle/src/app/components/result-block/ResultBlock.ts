@@ -56,7 +56,6 @@ export default class ResultBlock extends BaseComponent {
     private createParts(index: number) {
         return this.guessedSentences[index]?.map((word) => {
             const part = span(['part'], word);
-            // part.setAttribute(FormAttribute.ID, `part-${String(index + 1)}`);
             return part;
         });
     }
