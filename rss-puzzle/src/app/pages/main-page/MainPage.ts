@@ -5,34 +5,36 @@ import { GameData } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import { FormAttribute } from '../../../types/enums';
-import { button, div } from '../../components/HTMLComponents';
+import { button, div, span } from '../../components/HTMLComponents';
 
 export default class MainPage extends BaseComponent {
-    gameData: GameData = data;
+    private gameData: GameData = data;
 
-    level: number = 0;
+    private level: number = 0;
 
-    sentence: number = 0;
+    private sentence: number = 0;
 
-    words: string[] = [];
+    private words: string[] = [];
 
-    resultBlock?: BaseComponent;
+    private resultBlock?: BaseComponent;
 
-    sourceBlock?: BaseComponent;
+    private sourceBlock?: BaseComponent;
 
-    stringLength: number = 0;
+    private stringLength: number = 0;
 
-    correctWordOrder: string[] = [];
+    private correctWordOrder: string[] = [];
 
-    guessedWordOrder: string[] = [];
+    private guessedWordOrder: string[] = [];
 
-    isOrderCorrect: boolean = false;
+    private isOrderCorrect: boolean = false;
 
-    guessedSentences: string[][] = [];
+    private guessedSentences: string[][] = [];
 
-    checkButton: BaseComponent = button(['check-btn', 'btn'], 'Check Answer');
+    private checkButton: BaseComponent = button(['check-btn', 'btn'], 'Check Answer');
 
-    guessedElements: HTMLElement[] = [];
+    private autocompleteButton: BaseComponent = button(['complete-btn', 'btn'], 'Complete Sentence');
+
+    private guessedElements: HTMLElement[] = [];
 
     constructor() {
         super({
@@ -52,10 +54,12 @@ export default class MainPage extends BaseComponent {
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
         this.checkButton.setTextContent('Check Answer');
         this.checkButton.addListener('click', this.checkGuess);
+        this.autocompleteButton.addListener('click', this.autocompleteSentence);
+        this.autocompleteButton.removeAttribute(FormAttribute.DISABLED);
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
         this.sourceBlock = new SourceDataBlock(this.words);
 
-        btnWrapper.appendChildren([this.checkButton]);
+        btnWrapper.appendChildren([this.checkButton, this.autocompleteButton]);
         this.appendChildren([this.resultBlock, this.sourceBlock, btnWrapper]);
     }
 
@@ -93,8 +97,8 @@ export default class MainPage extends BaseComponent {
         const currentTemplateId = Number(currentWord.getAttribute(FormAttribute.ID)?.slice(-1));
         let count = 0;
 
-        currentWord.classList.remove('match');
-        currentWord.classList.remove('mismatch');
+        // currentWord.classList.remove('match');
+        // currentWord.classList.remove('mismatch');
 
         if (currentWord.closest('#result') && currentWord.classList.contains('part')) {
             const resultParts = document.querySelectorAll('.result-template .part');
@@ -130,7 +134,7 @@ export default class MainPage extends BaseComponent {
             }, 0);
         }
 
-        if (!currentWord.classList.contains('btn')) {
+        if (!currentWord.classList.contains('btn') && !this.isOrderCorrect) {
             this.checkWin();
         }
 
@@ -216,10 +220,52 @@ export default class MainPage extends BaseComponent {
             this.guessedSentences = [];
         }
 
+        this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.checkButton.removeListener('click', this.handleContinueButton);
         this.shuffleWords();
         this.setPage();
+    };
+
+    private autocompleteSentence = () => {
+        const resultBlockTemplates = document.querySelectorAll(`#row-${this.sentence + 1} .result-template`);
+        const sourceTemplates = document.querySelectorAll('.source-template');
+
+        this.guessedWordOrder = [];
+
+        this.correctWordOrder.forEach((word) => {
+            const part = span(['part'], word);
+
+            this.addWordsToGuessed(part.getNode());
+        });
+
+        resultBlockTemplates.forEach((template, index) => {
+            const templateElement = template;
+            const part = span(['part'], this.correctWordOrder[index]);
+            part.addClass('match');
+            const partElement = part.getNode();
+
+            partElement.classList.add(styles['remove-animation']);
+
+            templateElement.innerHTML = '';
+            template.append(partElement);
+
+            setTimeout(() => {
+                partElement.classList.remove(styles['remove-animation']);
+            }, 0);
+        });
+
+        // clear source block after button click
+        sourceTemplates.forEach((template) => {
+            const templateElement = template;
+            templateElement.innerHTML = '';
+        });
+
+        this.checkWin();
+        this.checkGuess();
+        this.enableCheckButton();
+        this.isOrderCorrect = true;
+        this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
     };
 }

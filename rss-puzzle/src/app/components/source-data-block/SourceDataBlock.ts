@@ -8,13 +8,13 @@ import { FormAttribute } from '../../../types/enums';
 // import styles from './SourceDataBlock.module.scss';
 
 export default class SourceDataBlock extends BaseComponent {
-    gameData: GameData = data;
+    private gameData: GameData = data;
 
     // level: number = 0;
 
     // sentence: number = 0;
 
-    words: string[];
+    private words: string[];
 
     constructor(words: string[]) {
         super({

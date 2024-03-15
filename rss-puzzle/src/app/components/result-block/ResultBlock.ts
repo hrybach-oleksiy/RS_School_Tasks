@@ -6,11 +6,11 @@ import { div, span } from '../HTMLComponents';
 
 export default class ResultBlock extends BaseComponent {
     // const ROWS_NUMBER = 10;rss
-    stringLength: number;
+    private stringLength: number;
 
-    rows: number = 10;
+    private rows: number = 10;
 
-    guessedSentences: string[][];
+    private guessedSentences: string[][];
 
     constructor(stringLength: number, guessedSentences: string[][]) {
         super({
@@ -65,6 +65,7 @@ export default class ResultBlock extends BaseComponent {
 
         for (let i = 0; i < this.guessedSentences[index]?.length; i += 1) {
             const template = div(['result-template']);
+            parts[i].addClass('match');
 
             template.setAttribute(FormAttribute.ID, `template-${String(i + 1)}`);
             template.append(parts[i]);
