@@ -5,6 +5,7 @@ import { HintsState } from '../../../types/interfaces';
 import { FormAttribute, ImageAttribute } from '../../../types/enums';
 
 import audioIconImage from '../../../assets/images/audio-icon.svg';
+import playingIconImage from '../../../assets/images/audio-playing.svg';
 
 import styles from './GameHeader.module.scss';
 
@@ -16,6 +17,8 @@ export default class GameHeader extends BaseComponent {
     private audioExample: string;
 
     private isPlaying: boolean = false;
+
+    private audioIcon: BaseComponent = img([styles['audio-img']]);
 
     constructor(translation: string, hintsState: HintsState, audioExample: string) {
         super({
@@ -40,7 +43,7 @@ export default class GameHeader extends BaseComponent {
         };
         const hint = new Hint('Translation', this.hintsState.translation, translationProps);
         const audioIconWrapper = div([styles['audio-icon-wrapper']]);
-        const audioIcon = img([styles['audio-img']]);
+        // const audioIcon = img([styles['audio-img']]);
 
         if (this.hintsState.translation) {
             paragraph.removeClass('hidden');
@@ -49,15 +52,15 @@ export default class GameHeader extends BaseComponent {
         }
 
         paragraph.setAttribute(FormAttribute.ID, 'translation-text');
-        audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
-        audioIcon.setAttribute(ImageAttribute.ALT, 'Audio Icon');
-        audioIcon.addListener('click', () => {
+        this.audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
+        this.audioIcon.setAttribute(ImageAttribute.ALT, 'Audio Icon');
+        this.audioIcon.addListener('click', () => {
             if (!this.isPlaying) {
                 this.handleAudioIconClick(this.audioExample);
             }
         });
 
-        audioIconWrapper.append(audioIcon);
+        audioIconWrapper.append(this.audioIcon);
         this.appendChildren([hint, audioIconWrapper, paragraph]);
     }
 
@@ -80,15 +83,15 @@ export default class GameHeader extends BaseComponent {
 
     private handleAudioIconClick = (example: string) => {
         const audio = new Audio();
-        console.log('click works');
 
         if (!this.isPlaying) {
-            console.log('audio playing');
+            this.audioIcon.setAttribute(ImageAttribute.SRC, playingIconImage);
             audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${example}`;
             audio.play();
             this.isPlaying = true;
             audio.onended = () => {
                 this.isPlaying = false;
+                this.audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
             };
         }
     };
