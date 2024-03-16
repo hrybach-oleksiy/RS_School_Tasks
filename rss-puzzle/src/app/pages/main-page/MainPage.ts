@@ -4,6 +4,7 @@ import data from '../../../api/wordsCollectionLevel1.json';
 import { GameData } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
+import GameHeader from '../../components/game-header/GameHeader';
 import { FormAttribute } from '../../../types/enums';
 import { button, div, span } from '../../components/HTMLComponents';
 
@@ -36,6 +37,8 @@ export default class MainPage extends BaseComponent {
 
     private guessedElements: HTMLElement[] = [];
 
+    private translation: string = '';
+
     constructor() {
         super({
             tag: 'section',
@@ -49,6 +52,7 @@ export default class MainPage extends BaseComponent {
 
     private setPage() {
         const btnWrapper = div([styles['btn-wrapper']]);
+        const gameHeader = new GameHeader(this.translation);
 
         this.destroyChildren();
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
@@ -60,7 +64,7 @@ export default class MainPage extends BaseComponent {
         this.sourceBlock = new SourceDataBlock(this.words);
 
         btnWrapper.appendChildren([this.checkButton, this.autocompleteButton]);
-        this.appendChildren([this.resultBlock, this.sourceBlock, btnWrapper]);
+        this.appendChildren([gameHeader, this.resultBlock, this.sourceBlock, btnWrapper]);
     }
 
     private getWords(levelNumber: number, sentenceNumber: number) {
@@ -68,8 +72,10 @@ export default class MainPage extends BaseComponent {
         const level = rounds[levelNumber];
         const sentence = level.words[sentenceNumber];
         const words = sentence.textExample;
+        const translation = sentence.textExampleTranslate;
 
         this.correctWordOrder = words.split(' ');
+        this.translation = translation;
         console.log(this.correctWordOrder);
 
         return words;
