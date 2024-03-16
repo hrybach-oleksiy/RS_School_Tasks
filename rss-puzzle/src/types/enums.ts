@@ -16,4 +16,9 @@ enum AppPage {
     MAIN_PAGE = 'main page',
 }
 
-export { FormAttribute, AppPage };
+enum ImageAttribute {
+    SRC = 'src',
+    ALT = 'alt',
+}
+
+export { FormAttribute, AppPage, ImageAttribute };

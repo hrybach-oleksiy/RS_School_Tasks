@@ -42,6 +42,8 @@ export default class MainPage extends BaseComponent {
 
     private translation: string = '';
 
+    private audioExample: string = '';
+
     private hintsState: HintsState = {
         translation: false,
     };
@@ -58,7 +60,7 @@ export default class MainPage extends BaseComponent {
 
     private setPage() {
         const btnWrapper = div([styles['btn-wrapper']]);
-        const gameHeader = new GameHeader(this.translation, this.hintsState);
+        const gameHeader = new GameHeader(this.translation, this.hintsState, this.audioExample);
 
         this.destroyChildren();
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
@@ -79,10 +81,12 @@ export default class MainPage extends BaseComponent {
         const sentence = round.words[sentenceNumber];
         const words = sentence.textExample;
         const translation = sentence.textExampleTranslate;
+        const audio = sentence.audioExample;
 
         this.correctWordOrder = words.split(' ');
         this.translation = translation;
         this.roundsCount = roundsCount;
+        this.audioExample = audio;
         console.log(this.correctWordOrder);
 
         return words;
@@ -116,8 +120,6 @@ export default class MainPage extends BaseComponent {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-
-        // https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${ссылка из JSON}
     }
 
     private handleWordClick = (event: Event) => {

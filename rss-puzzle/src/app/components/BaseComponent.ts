@@ -1,5 +1,5 @@
 // import assertIsDefined from '../../utilities/assertIsDefined';
-import { FormAttribute } from '../../types/enums';
+import { FormAttribute, ImageAttribute } from '../../types/enums';
 
 interface BaseComponentProps {
     tag?: string;
@@ -46,7 +46,7 @@ export default class BaseComponent {
         this.node.textContent = content;
     }
 
-    public setAttribute(attribute: FormAttribute, value: string) {
+    public setAttribute(attribute: FormAttribute | ImageAttribute, value: string) {
         this.node.setAttribute(attribute, value);
     }
 

@@ -28,4 +28,6 @@ const label = (classNames: string[], text: string) => new BaseComponent({ tag: '
 const button = (classNames: string[], text?: string, onClick?: EventCallback) =>
     new Button({ classNames, text, onClick });
 
-export { div, p, h1, input, button, label, span, h2 };
+const img = (classNames: string[]) => new BaseComponent({ tag: 'img', classNames });
+
+export { div, p, h1, input, button, label, span, h2, img };

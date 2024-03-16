@@ -1,8 +1,10 @@
 import BaseComponent from '../BaseComponent';
-import { p } from '../HTMLComponents';
+import { div, p, img } from '../HTMLComponents';
 import Hint from '../hint/Hint';
 import { HintsState } from '../../../types/interfaces';
-import { FormAttribute } from '../../../types/enums';
+import { FormAttribute, ImageAttribute } from '../../../types/enums';
+
+import audioIconImage from '../../../assets/images/audio-icon.svg';
 
 import styles from './GameHeader.module.scss';
 
@@ -11,19 +13,24 @@ export default class GameHeader extends BaseComponent {
 
     private hintsState: HintsState;
 
-    constructor(translation: string, hintsState: HintsState) {
+    private audioExample: string;
+
+    private isPlaying: boolean = false;
+
+    constructor(translation: string, hintsState: HintsState, audioExample: string) {
         super({
             tag: 'div',
             classNames: [styles['game-header-wrapper']],
         });
         this.translation = translation;
         this.hintsState = hintsState;
+        this.audioExample = audioExample;
         this.setBlock();
     }
 
     private setBlock() {
         this.destroyChildren();
-        // const translationText = this.hintsState.translation ? this.translation : '';
+
         const paragraph = p([styles.translation], this.translation);
         const translationProps = {
             id: 'translation',
@@ -32,6 +39,8 @@ export default class GameHeader extends BaseComponent {
             onChange: this.handleHintChange,
         };
         const hint = new Hint('Translation', this.hintsState.translation, translationProps);
+        const audioIconWrapper = div([styles['audio-icon-wrapper']]);
+        const audioIcon = img([styles['audio-img']]);
 
         if (this.hintsState.translation) {
             paragraph.removeClass('hidden');
@@ -40,8 +49,16 @@ export default class GameHeader extends BaseComponent {
         }
 
         paragraph.setAttribute(FormAttribute.ID, 'translation-text');
+        audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
+        audioIcon.setAttribute(ImageAttribute.ALT, 'Audio Icon');
+        audioIcon.addListener('click', () => {
+            if (!this.isPlaying) {
+                this.handleAudioIconClick(this.audioExample);
+            }
+        });
 
-        this.appendChildren([hint, paragraph]);
+        audioIconWrapper.append(audioIcon);
+        this.appendChildren([hint, audioIconWrapper, paragraph]);
     }
 
     private handleHintChange = (event: Event) => {
@@ -60,4 +77,19 @@ export default class GameHeader extends BaseComponent {
         this.hintsState[hintName] = value;
         this.setBlock();
     }
+
+    private handleAudioIconClick = (example: string) => {
+        const audio = new Audio();
+        console.log('click works');
+
+        if (!this.isPlaying) {
+            console.log('audio playing');
+            audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${example}`;
+            audio.play();
+            this.isPlaying = true;
+            audio.onended = () => {
+                this.isPlaying = false;
+            };
+        }
+    };
 }
