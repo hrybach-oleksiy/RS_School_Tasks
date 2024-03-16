@@ -1,6 +1,5 @@
 import styles from './MainPage.module.scss';
 import BaseComponent from '../../components/BaseComponent';
-import data from '../../../api/wordsCollectionLevel1.json';
 import { GameData, HintsState } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
@@ -9,11 +8,15 @@ import { FormAttribute } from '../../../types/enums';
 import { button, div, span } from '../../components/HTMLComponents';
 
 export default class MainPage extends BaseComponent {
-    private gameData: GameData = data;
+    private gameData!: GameData;
 
-    private level: number = 0;
+    private level: number = 1;
+
+    private round: number = 0;
 
     private sentence: number = 0;
+
+    private roundsCount: number = 0;
 
     private words: string[] = [];
 
@@ -49,8 +52,7 @@ export default class MainPage extends BaseComponent {
             classNames: [styles['main-page']],
         });
 
-        this.shuffleWords();
-        this.setPage();
+        this.fetchData(1);
         this.addListener('click', this.handleWordClick);
     }
 
@@ -71,22 +73,23 @@ export default class MainPage extends BaseComponent {
         this.appendChildren([gameHeader, this.resultBlock, this.sourceBlock, btnWrapper]);
     }
 
-    private getWords(levelNumber: number, sentenceNumber: number) {
-        const { rounds } = this.gameData;
-        const level = rounds[levelNumber];
-        const sentence = level.words[sentenceNumber];
+    private getWords(roundNumber: number, sentenceNumber: number) {
+        const { rounds, roundsCount } = this.gameData;
+        const round = rounds[roundNumber];
+        const sentence = round.words[sentenceNumber];
         const words = sentence.textExample;
         const translation = sentence.textExampleTranslate;
 
         this.correctWordOrder = words.split(' ');
         this.translation = translation;
+        this.roundsCount = roundsCount;
         console.log(this.correctWordOrder);
 
         return words;
     }
 
     private shuffleWords() {
-        const words = this.getWords(this.level, this.sentence).split(' ');
+        const words = this.getWords(this.round, this.sentence).split(' ');
 
         for (let i = words.length - 1; i > 0; i -= 1) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -97,6 +100,24 @@ export default class MainPage extends BaseComponent {
 
         this.words = words;
         this.stringLength = words.length;
+    }
+
+    private async fetchData(level: number) {
+        try {
+            const response = await fetch(
+                `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/data/wordCollectionLevel${level}.json`,
+            );
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            this.gameData = await response.json();
+            this.shuffleWords();
+            this.setPage();
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+        // https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${ссылка из JSON}
     }
 
     private handleWordClick = (event: Event) => {
@@ -225,8 +246,16 @@ export default class MainPage extends BaseComponent {
         this.sentence += 1;
 
         if (this.sentence === 10) {
+            console.log('next round starts');
+            this.round += 1;
+            this.sentence = 0;
+            this.guessedSentences = [];
+        }
+
+        if (this.round === this.roundsCount) {
             console.log('next level starts');
             this.level += 1;
+            this.round = 0;
             this.sentence = 0;
             this.guessedSentences = [];
         }
@@ -235,8 +264,7 @@ export default class MainPage extends BaseComponent {
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.checkButton.removeListener('click', this.handleContinueButton);
-        this.shuffleWords();
-        this.setPage();
+        this.fetchData(this.level);
     };
 
     private autocompleteSentence = () => {
