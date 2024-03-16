@@ -45,8 +45,8 @@ export default class MainPage extends BaseComponent {
     private audioExample: string = '';
 
     private hintsState: HintsState = {
-        translation: false,
-        pronunciation: false,
+        translation: true,
+        pronunciation: true,
     };
 
     constructor() {
@@ -117,6 +117,7 @@ export default class MainPage extends BaseComponent {
             }
             this.gameData = await response.json();
             this.shuffleWords();
+            this.getHintsState();
             this.setPage();
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -321,5 +322,21 @@ export default class MainPage extends BaseComponent {
     static showAudioByLevelComplete() {
         const translationElement = document.querySelector('#audio-icon');
         translationElement?.classList.remove('hidden');
+    }
+
+    private getHintsState() {
+        const hintsStateJSON = localStorage.getItem('hintsState');
+
+        if (hintsStateJSON) {
+            const hintsState = JSON.parse(hintsStateJSON);
+
+            this.hintsState = {
+                translation: hintsState.translation,
+                pronunciation: hintsState.pronunciation,
+            };
+        }
+        // else {
+        //     this.userData = null;
+        // }
     }
 }

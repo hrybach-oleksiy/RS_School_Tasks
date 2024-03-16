@@ -83,12 +83,29 @@ export default class GameHeader extends BaseComponent {
         const currentHint = event.target as HTMLInputElement;
         const isHintChecked = currentHint.checked;
         const hintName = currentHint.name;
+        const currentHintsState = GameHeader.getHintsState();
+
+        let translationValue = currentHintsState?.translation;
+        let pronunciationValue = currentHintsState?.pronunciation;
 
         if (isHintChecked) {
             this.setHintState(hintName, true);
         } else {
             this.setHintState(hintName, false);
         }
+
+        if (hintName === 'translation') {
+            translationValue = isHintChecked;
+        }
+
+        if (hintName === 'pronunciation') {
+            pronunciationValue = isHintChecked;
+        }
+
+        const hintsState = { translation: translationValue, pronunciation: pronunciationValue };
+        const hintsStateJSON = JSON.stringify(hintsState);
+
+        localStorage.setItem('hintsState', hintsStateJSON);
     };
 
     private setHintState(hintName: keyof HintsState, value: boolean) {
@@ -110,4 +127,19 @@ export default class GameHeader extends BaseComponent {
             };
         }
     };
+
+    static getHintsState() {
+        const hintsStateJSON = localStorage.getItem('hintsState');
+
+        if (hintsStateJSON) {
+            const hintsState = JSON.parse(hintsStateJSON);
+
+            return {
+                translation: hintsState.translation,
+                pronunciation: hintsState.pronunciation,
+            };
+        }
+
+        return null;
+    }
 }
