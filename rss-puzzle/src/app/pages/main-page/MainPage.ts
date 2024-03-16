@@ -46,6 +46,7 @@ export default class MainPage extends BaseComponent {
 
     private hintsState: HintsState = {
         translation: false,
+        pronunciation: false,
     };
 
     constructor() {
@@ -309,10 +310,16 @@ export default class MainPage extends BaseComponent {
         this.isOrderCorrect = true;
         this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
         MainPage.showTranslationByLevelComplete();
+        MainPage.showAudioByLevelComplete();
     };
 
     static showTranslationByLevelComplete() {
         const translationElement = document.querySelector('#translation-text');
+        translationElement?.classList.remove('hidden');
+    }
+
+    static showAudioByLevelComplete() {
+        const translationElement = document.querySelector('#audio-icon');
         translationElement?.classList.remove('hidden');
     }
 }
