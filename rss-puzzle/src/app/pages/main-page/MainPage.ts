@@ -1,7 +1,7 @@
 import styles from './MainPage.module.scss';
 import BaseComponent from '../../components/BaseComponent';
 import data from '../../../api/wordsCollectionLevel1.json';
-import { GameData } from '../../../types/interfaces';
+import { GameData, HintsState } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import GameHeader from '../../components/game-header/GameHeader';
@@ -39,6 +39,10 @@ export default class MainPage extends BaseComponent {
 
     private translation: string = '';
 
+    private hintsState: HintsState = {
+        translation: false,
+    };
+
     constructor() {
         super({
             tag: 'section',
@@ -52,7 +56,7 @@ export default class MainPage extends BaseComponent {
 
     private setPage() {
         const btnWrapper = div([styles['btn-wrapper']]);
-        const gameHeader = new GameHeader(this.translation);
+        const gameHeader = new GameHeader(this.translation, this.hintsState);
 
         this.destroyChildren();
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
@@ -192,6 +196,7 @@ export default class MainPage extends BaseComponent {
             this.checkButton.removeListener('click', this.checkGuess);
             this.checkButton.setTextContent('Continue');
             this.checkButton.addListener('click', this.handleContinueButton);
+            MainPage.showTranslationByLevelComplete();
         }
     };
 
@@ -273,5 +278,11 @@ export default class MainPage extends BaseComponent {
         this.enableCheckButton();
         this.isOrderCorrect = true;
         this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
+        MainPage.showTranslationByLevelComplete();
     };
+
+    static showTranslationByLevelComplete() {
+        const translationElement = document.querySelector('#translation-text');
+        translationElement?.classList.remove('hidden');
+    }
 }

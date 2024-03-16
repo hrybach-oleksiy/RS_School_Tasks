@@ -7,6 +7,7 @@ enum FormAttribute {
     REQUIRED = 'required',
     ACTION = 'action',
     DISABLED = 'disabled',
+    CHECKED = 'checked',
 }
 
 enum AppPage {

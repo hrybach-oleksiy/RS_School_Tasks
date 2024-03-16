@@ -36,3 +36,18 @@ export interface GameData {
 export interface AppState {
     currentPage: string;
 }
+
+export interface InputProps {
+    classNames?: string[];
+    id: string;
+    type?: string;
+    name: string;
+    placeholder?: string;
+    required?: string;
+    checked?: string;
+    onChange?: EventListener;
+}
+
+export interface HintsState {
+    [key: string]: boolean;
+}
