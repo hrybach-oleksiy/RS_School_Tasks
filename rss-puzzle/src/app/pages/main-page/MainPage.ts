@@ -55,6 +55,7 @@ export default class MainPage extends BaseComponent {
             classNames: [styles['main-page']],
         });
 
+        this.getGameState();
         this.fetchData(1);
         this.addListener('click', this.handleWordClick);
     }
@@ -187,8 +188,9 @@ export default class MainPage extends BaseComponent {
 
     private handleLevelSelect = (event: Event) => {
         const currentLevel = event.target as HTMLSelectElement;
+        const currentLevelValue = Number(currentLevel.value);
 
-        this.level = Number(currentLevel.value);
+        this.level = currentLevelValue;
         this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
@@ -196,23 +198,23 @@ export default class MainPage extends BaseComponent {
         this.round = 1;
         this.sentence = 0;
         this.fetchData(this.level);
+        MainPage.saveLevelState(currentLevelValue);
+        localStorage.removeItem('gameState');
     };
 
     private handleRoundSelect = (event: Event) => {
         const currentRound = event.target as HTMLSelectElement;
+        const currentRoundValue = Number(currentRound.value);
 
-        this.round = Number(currentRound.value);
-
-        console.log(currentRound);
-        console.log('Round changed');
-        console.log('Main page rendered');
-
+        this.round = currentRoundValue;
         this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.guessedSentences = [];
         this.sentence = 0;
         this.fetchData(this.level);
+        MainPage.saveRoundState(currentRoundValue);
+        localStorage.removeItem('gameState');
     };
 
     private addWordsToGuessed(word: HTMLElement) {
@@ -307,6 +309,7 @@ export default class MainPage extends BaseComponent {
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.checkButton.removeListener('click', this.handleContinueButton);
+        MainPage.saveGameState(this.guessedSentences, this.sentence);
         this.fetchData(this.level);
     };
 
@@ -315,7 +318,6 @@ export default class MainPage extends BaseComponent {
         const sourceTemplates = document.querySelectorAll('.source-template');
 
         this.guessedWordOrder = [];
-        console.log(this.correctWordOrder);
 
         this.correctWordOrder.forEach((word) => {
             const part = span(['part'], word);
@@ -378,5 +380,58 @@ export default class MainPage extends BaseComponent {
         // else {
         //     this.userData = null;
         // }
+    }
+
+    static saveLevelState(value: number) {
+        const levelState = { level: value };
+        const levelStateJSON = JSON.stringify(levelState);
+
+        localStorage.setItem('levelState', levelStateJSON);
+    }
+
+    static saveRoundState(value: number) {
+        const roundState = { round: value };
+        const roundStateJSON = JSON.stringify(roundState);
+
+        localStorage.setItem('roundState', roundStateJSON);
+    }
+
+    static saveGameState(guessedSentencesValue: string[][], sentence: number) {
+        const gameState = { guessedSentences: guessedSentencesValue, sentenceNumber: sentence };
+        const gameStateJSON = JSON.stringify(gameState);
+
+        localStorage.setItem('gameState', gameStateJSON);
+    }
+
+    private getGameState() {
+        const levelStateJSON = localStorage.getItem('levelState');
+        const roundStateJSON = localStorage.getItem('roundState');
+        const gameStateJSON = localStorage.getItem('gameState');
+
+        if (levelStateJSON) {
+            const levelState = JSON.parse(levelStateJSON);
+
+            this.level = levelState.level;
+        } else {
+            this.level = 1;
+        }
+
+        if (roundStateJSON) {
+            const roundState = JSON.parse(roundStateJSON);
+
+            this.round = roundState.round;
+        } else {
+            this.round = 1;
+        }
+
+        if (gameStateJSON) {
+            const gameState = JSON.parse(gameStateJSON);
+
+            this.guessedSentences = gameState.guessedSentences;
+            this.sentence = gameState.sentenceNumber;
+        } else {
+            this.guessedSentences = [];
+            this.sentence = 0;
+        }
     }
 }
