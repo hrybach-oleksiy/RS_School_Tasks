@@ -25,9 +25,13 @@ const input = (
 
 const label = (classNames: string[], text: string) => new BaseComponent({ tag: 'label', classNames, text });
 
+const select = (classNames: string[]) => new BaseComponent({ tag: 'select', classNames });
+
+const option = (classNames: string[], text: string) => new BaseComponent({ tag: 'option', classNames, text });
+
 const button = (classNames: string[], text?: string, onClick?: EventCallback) =>
     new Button({ classNames, text, onClick });
 
 const img = (classNames: string[]) => new BaseComponent({ tag: 'img', classNames });
 
-export { div, p, h1, input, button, label, span, h2, img };
+export { div, p, h1, input, button, label, span, h2, img, select, option };

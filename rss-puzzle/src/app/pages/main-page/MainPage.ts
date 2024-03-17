@@ -12,7 +12,7 @@ export default class MainPage extends BaseComponent {
 
     private level: number = 1;
 
-    private round: number = 0;
+    private round: number = 1;
 
     private sentence: number = 0;
 
@@ -61,7 +61,16 @@ export default class MainPage extends BaseComponent {
 
     private setPage() {
         const btnWrapper = div([styles['btn-wrapper']]);
-        const gameHeader = new GameHeader(this.translation, this.hintsState, this.audioExample);
+        const gameHeader = new GameHeader(
+            this.translation,
+            this.hintsState,
+            this.audioExample,
+            this.handleLevelSelect,
+            this.handleRoundSelect,
+            this.level,
+            this.roundsCount,
+            this.round,
+        );
 
         this.destroyChildren();
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
@@ -94,7 +103,7 @@ export default class MainPage extends BaseComponent {
     }
 
     private shuffleWords() {
-        const words = this.getWords(this.round, this.sentence).split(' ');
+        const words = this.getWords(this.round - 1, this.sentence).split(' ');
 
         for (let i = words.length - 1; i > 0; i -= 1) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -174,6 +183,36 @@ export default class MainPage extends BaseComponent {
         }
 
         this.enableCheckButton();
+    };
+
+    private handleLevelSelect = (event: Event) => {
+        const currentLevel = event.target as HTMLSelectElement;
+
+        this.level = Number(currentLevel.value);
+        this.isOrderCorrect = false;
+        this.guessedElements = [];
+        this.guessedWordOrder = [];
+        this.guessedSentences = [];
+        this.round = 1;
+        this.sentence = 0;
+        this.fetchData(this.level);
+    };
+
+    private handleRoundSelect = (event: Event) => {
+        const currentRound = event.target as HTMLSelectElement;
+
+        this.round = Number(currentRound.value);
+
+        console.log(currentRound);
+        console.log('Round changed');
+        console.log('Main page rendered');
+
+        this.isOrderCorrect = false;
+        this.guessedElements = [];
+        this.guessedWordOrder = [];
+        this.guessedSentences = [];
+        this.sentence = 0;
+        this.fetchData(this.level);
     };
 
     private addWordsToGuessed(word: HTMLElement) {
@@ -256,10 +295,10 @@ export default class MainPage extends BaseComponent {
             this.guessedSentences = [];
         }
 
-        if (this.round === this.roundsCount) {
+        if (this.round === this.roundsCount + 1) {
             console.log('next level starts');
             this.level += 1;
-            this.round = 0;
+            this.round = 1;
             this.sentence = 0;
             this.guessedSentences = [];
         }
@@ -276,6 +315,7 @@ export default class MainPage extends BaseComponent {
         const sourceTemplates = document.querySelectorAll('.source-template');
 
         this.guessedWordOrder = [];
+        console.log(this.correctWordOrder);
 
         this.correctWordOrder.forEach((word) => {
             const part = span(['part'], word);
@@ -286,9 +326,9 @@ export default class MainPage extends BaseComponent {
         resultBlockTemplates.forEach((template, index) => {
             const templateElement = template;
             const part = span(['part'], this.correctWordOrder[index]);
-            part.addClass('match');
             const partElement = part.getNode();
 
+            part.addClass('match');
             partElement.classList.add(styles['remove-animation']);
 
             templateElement.innerHTML = '';

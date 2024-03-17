@@ -8,6 +8,8 @@ enum FormAttribute {
     ACTION = 'action',
     DISABLED = 'disabled',
     CHECKED = 'checked',
+    VALUE = 'value',
+    SELECTED = 'selected',
 }
 
 enum AppPage {
