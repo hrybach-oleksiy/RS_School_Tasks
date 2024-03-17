@@ -16,6 +16,7 @@ enum AppPage {
     LOGIN = 'login',
     START_PAGE = 'start page',
     MAIN_PAGE = 'main page',
+    STATISTIC_PAGE = 'statistic page',
 }
 
 enum ImageAttribute {

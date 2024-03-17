@@ -4,7 +4,7 @@ import { GameData, HintsState } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import GameHeader from '../../components/game-header/GameHeader';
-import { FormAttribute } from '../../../types/enums';
+import { FormAttribute, AppPage } from '../../../types/enums';
 import { button, div, span } from '../../components/HTMLComponents';
 
 export default class MainPage extends BaseComponent {
@@ -38,6 +38,8 @@ export default class MainPage extends BaseComponent {
 
     private autocompleteButton: BaseComponent = button(['complete-btn', 'btn'], 'Complete Sentence');
 
+    private resultsButton: BaseComponent = button(['results-btn', 'btn', styles.hidden], 'Results');
+
     private guessedElements: HTMLElement[] = [];
 
     private translation: string = '';
@@ -49,12 +51,15 @@ export default class MainPage extends BaseComponent {
         pronunciation: true,
     };
 
-    constructor() {
+    private setAppState: (page: string) => void;
+
+    constructor(setAppState: (page: string) => void) {
         super({
             tag: 'section',
             classNames: [styles['main-page']],
         });
 
+        this.setAppState = setAppState;
         this.getGameState();
         this.fetchData(1);
         this.addListener('click', this.handleWordClick);
@@ -79,10 +84,12 @@ export default class MainPage extends BaseComponent {
         this.checkButton.addListener('click', this.checkGuess);
         this.autocompleteButton.addListener('click', this.autocompleteSentence);
         this.autocompleteButton.removeAttribute(FormAttribute.DISABLED);
+        this.resultsButton.addListener('click', this.openStatisticPage);
+        this.resultsButton.addClass(styles.hidden);
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
         this.sourceBlock = new SourceDataBlock(this.words);
 
-        btnWrapper.appendChildren([this.checkButton, this.autocompleteButton]);
+        btnWrapper.appendChildren([this.checkButton, this.autocompleteButton, this.resultsButton]);
         this.appendChildren([gameHeader, this.resultBlock, this.sourceBlock, btnWrapper]);
     }
 
@@ -354,6 +361,12 @@ export default class MainPage extends BaseComponent {
         this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
         MainPage.showTranslationByLevelComplete();
         MainPage.showAudioByLevelComplete();
+
+        if (this.sentence === 9) {
+            const completeButton = this.autocompleteButton.getNode();
+            completeButton.remove();
+            this.resultsButton.removeClass(styles.hidden);
+        }
     };
 
     static showTranslationByLevelComplete() {
@@ -434,4 +447,10 @@ export default class MainPage extends BaseComponent {
             this.sentence = 0;
         }
     }
+
+    private openStatisticPage = () => {
+        if (this.setAppState) {
+            this.setAppState(AppPage.STATISTIC_PAGE);
+        }
+    };
 }
