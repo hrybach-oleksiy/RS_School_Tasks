@@ -1,15 +1,16 @@
 import BaseComponent from '../../components/BaseComponent';
-import LoginForm from '../../components/login-form/LoginForm';
+import LoginForm from '../../pages/login-form/LoginForm';
 import StartScreen from '../../pages/start-screen/StartScreen';
 import MainPage from '../../pages/main-page/MainPage';
 import StatisticPage from '../../pages/statistic-page/StatisticPage';
+
 import { UserData } from '../../../types/interfaces';
 import { AppPage } from '../../../types/enums';
 
 import styles from './Main.module.scss';
 
 export default class Main extends BaseComponent {
-    private userData;
+    private userData: UserData | null;
 
     private setAppState: (page: string) => void;
 

@@ -23,7 +23,7 @@ html {
 
 body {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     overflow-x: hidden;
     color: var(--text);
     font-family: "Inter", sans-serif;

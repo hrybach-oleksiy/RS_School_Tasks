@@ -1,14 +1,13 @@
 import BaseComponent from '../../components/BaseComponent';
 import { h1, p, div, button } from '../../components/HTMLComponents';
-import { UserData } from '../../../types/interfaces';
-// import assertIsDefined from '../../../utilities/assertIsDefined';
-// import MainPage from '../main-page/MainPage';
 
-import styles from './StartScreen.module.scss';
+import { UserData } from '../../../types/interfaces';
 import { AppPage } from '../../../types/enums';
 
+import styles from './StartScreen.module.scss';
+
 export default class StartScreen extends BaseComponent {
-    userData: UserData | null;
+    private userData: UserData | null;
 
     private setAppState?: (page: string) => void;
 

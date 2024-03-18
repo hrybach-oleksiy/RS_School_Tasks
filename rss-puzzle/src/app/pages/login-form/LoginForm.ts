@@ -1,5 +1,6 @@
-import BaseComponent from '../BaseComponent';
-import { h1, input, button, div, label } from '../HTMLComponents';
+import BaseComponent from '../../components/BaseComponent';
+import { h1, input, button, div, label } from '../../components/HTMLComponents';
+
 import { FormAttribute, AppPage } from '../../../types/enums';
 import assertIsDefined from '../../../utilities/assertIsDefined';
 

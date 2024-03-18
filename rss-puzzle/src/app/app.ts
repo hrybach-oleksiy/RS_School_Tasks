@@ -33,7 +33,7 @@ export default class App {
         this.root.destroyChildren();
         const header = new Header(this.handleAppState, this.appState.currentPage);
         const main = new Main(this.userData, this.handleAppState, this.appState.currentPage);
-        const footer = new Footer(App.handleFooterButtonClick);
+        const footer = new Footer();
 
         this.root.appendChildren([header, main, footer]);
     }
@@ -50,10 +50,6 @@ export default class App {
         } else {
             this.userData = null;
         }
-    }
-
-    static handleFooterButtonClick() {
-        console.log('Кнопка в футері була натиснута');
     }
 
     private handleAppState = (page: string) => {

@@ -5,18 +5,6 @@ import { FormAttribute } from '../../../types/enums';
 
 import styles from './GameSelect.module.scss';
 
-// <div class="levels">
-//             <label for="level">Select Level:</label>
-//             <select id="level">
-//                 <option value="1">Level 1</option>
-//                 <option value="2">Level 2</option>
-//                 <option value="3">Level 3</option>
-//                 <option value="4">Level 4</option>
-//                 <option value="5">Level 5</option>
-//                 <option value="6">Level 6</option>
-//             </select>
-// </div>
-
 export default class GameSelect extends BaseComponent {
     title: string;
 

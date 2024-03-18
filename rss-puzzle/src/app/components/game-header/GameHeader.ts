@@ -1,7 +1,9 @@
 import BaseComponent from '../BaseComponent';
 import { div, p, img, h2, span } from '../HTMLComponents';
+
 import Hint from '../hint/Hint';
 import GameSelect from '../game-select/GameSelect';
+
 import { HintsState } from '../../../types/interfaces';
 import { FormAttribute, ImageAttribute } from '../../../types/enums';
 
@@ -27,9 +29,9 @@ export default class GameHeader extends BaseComponent {
 
     private currentLevel: number;
 
-    private roundsCount: number;
-
     private currentRound: number;
+
+    private roundsCount: number;
 
     constructor(
         translation: string,
@@ -59,46 +61,37 @@ export default class GameHeader extends BaseComponent {
     private setBlock() {
         this.destroyChildren();
 
-        // TODO: Move blocks to the separate methods
+        const translationBlock = this.setTranslationBlock();
+        const hintsWrapper = this.setHintsBlock();
+        const gameLevelsWrapper = this.setGameLevelsBlock();
+        const audioIconWrapper = this.setAudioIconBlock();
+        const gameLevelsTitle = this.setLevelsTitleBlock();
 
-        // translation block
-        const paragraph = p([styles.translation], this.translation);
-        paragraph.setAttribute(FormAttribute.ID, 'translation-text');
+        this.appendChildren([gameLevelsWrapper, hintsWrapper, gameLevelsTitle, audioIconWrapper, translationBlock]);
 
-        if (this.hintsState.translation) {
-            paragraph.removeClass('hidden');
-        } else {
-            paragraph.addClass('hidden');
-        }
+        // add class for smooth element appearance
+        setTimeout(() => {
+            document.querySelectorAll(`.${styles.count}`).forEach((element) => {
+                element.classList.add(styles.show);
+            });
+        }, 0);
+    }
 
-        // hints block
-        const translationProps = {
-            id: 'translation',
-            name: 'translation',
-            type: 'checkbox',
-            onChange: this.handleHintChange,
-        };
-        const pronunciationProps = {
-            id: 'pronunciation',
-            name: 'pronunciation',
-            type: 'checkbox',
-            onChange: this.handleHintChange,
-        };
-        const translationHint = new Hint('Translation', this.hintsState.translation, translationProps);
-        const pronunciationHint = new Hint('Pronunciation ', this.hintsState.pronunciation, pronunciationProps);
-        const hintsWrapper = div([styles['hints-wrapper']]);
-        hintsWrapper.appendChildren([translationHint, pronunciationHint]);
+    private setLevelsTitleBlock() {
+        const levelCountElement = span([styles.count], String(this.currentLevel));
+        const roundCountElement = span([styles.count], String(this.currentRound));
+        const levelElement = span([], 'Level: ');
+        const roundElement = span([], ',    Round: ');
+        const gameLevelsTitle = h2([styles['game-levels-title']], ``);
+        const currentColorClass = GameHeader.setDifficultyColor(this.currentLevel);
+        levelCountElement.addClass(`${styles[currentColorClass]}`);
+        roundCountElement.addClass(`${styles[currentColorClass]}`);
+        gameLevelsTitle.appendChildren([levelElement, levelCountElement, roundElement, roundCountElement]);
 
-        // Game Levels Block
-        const gameLevelsWrapper = div([styles['game-levels-wrapper']]);
-        const levelSelect = new GameSelect('Level', 6, this.currentLevel);
-        const roundSelect = new GameSelect('Round', this.roundsCount, this.currentRound);
-        gameLevelsWrapper.appendChildren([levelSelect, roundSelect]);
+        return gameLevelsTitle;
+    }
 
-        levelSelect.addListener('change', this.onLevelChange);
-        roundSelect.addListener('change', this.onRoundChange);
-
-        // Audio Icon Block
+    private setAudioIconBlock() {
         const audioIconWrapper = div([styles['audio-icon-wrapper']]);
         this.audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
         this.audioIcon.setAttribute(ImageAttribute.ALT, 'Audio Icon');
@@ -116,26 +109,54 @@ export default class GameHeader extends BaseComponent {
         }
         audioIconWrapper.append(this.audioIcon);
 
-        // Game Levels Title Block
-        const levelCountElement = span([styles.count], String(this.currentLevel));
-        const roundCountElement = span([styles.count], String(this.currentRound));
-        const levelElement = span([], 'Level: ');
-        const roundElement = span([], ',    Round: ');
-        const gameLevelsTitle = h2([styles['game-levels-title']], ``);
-        const currentColorClass = GameHeader.setDifficultyColor(this.currentLevel);
-        levelCountElement.addClass(`${styles[currentColorClass]}`);
-        roundCountElement.addClass(`${styles[currentColorClass]}`);
-        gameLevelsTitle.appendChildren([levelElement, levelCountElement, roundElement, roundCountElement]);
+        return audioIconWrapper;
+    }
 
-        // appending to the page
-        this.appendChildren([gameLevelsWrapper, hintsWrapper, gameLevelsTitle, audioIconWrapper, paragraph]);
+    private setGameLevelsBlock() {
+        const gameLevelsWrapper = div([styles['game-levels-wrapper']]);
+        const levelSelect = new GameSelect('Level', 6, this.currentLevel);
+        const roundSelect = new GameSelect('Round', this.roundsCount, this.currentRound);
 
-        // add class for smooth element appearance
-        setTimeout(() => {
-            document.querySelectorAll(`.${styles.count}`).forEach((element) => {
-                element.classList.add(styles.show);
-            });
-        }, 0);
+        gameLevelsWrapper.appendChildren([levelSelect, roundSelect]);
+        levelSelect.addListener('change', this.onLevelChange);
+        roundSelect.addListener('change', this.onRoundChange);
+
+        return gameLevelsWrapper;
+    }
+
+    private setHintsBlock() {
+        const translationProps = {
+            id: 'translation',
+            name: 'translation',
+            type: 'checkbox',
+            onChange: this.handleHintChange,
+        };
+        const pronunciationProps = {
+            id: 'pronunciation',
+            name: 'pronunciation',
+            type: 'checkbox',
+            onChange: this.handleHintChange,
+        };
+        const translationHint = new Hint('Translation', this.hintsState.translation, translationProps);
+        const pronunciationHint = new Hint('Pronunciation ', this.hintsState.pronunciation, pronunciationProps);
+        const hintsWrapper = div([styles['hints-wrapper']]);
+
+        hintsWrapper.appendChildren([translationHint, pronunciationHint]);
+
+        return hintsWrapper;
+    }
+
+    private setTranslationBlock() {
+        const translationBlock = p([styles.translation], this.translation);
+        translationBlock.setAttribute(FormAttribute.ID, 'translation-text');
+
+        if (this.hintsState.translation) {
+            translationBlock.removeClass('hidden');
+        } else {
+            translationBlock.addClass('hidden');
+        }
+
+        return translationBlock;
     }
 
     static setDifficultyColor(level: number) {
@@ -191,21 +212,6 @@ export default class GameHeader extends BaseComponent {
         this.setBlock();
     }
 
-    private handleAudioIconClick = (example: string) => {
-        const audio = new Audio();
-
-        if (!this.isPlaying) {
-            this.audioIcon.setAttribute(ImageAttribute.SRC, playingIconImage);
-            audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${example}`;
-            audio.play();
-            this.isPlaying = true;
-            audio.onended = () => {
-                this.isPlaying = false;
-                this.audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
-            };
-        }
-    };
-
     static getHintsState() {
         const hintsStateJSON = localStorage.getItem('hintsState');
 
@@ -220,4 +226,19 @@ export default class GameHeader extends BaseComponent {
 
         return null;
     }
+
+    private handleAudioIconClick = (example: string) => {
+        const audio = new Audio();
+
+        if (!this.isPlaying) {
+            this.audioIcon.setAttribute(ImageAttribute.SRC, playingIconImage);
+            audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${example}`;
+            audio.play();
+            this.isPlaying = true;
+            audio.onended = () => {
+                this.isPlaying = false;
+                this.audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
+            };
+        }
+    };
 }

@@ -1,6 +1,6 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button } from '../../components/HTMLComponents';
-// import LoginForm from '../../components/login-form/LoginForm';
+
 import { AppPage } from '../../../types/enums';
 
 import styles from './Header.module.scss';
@@ -16,7 +16,7 @@ export default class Header extends BaseComponent {
                 tag: 'header',
                 classNames: [styles.header],
             },
-            p(['header-title'], 'RSS Puzzle'),
+            p([styles['header-title']], 'RSS Puzzle'),
         );
 
         this.setAppState = setAppState;
@@ -25,7 +25,7 @@ export default class Header extends BaseComponent {
     }
 
     setContent() {
-        const logoutButton = button(['btn', styles.button], 'Log out', () => {
+        const logoutButton = button(['btn'], 'Log out', () => {
             document.body.classList.remove('background');
             localStorage.clear();
             this.setAppState(AppPage.LOGIN);

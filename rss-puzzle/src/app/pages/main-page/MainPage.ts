@@ -1,11 +1,14 @@
-import styles from './MainPage.module.scss';
 import BaseComponent from '../../components/BaseComponent';
-import { GameData, HintsState, LevelData } from '../../../types/interfaces';
+import { button, div, span } from '../../components/HTMLComponents';
+
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import GameHeader from '../../components/game-header/GameHeader';
+
+import { GameData, HintsState, LevelData } from '../../../types/interfaces';
 import { FormAttribute, AppPage } from '../../../types/enums';
-import { button, div, span } from '../../components/HTMLComponents';
+
+import styles from './MainPage.module.scss';
 
 export default class MainPage extends BaseComponent {
     private gameData!: GameData;
@@ -78,6 +81,8 @@ export default class MainPage extends BaseComponent {
     }
 
     private setPage() {
+        this.destroyChildren();
+
         const btnWrapper = div([styles['btn-wrapper']]);
         const gameHeader = new GameHeader(
             this.translation,
@@ -90,7 +95,9 @@ export default class MainPage extends BaseComponent {
             this.round,
         );
 
-        this.destroyChildren();
+        this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
+        this.sourceBlock = new SourceDataBlock(this.words);
+
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
         this.checkButton.setTextContent('Check Answer');
         this.checkButton.addListener('click', this.checkGuess);
@@ -98,8 +105,6 @@ export default class MainPage extends BaseComponent {
         this.autocompleteButton.removeAttribute(FormAttribute.DISABLED);
         this.resultsButton.addListener('click', this.openStatisticPage);
         this.resultsButton.addClass(styles.hidden);
-        this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
-        this.sourceBlock = new SourceDataBlock(this.words);
         this.isSentenceAutocompleted = false;
 
         btnWrapper.appendChildren([this.checkButton, this.autocompleteButton, this.resultsButton]);
@@ -198,7 +203,9 @@ export default class MainPage extends BaseComponent {
             this.addWordsToGuessed(currentWord);
             resultBlockTemplates[count].append(currentWord);
             count += 1;
-            if (count === this.stringLength) count = 0;
+            if (count === this.stringLength) {
+                count = 0;
+            }
 
             setTimeout(() => {
                 currentWord.classList.remove(styles['remove-animation']);
@@ -220,11 +227,7 @@ export default class MainPage extends BaseComponent {
         this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
-        this.guessedSentences = [];
-        this.guessedToStatistic = [];
-        this.notGuessedToStatistic = [];
-        this.guessedAudioExamples = [];
-        this.noteGuessedAudioExamples = [];
+        this.clearGuessedData();
         this.round = 1;
         this.sentence = 0;
         this.fetchData(this.level);
@@ -240,11 +243,7 @@ export default class MainPage extends BaseComponent {
         this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
-        this.guessedSentences = [];
-        this.guessedToStatistic = [];
-        this.notGuessedToStatistic = [];
-        this.guessedAudioExamples = [];
-        this.noteGuessedAudioExamples = [];
+        this.clearGuessedData();
         this.sentence = 0;
         this.fetchData(this.level);
         MainPage.saveRoundState(currentRoundValue);
@@ -291,8 +290,6 @@ export default class MainPage extends BaseComponent {
                 currentElement.classList.add('mismatch');
             }
         }
-
-        console.log(this.sentence);
 
         if (this.isOrderCorrect) {
             this.checkButton.removeListener('click', this.checkGuess);
@@ -371,11 +368,7 @@ export default class MainPage extends BaseComponent {
             console.log('next round starts');
             this.round += 1;
             this.sentence = 0;
-            this.guessedSentences = [];
-            this.guessedToStatistic = [];
-            this.notGuessedToStatistic = [];
-            this.guessedAudioExamples = [];
-            this.noteGuessedAudioExamples = [];
+            this.clearGuessedData();
         }
 
         if (this.round === this.roundsCount + 1) {
@@ -383,16 +376,8 @@ export default class MainPage extends BaseComponent {
             this.level += 1;
             this.round = 1;
             this.sentence = 0;
-            this.guessedSentences = [];
-            this.guessedToStatistic = [];
-            this.notGuessedToStatistic = [];
-            this.guessedAudioExamples = [];
-            this.noteGuessedAudioExamples = [];
+            this.clearGuessedData();
         }
-
-        // if (!this.isSentenceAutocompleted) {
-        //     this.addGuessedToStatistic();
-        // }
 
         this.isOrderCorrect = false;
         this.guessedElements = [];
@@ -570,4 +555,12 @@ export default class MainPage extends BaseComponent {
             this.setAppState(AppPage.STATISTIC_PAGE);
         }
     };
+
+    private clearGuessedData() {
+        this.guessedSentences = [];
+        this.guessedToStatistic = [];
+        this.notGuessedToStatistic = [];
+        this.guessedAudioExamples = [];
+        this.noteGuessedAudioExamples = [];
+    }
 }

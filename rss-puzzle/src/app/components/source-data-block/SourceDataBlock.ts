@@ -1,19 +1,9 @@
 import BaseComponent from '../BaseComponent';
-import data from '../../../api/wordsCollectionLevel1.json';
-import { GameData } from '../../../types/interfaces';
 import { span, div } from '../HTMLComponents';
-import { FormAttribute } from '../../../types/enums';
-// import assertIsDefined from '../../../utilities/assertIsDefined';
 
-// import styles from './SourceDataBlock.module.scss';
+import { FormAttribute } from '../../../types/enums';
 
 export default class SourceDataBlock extends BaseComponent {
-    private gameData: GameData = data;
-
-    // level: number = 0;
-
-    // sentence: number = 0;
-
     private words: string[];
 
     constructor(words: string[]) {

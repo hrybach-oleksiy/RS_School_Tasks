@@ -1,11 +1,9 @@
 import BaseComponent from '../BaseComponent';
-import { FormAttribute } from '../../../types/enums';
 import { div, span } from '../HTMLComponents';
 
-// import styles from './ResultBlock.module.scss';
+import { FormAttribute } from '../../../types/enums';
 
 export default class ResultBlock extends BaseComponent {
-    // const ROWS_NUMBER = 10;rss
     private stringLength: number;
 
     private rows: number = 10;

@@ -1,10 +1,12 @@
 import BaseComponent from '../BaseComponent';
 import { span, label, h2 } from '../HTMLComponents';
+
 import Input from '../input/Input';
+
+import { InputProps } from '../../../types/interfaces';
 import { FormAttribute } from '../../../types/enums';
 
 import styles from './Hint.module.scss';
-import { InputProps } from '../../../types/interfaces';
 
 export default class Hint extends BaseComponent {
     title: string;
