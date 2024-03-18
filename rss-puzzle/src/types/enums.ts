@@ -24,4 +24,9 @@ enum ImageAttribute {
     ALT = 'alt',
 }
 
-export { FormAttribute, AppPage, ImageAttribute };
+enum LinkAttribute {
+    HREF = 'href',
+    TARGET = 'target',
+}
+
+export { FormAttribute, AppPage, ImageAttribute, LinkAttribute };

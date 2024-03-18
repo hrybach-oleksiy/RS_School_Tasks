@@ -6,13 +6,26 @@
 
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
+
+    @include media-laptop {
+        font-size: 14px;
+    }
+
+    @include media-big-tablet {
+        font-size: 12px;
+    }
+
+    @include media-tablet {
+        font-size: 10px;
+    }
 }
 
 body {
     position: relative;
+    height: 100vh;
     overflow-x: hidden;
     color: var(--text);
-    font-size: 16px;
     font-family: "Inter", sans-serif;
     line-height: 20px; /* 142.857% */
     background-color: var(--body);
@@ -21,6 +34,7 @@ body {
 .background {
     background-image: url("../assets/images/background.png");
     background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
 }
 

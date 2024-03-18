@@ -9,6 +9,7 @@
 .game-levels-wrapper {
     display: flex;
     gap: 20px;
+    font-size: 1.5rem;
 }
 
 .hints-wrapper {
@@ -32,7 +33,7 @@
 
 .translation {
     grid-column: 1 / 3;
-    font-size: 24px;
+    font-size: 2rem;
     opacity: 1;
     transition: all 0.4s ease-in-out;
 }

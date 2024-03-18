@@ -1,4 +1,4 @@
 {
-    "pattern": "^(main|staging|production)$|^(chore|feat|fix|refactor|rel(?:ease)?)/RSS-PZ-(?:[0-2][0-9]|3[0-3])_[a-zA-Z]+",
+    "pattern": "^(main|staging|production)$|^(bugfix|chore|feat|fix|refactor|rel(?:ease)?)/RSS-PZ-(?:[0-2][0-9]|3[0-3])_[a-zA-Z]+",
     "errorMsg": ":🤨 You fool! The branch you're trying to push does not Rss School Code."
 }

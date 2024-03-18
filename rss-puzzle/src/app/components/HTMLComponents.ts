@@ -37,5 +37,6 @@ const img = (classNames: string[]) => new BaseComponent({ tag: 'img', classNames
 const ul = (classNames: string[]) => new BaseComponent({ tag: 'ul', classNames });
 
 const li = (classNames: string[], text: string) => new BaseComponent({ tag: 'li', classNames, text });
+const a = (classNames: string[]) => new BaseComponent({ tag: 'a', classNames });
 
-export { div, p, h1, input, button, label, span, h2, img, select, option, ul, li };
+export { div, p, h1, input, button, label, span, h2, img, select, option, ul, li, a };

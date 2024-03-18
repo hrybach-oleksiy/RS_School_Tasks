@@ -1,9 +1,10 @@
 .statistic {
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    width: 70%;
-    padding: 50px;
+    gap: 18px;
+    width: 60%;
+    margin: 20px 0;
+    padding: 20px 15px;
     background-color: #e1d4c9;
     border-radius: 100px;
 }
@@ -30,20 +31,22 @@
 
 .miniature {
     width: 300px;
+
+    @media screen and (width <= 900px) {
+        width: 200px;
+    }
 }
 
 .not-guessed,
 .guessed {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 .list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .list-item {
