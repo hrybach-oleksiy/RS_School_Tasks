@@ -6,7 +6,7 @@ import StatisticPage from '../../pages/statistic-page/StatisticPage';
 import { UserData } from '../../../types/interfaces';
 import { AppPage } from '../../../types/enums';
 
-// import styles from './Main.module.scss';
+import styles from './Main.module.scss';
 
 export default class Main extends BaseComponent {
     private userData;
@@ -18,7 +18,7 @@ export default class Main extends BaseComponent {
     constructor(userData: UserData | null, setAppState: (page: string) => void, page: string) {
         super({
             tag: 'main',
-            classNames: ['main'],
+            classNames: [styles.main],
         });
         this.userData = userData;
         this.setAppState = setAppState;

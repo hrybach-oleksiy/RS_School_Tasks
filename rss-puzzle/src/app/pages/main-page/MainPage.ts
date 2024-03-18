@@ -51,7 +51,13 @@ export default class MainPage extends BaseComponent {
         pronunciation: true,
     };
 
+    private guessedToStatistic: string[][] = [];
+
+    private notGuessedToStatistic: string[][] = [];
+
     private setAppState: (page: string) => void;
+
+    private isSentenceAutocompleted: boolean = false;
 
     constructor(setAppState: (page: string) => void) {
         super({
@@ -88,6 +94,7 @@ export default class MainPage extends BaseComponent {
         this.resultsButton.addClass(styles.hidden);
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
         this.sourceBlock = new SourceDataBlock(this.words);
+        this.isSentenceAutocompleted = false;
 
         btnWrapper.appendChildren([this.checkButton, this.autocompleteButton, this.resultsButton]);
         this.appendChildren([gameHeader, this.resultBlock, this.sourceBlock, btnWrapper]);
@@ -202,6 +209,8 @@ export default class MainPage extends BaseComponent {
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.guessedSentences = [];
+        this.guessedToStatistic = [];
+        this.notGuessedToStatistic = [];
         this.round = 1;
         this.sentence = 0;
         this.fetchData(this.level);
@@ -218,6 +227,8 @@ export default class MainPage extends BaseComponent {
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.guessedSentences = [];
+        this.guessedToStatistic = [];
+        this.notGuessedToStatistic = [];
         this.sentence = 0;
         this.fetchData(this.level);
         MainPage.saveRoundState(currentRoundValue);
@@ -286,6 +297,26 @@ export default class MainPage extends BaseComponent {
         }
     }
 
+    private addNotGuessedToStatistic() {
+        if (this.isOrderCorrect) {
+            this.notGuessedToStatistic.push(this.correctWordOrder);
+        } else {
+            this.notGuessedToStatistic.splice(this.sentence, 1);
+        }
+
+        console.log('NOT guessed to statistic', this.notGuessedToStatistic);
+    }
+
+    private addGuessedToStatistic() {
+        if (this.isOrderCorrect) {
+            this.guessedToStatistic.push(this.correctWordOrder);
+        } else {
+            this.guessedToStatistic.splice(this.sentence, 1);
+        }
+
+        console.log('guessed to statistic', this.guessedToStatistic);
+    }
+
     static changeButtonState(btn: BaseComponent, condition: boolean) {
         if (condition) {
             btn.removeAttribute(FormAttribute.DISABLED);
@@ -302,6 +333,8 @@ export default class MainPage extends BaseComponent {
             this.round += 1;
             this.sentence = 0;
             this.guessedSentences = [];
+            this.guessedToStatistic = [];
+            this.notGuessedToStatistic = [];
         }
 
         if (this.round === this.roundsCount + 1) {
@@ -310,13 +343,25 @@ export default class MainPage extends BaseComponent {
             this.round = 1;
             this.sentence = 0;
             this.guessedSentences = [];
+            this.guessedToStatistic = [];
+            this.notGuessedToStatistic = [];
+        }
+
+        if (!this.isSentenceAutocompleted) {
+            this.addGuessedToStatistic();
         }
 
         this.isOrderCorrect = false;
         this.guessedElements = [];
         this.guessedWordOrder = [];
         this.checkButton.removeListener('click', this.handleContinueButton);
-        MainPage.saveGameState(this.guessedSentences, this.sentence);
+
+        MainPage.saveGameState(
+            this.guessedSentences,
+            this.guessedToStatistic,
+            this.notGuessedToStatistic,
+            this.sentence,
+        );
         this.fetchData(this.level);
     };
 
@@ -361,12 +406,15 @@ export default class MainPage extends BaseComponent {
         this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
         MainPage.showTranslationByLevelComplete();
         MainPage.showAudioByLevelComplete();
+        this.addNotGuessedToStatistic();
 
         if (this.sentence === 9) {
             const completeButton = this.autocompleteButton.getNode();
             completeButton.remove();
             this.resultsButton.removeClass(styles.hidden);
         }
+
+        this.isSentenceAutocompleted = true;
     };
 
     static showTranslationByLevelComplete() {
@@ -390,9 +438,6 @@ export default class MainPage extends BaseComponent {
                 pronunciation: hintsState.pronunciation,
             };
         }
-        // else {
-        //     this.userData = null;
-        // }
     }
 
     static saveLevelState(value: number) {
@@ -409,8 +454,18 @@ export default class MainPage extends BaseComponent {
         localStorage.setItem('roundState', roundStateJSON);
     }
 
-    static saveGameState(guessedSentencesValue: string[][], sentence: number) {
-        const gameState = { guessedSentences: guessedSentencesValue, sentenceNumber: sentence };
+    static saveGameState(
+        guessedSentencesValue: string[][],
+        guessedToStatisticValue: string[][],
+        notGuessedToStatisticValue: string[][],
+        sentence: number,
+    ) {
+        const gameState = {
+            guessedSentences: guessedSentencesValue,
+            guessedToStatistic: guessedToStatisticValue,
+            notGuessedToStatistic: notGuessedToStatisticValue,
+            sentenceNumber: sentence,
+        };
         const gameStateJSON = JSON.stringify(gameState);
 
         localStorage.setItem('gameState', gameStateJSON);
@@ -441,9 +496,13 @@ export default class MainPage extends BaseComponent {
             const gameState = JSON.parse(gameStateJSON);
 
             this.guessedSentences = gameState.guessedSentences;
+            this.guessedToStatistic = gameState.guessedToStatistic;
+            this.notGuessedToStatistic = gameState.notGuessedToStatistic;
             this.sentence = gameState.sentenceNumber;
         } else {
             this.guessedSentences = [];
+            this.guessedToStatistic = [];
+            this.notGuessedToStatistic = [];
             this.sentence = 0;
         }
     }

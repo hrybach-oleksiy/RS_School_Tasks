@@ -1,0 +1,49 @@
+.statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 70%;
+    height: 600px;
+    padding: 50px;
+    background-color: #e1d4c9;
+    border-radius: 100px;
+}
+
+.not-guessed,
+.guessed {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 24px;
+}
+
+.title-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #e1d4c9;
+    font-weight: 700;
+    border-radius: 50%;
+}
+
+.red {
+    background-color: #f00;
+}
+
+.green {
+    background-color: #008000;
+}

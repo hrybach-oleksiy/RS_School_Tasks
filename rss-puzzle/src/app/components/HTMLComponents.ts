@@ -34,4 +34,8 @@ const button = (classNames: string[], text?: string, onClick?: EventCallback) =>
 
 const img = (classNames: string[]) => new BaseComponent({ tag: 'img', classNames });
 
-export { div, p, h1, input, button, label, span, h2, img, select, option };
+const ul = (classNames: string[]) => new BaseComponent({ tag: 'ul', classNames });
+
+const li = (classNames: string[], text: string) => new BaseComponent({ tag: 'li', classNames, text });
+
+export { div, p, h1, input, button, label, span, h2, img, select, option, ul, li };
