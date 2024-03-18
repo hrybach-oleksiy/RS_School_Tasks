@@ -1,6 +1,6 @@
 import styles from './MainPage.module.scss';
 import BaseComponent from '../../components/BaseComponent';
-import { GameData, HintsState } from '../../../types/interfaces';
+import { GameData, HintsState, LevelData } from '../../../types/interfaces';
 import ResultBlock from '../../components/result-block/ResultBlock';
 import SourceDataBlock from '../../components/source-data-block/SourceDataBlock';
 import GameHeader from '../../components/game-header/GameHeader';
@@ -50,6 +50,8 @@ export default class MainPage extends BaseComponent {
         translation: true,
         pronunciation: true,
     };
+
+    private levelData!: LevelData;
 
     private guessedToStatistic: string[][] = [];
 
@@ -112,6 +114,12 @@ export default class MainPage extends BaseComponent {
         this.translation = translation;
         this.roundsCount = roundsCount;
         this.audioExample = audio;
+        this.levelData = {
+            name: round.levelData.name,
+            cutSrc: round.levelData.cutSrc,
+            author: round.levelData.author,
+            year: round.levelData.year,
+        };
         console.log(this.correctWordOrder);
 
         return words;
@@ -299,6 +307,7 @@ export default class MainPage extends BaseComponent {
                     this.guessedToStatistic,
                     this.notGuessedToStatistic,
                     this.sentence,
+                    this.levelData,
                 );
             }
         }
@@ -377,6 +386,7 @@ export default class MainPage extends BaseComponent {
             this.guessedToStatistic,
             this.notGuessedToStatistic,
             this.sentence,
+            this.levelData,
         );
 
         this.fetchData(this.level);
@@ -471,12 +481,14 @@ export default class MainPage extends BaseComponent {
         guessedToStatisticValue: string[][],
         notGuessedToStatisticValue: string[][],
         sentence: number,
+        artworkData: LevelData,
     ) {
         const gameState = {
             guessedSentences: guessedSentencesValue,
             guessedToStatistic: guessedToStatisticValue,
             notGuessedToStatistic: notGuessedToStatisticValue,
             sentenceNumber: sentence,
+            artwork: artworkData,
         };
         const gameStateJSON = JSON.stringify(gameState);
 
@@ -525,6 +537,7 @@ export default class MainPage extends BaseComponent {
             this.guessedToStatistic,
             this.notGuessedToStatistic,
             this.sentence,
+            this.levelData,
         );
 
         if (this.setAppState) {

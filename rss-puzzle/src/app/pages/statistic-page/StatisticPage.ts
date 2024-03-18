@@ -1,6 +1,7 @@
 import BaseComponent from '../../components/BaseComponent';
-import { div, h2, ul, li, span, button } from '../../components/HTMLComponents';
-import { AppPage } from '../../../types/enums';
+import { div, h2, ul, li, span, button, img } from '../../components/HTMLComponents';
+import { AppPage, ImageAttribute } from '../../../types/enums';
+import { LevelData } from '../../../types/interfaces';
 
 import styles from './StatisticPage.module.scss';
 // import { AppPage } from '../../../types/enums';
@@ -11,6 +12,8 @@ export default class StatisticPage extends BaseComponent {
     private guessedSentences: string[][] = [];
 
     private notGuessedSentences: string[][] = [];
+
+    private artworkData: LevelData | null = null;
 
     constructor(setAppState?: (page: string) => void) {
         super({
@@ -24,23 +27,44 @@ export default class StatisticPage extends BaseComponent {
     }
 
     private SetPage() {
-        const artworkBlock = div(['artwork-block']);
-        const notGuessedBlock = div([styles['not-guessed']]);
-        const guessedBlock = div([styles.guessed]);
-        const notGuessedBlockTitle = h2(['title'], "I don't know");
-        const guessedBlockTitle = h2(['title'], 'I know');
-        const notGuessedCount = span([styles.count, styles.red], String(this.notGuessedSentences.length));
-        const guessedCount = span([styles.count, styles.green], String(this.guessedSentences.length));
-        const notGuessedTitleWrapper = div([styles['title-wrapper']]);
-        const guessedTitleWrapper = div([styles['title-wrapper']]);
-        const notGuessedSentencesList = StatisticPage.createSentencesList(this.notGuessedSentences);
-        const guessedSentencesList = StatisticPage.createSentencesList(this.guessedSentences);
+        // artwork block
+        const artworkBlock = div([styles['artwork-block']]);
+        const miniatureBlock = div([styles.miniature]);
+        const miniatureImg = img(['img']);
+        const textBlock = div(['text-block']);
+        const authorName = span(['author-name'], `${this.artworkData?.author} - `);
+        const miniatureName = span(['miniature-name'], `${this.artworkData?.name} `);
+        const year = span(['year'], `(${this.artworkData?.year})`);
+        miniatureImg.setAttribute(
+            ImageAttribute.SRC,
+            `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/${this.artworkData?.cutSrc}`,
+        );
+        miniatureImg.setAttribute(ImageAttribute.ALT, `${this.artworkData?.name} Miniature`);
+        miniatureBlock.append(miniatureImg);
+        textBlock.appendChildren([authorName, miniatureName, year]);
+        artworkBlock.appendChildren([miniatureBlock, textBlock]);
 
+        // not guessed block
+        const notGuessedBlock = div([styles['not-guessed']]);
+        const notGuessedBlockTitle = h2(['title'], "I don't know");
+        const notGuessedCount = span([styles.count, styles.red], String(this.notGuessedSentences.length));
+        const notGuessedTitleWrapper = div([styles['title-wrapper']]);
+        const notGuessedSentencesList = StatisticPage.createSentencesList(this.notGuessedSentences);
         notGuessedTitleWrapper.appendChildren([notGuessedBlockTitle, notGuessedCount]);
-        guessedTitleWrapper.appendChildren([guessedBlockTitle, guessedCount]);
         notGuessedBlock.appendChildren([notGuessedTitleWrapper, notGuessedSentencesList]);
+
+        // guessed block
+        const guessedBlock = div([styles.guessed]);
+        const guessedBlockTitle = h2(['title'], 'I know');
+        const guessedCount = span([styles.count, styles.green], String(this.guessedSentences.length));
+        const guessedTitleWrapper = div([styles['title-wrapper']]);
+        const guessedSentencesList = StatisticPage.createSentencesList(this.guessedSentences);
+        guessedTitleWrapper.appendChildren([guessedBlockTitle, guessedCount]);
         guessedBlock.appendChildren([guessedTitleWrapper, guessedSentencesList]);
+
+        // continue button block
         const continueButton = button(['btn', styles.button], 'Continue Game', this.continueGame);
+
         document.body.classList.add('background');
         this.appendChildren([artworkBlock, notGuessedBlock, guessedBlock, continueButton]);
     }
@@ -53,9 +77,11 @@ export default class StatisticPage extends BaseComponent {
 
             this.guessedSentences = gameState.guessedToStatistic;
             this.notGuessedSentences = gameState.notGuessedToStatistic;
+            this.artworkData = gameState.artwork;
         } else {
             this.guessedSentences = [];
             this.notGuessedSentences = [];
+            this.artworkData = null;
         }
     }
 
