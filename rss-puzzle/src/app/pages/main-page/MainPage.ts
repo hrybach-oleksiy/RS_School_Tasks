@@ -276,11 +276,31 @@ export default class MainPage extends BaseComponent {
             }
         }
 
+        console.log(this.sentence);
+
         if (this.isOrderCorrect) {
             this.checkButton.removeListener('click', this.checkGuess);
             this.checkButton.setTextContent('Continue');
             this.checkButton.addListener('click', this.handleContinueButton);
             MainPage.showTranslationByLevelComplete();
+            this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
+
+            if (!this.isSentenceAutocompleted) {
+                this.addGuessedToStatistic();
+            }
+
+            if (this.sentence === 9) {
+                const completeButton = this.autocompleteButton.getNode();
+                completeButton.remove();
+                this.resultsButton.removeClass(styles.hidden);
+
+                MainPage.saveGameState(
+                    this.guessedSentences,
+                    this.guessedToStatistic,
+                    this.notGuessedToStatistic,
+                    this.sentence,
+                );
+            }
         }
     };
 
@@ -303,8 +323,6 @@ export default class MainPage extends BaseComponent {
         } else {
             this.notGuessedToStatistic.splice(this.sentence, 1);
         }
-
-        console.log('NOT guessed to statistic', this.notGuessedToStatistic);
     }
 
     private addGuessedToStatistic() {
@@ -313,8 +331,6 @@ export default class MainPage extends BaseComponent {
         } else {
             this.guessedToStatistic.splice(this.sentence, 1);
         }
-
-        console.log('guessed to statistic', this.guessedToStatistic);
     }
 
     static changeButtonState(btn: BaseComponent, condition: boolean) {
@@ -347,9 +363,9 @@ export default class MainPage extends BaseComponent {
             this.notGuessedToStatistic = [];
         }
 
-        if (!this.isSentenceAutocompleted) {
-            this.addGuessedToStatistic();
-        }
+        // if (!this.isSentenceAutocompleted) {
+        //     this.addGuessedToStatistic();
+        // }
 
         this.isOrderCorrect = false;
         this.guessedElements = [];
@@ -362,6 +378,7 @@ export default class MainPage extends BaseComponent {
             this.notGuessedToStatistic,
             this.sentence,
         );
+
         this.fetchData(this.level);
     };
 
@@ -399,6 +416,8 @@ export default class MainPage extends BaseComponent {
             templateElement.innerHTML = '';
         });
 
+        this.isSentenceAutocompleted = true;
+
         this.checkWin();
         this.checkGuess();
         this.enableCheckButton();
@@ -406,15 +425,8 @@ export default class MainPage extends BaseComponent {
         this.autocompleteButton.setAttribute(FormAttribute.DISABLED, 'true');
         MainPage.showTranslationByLevelComplete();
         MainPage.showAudioByLevelComplete();
+
         this.addNotGuessedToStatistic();
-
-        if (this.sentence === 9) {
-            const completeButton = this.autocompleteButton.getNode();
-            completeButton.remove();
-            this.resultsButton.removeClass(styles.hidden);
-        }
-
-        this.isSentenceAutocompleted = true;
     };
 
     static showTranslationByLevelComplete() {
@@ -508,6 +520,13 @@ export default class MainPage extends BaseComponent {
     }
 
     private openStatisticPage = () => {
+        MainPage.saveGameState(
+            this.guessedSentences,
+            this.guessedToStatistic,
+            this.notGuessedToStatistic,
+            this.sentence,
+        );
+
         if (this.setAppState) {
             this.setAppState(AppPage.STATISTIC_PAGE);
         }

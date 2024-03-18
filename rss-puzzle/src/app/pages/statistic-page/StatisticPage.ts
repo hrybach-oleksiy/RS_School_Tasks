@@ -1,25 +1,24 @@
 import BaseComponent from '../../components/BaseComponent';
-import { div, h2, ul, li, span } from '../../components/HTMLComponents';
-// import assertIsDefined from '../../../utilities/assertIsDefined';
-// import MainPage from '../main-page/MainPage';
+import { div, h2, ul, li, span, button } from '../../components/HTMLComponents';
+import { AppPage } from '../../../types/enums';
 
 import styles from './StatisticPage.module.scss';
 // import { AppPage } from '../../../types/enums';
 
 export default class StatisticPage extends BaseComponent {
-    // private setAppState?: (page: string) => void;
+    private setAppState?: (page: string) => void;
 
     private guessedSentences: string[][] = [];
 
     private notGuessedSentences: string[][] = [];
 
-    constructor() {
+    constructor(setAppState?: (page: string) => void) {
         super({
             tag: 'section',
             classNames: [styles.statistic],
         });
 
-        // this.setAppState = setAppState;
+        this.setAppState = setAppState;
         this.getGameState();
         this.SetPage();
     }
@@ -41,11 +40,9 @@ export default class StatisticPage extends BaseComponent {
         guessedTitleWrapper.appendChildren([guessedBlockTitle, guessedCount]);
         notGuessedBlock.appendChildren([notGuessedTitleWrapper, notGuessedSentencesList]);
         guessedBlock.appendChildren([guessedTitleWrapper, guessedSentencesList]);
-        // const startGameButton = button(['btn', styles.button], 'Start Game', () => {
-        //     this.startGame();
-        // });
+        const continueButton = button(['btn', styles.button], 'Continue Game', this.continueGame);
         document.body.classList.add('background');
-        this.appendChildren([artworkBlock, notGuessedBlock, guessedBlock]);
+        this.appendChildren([artworkBlock, notGuessedBlock, guessedBlock, continueButton]);
     }
 
     private getGameState() {
@@ -77,9 +74,9 @@ export default class StatisticPage extends BaseComponent {
         return ulElement;
     }
 
-    // private startGame() {
-    //     if (this.setAppState) {
-    //         this.setAppState(AppPage.MAIN_PAGE);
-    //     }
-    // }
+    private continueGame = () => {
+        if (this.setAppState) {
+            this.setAppState(AppPage.MAIN_PAGE);
+        }
+    };
 }

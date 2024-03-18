@@ -45,7 +45,7 @@ export default class Main extends BaseComponent {
         }
 
         if (this.page === AppPage.STATISTIC_PAGE) {
-            const statisticPage = new StatisticPage();
+            const statisticPage = new StatisticPage(this.setAppState);
             this.append(statisticPage);
         }
     }

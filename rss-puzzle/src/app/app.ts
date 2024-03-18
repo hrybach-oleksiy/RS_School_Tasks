@@ -20,13 +20,13 @@ export default class App {
         document.body.setAttribute('data-theme', 'light');
         this.getUserData();
 
-        // if (this.userData) {
-        //     this.appState.currentPage = AppPage.START_PAGE;
-        // }
-
         if (this.userData) {
-            this.appState.currentPage = AppPage.STATISTIC_PAGE;
+            this.appState.currentPage = AppPage.START_PAGE;
         }
+
+        // if (this.userData) {
+        //     this.appState.currentPage = AppPage.STATISTIC_PAGE;
+        // }
     }
 
     public createLayout() {
