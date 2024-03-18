@@ -19,6 +19,15 @@
     font-size: 24px;
 }
 
+.audio-icon-wrapper {
+    order: -1;
+}
+
+.audio-img {
+    width: 40px;
+    cursor: pointer;
+}
+
 .miniature {
     width: 300px;
 }
@@ -35,6 +44,12 @@
     flex-direction: column;
     gap: 15px;
     font-size: 24px;
+}
+
+.list-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 .title-wrapper {

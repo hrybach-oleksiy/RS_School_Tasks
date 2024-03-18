@@ -46,6 +46,10 @@ export default class MainPage extends BaseComponent {
 
     private audioExample: string = '';
 
+    private guessedAudioExamples: string[] = [];
+
+    private noteGuessedAudioExamples: string[] = [];
+
     private hintsState: HintsState = {
         translation: true,
         pronunciation: true,
@@ -219,6 +223,8 @@ export default class MainPage extends BaseComponent {
         this.guessedSentences = [];
         this.guessedToStatistic = [];
         this.notGuessedToStatistic = [];
+        this.guessedAudioExamples = [];
+        this.noteGuessedAudioExamples = [];
         this.round = 1;
         this.sentence = 0;
         this.fetchData(this.level);
@@ -237,6 +243,8 @@ export default class MainPage extends BaseComponent {
         this.guessedSentences = [];
         this.guessedToStatistic = [];
         this.notGuessedToStatistic = [];
+        this.guessedAudioExamples = [];
+        this.noteGuessedAudioExamples = [];
         this.sentence = 0;
         this.fetchData(this.level);
         MainPage.saveRoundState(currentRoundValue);
@@ -308,6 +316,8 @@ export default class MainPage extends BaseComponent {
                     this.notGuessedToStatistic,
                     this.sentence,
                     this.levelData,
+                    this.guessedAudioExamples,
+                    this.noteGuessedAudioExamples,
                 );
             }
         }
@@ -329,16 +339,20 @@ export default class MainPage extends BaseComponent {
     private addNotGuessedToStatistic() {
         if (this.isOrderCorrect) {
             this.notGuessedToStatistic.push(this.correctWordOrder);
+            this.noteGuessedAudioExamples.push(this.audioExample);
         } else {
             this.notGuessedToStatistic.splice(this.sentence, 1);
+            this.noteGuessedAudioExamples.slice(this.sentence, 1);
         }
     }
 
     private addGuessedToStatistic() {
         if (this.isOrderCorrect) {
             this.guessedToStatistic.push(this.correctWordOrder);
+            this.guessedAudioExamples.push(this.audioExample);
         } else {
             this.guessedToStatistic.splice(this.sentence, 1);
+            this.guessedAudioExamples.slice(this.sentence, 1);
         }
     }
 
@@ -360,6 +374,8 @@ export default class MainPage extends BaseComponent {
             this.guessedSentences = [];
             this.guessedToStatistic = [];
             this.notGuessedToStatistic = [];
+            this.guessedAudioExamples = [];
+            this.noteGuessedAudioExamples = [];
         }
 
         if (this.round === this.roundsCount + 1) {
@@ -370,6 +386,8 @@ export default class MainPage extends BaseComponent {
             this.guessedSentences = [];
             this.guessedToStatistic = [];
             this.notGuessedToStatistic = [];
+            this.guessedAudioExamples = [];
+            this.noteGuessedAudioExamples = [];
         }
 
         // if (!this.isSentenceAutocompleted) {
@@ -387,6 +405,8 @@ export default class MainPage extends BaseComponent {
             this.notGuessedToStatistic,
             this.sentence,
             this.levelData,
+            this.guessedAudioExamples,
+            this.noteGuessedAudioExamples,
         );
 
         this.fetchData(this.level);
@@ -482,6 +502,8 @@ export default class MainPage extends BaseComponent {
         notGuessedToStatisticValue: string[][],
         sentence: number,
         artworkData: LevelData,
+        guessedAudio: string[],
+        notGuessedAudio: string[],
     ) {
         const gameState = {
             guessedSentences: guessedSentencesValue,
@@ -489,6 +511,8 @@ export default class MainPage extends BaseComponent {
             notGuessedToStatistic: notGuessedToStatisticValue,
             sentenceNumber: sentence,
             artwork: artworkData,
+            guessedAudioExamples: guessedAudio,
+            notGuessedAudioExamples: notGuessedAudio,
         };
         const gameStateJSON = JSON.stringify(gameState);
 
@@ -538,6 +562,8 @@ export default class MainPage extends BaseComponent {
             this.notGuessedToStatistic,
             this.sentence,
             this.levelData,
+            this.guessedAudioExamples,
+            this.noteGuessedAudioExamples,
         );
 
         if (this.setAppState) {

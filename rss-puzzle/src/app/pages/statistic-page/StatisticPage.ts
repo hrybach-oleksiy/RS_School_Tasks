@@ -4,7 +4,9 @@ import { AppPage, ImageAttribute } from '../../../types/enums';
 import { LevelData } from '../../../types/interfaces';
 
 import styles from './StatisticPage.module.scss';
-// import { AppPage } from '../../../types/enums';
+
+import audioIconImage from '../../../assets/images/audio-icon-statistic.svg';
+import playingIconImage from '../../../assets/images/audio-icon-statistic-playing.svg';
 
 export default class StatisticPage extends BaseComponent {
     private setAppState?: (page: string) => void;
@@ -15,6 +17,12 @@ export default class StatisticPage extends BaseComponent {
 
     private artworkData: LevelData | null = null;
 
+    private guessedAudioExamples: string[] = [];
+
+    private notGuessedAudioExamples: string[] = [];
+
+    private isPlaying: boolean = false;
+
     constructor(setAppState?: (page: string) => void) {
         super({
             tag: 'section',
@@ -24,6 +32,7 @@ export default class StatisticPage extends BaseComponent {
         this.setAppState = setAppState;
         this.getGameState();
         this.SetPage();
+        console.log();
     }
 
     private SetPage() {
@@ -49,7 +58,10 @@ export default class StatisticPage extends BaseComponent {
         const notGuessedBlockTitle = h2(['title'], "I don't know");
         const notGuessedCount = span([styles.count, styles.red], String(this.notGuessedSentences.length));
         const notGuessedTitleWrapper = div([styles['title-wrapper']]);
-        const notGuessedSentencesList = StatisticPage.createSentencesList(this.notGuessedSentences);
+        const notGuessedSentencesList = this.createSentencesList(
+            this.notGuessedSentences,
+            this.notGuessedAudioExamples,
+        );
         notGuessedTitleWrapper.appendChildren([notGuessedBlockTitle, notGuessedCount]);
         notGuessedBlock.appendChildren([notGuessedTitleWrapper, notGuessedSentencesList]);
 
@@ -58,7 +70,7 @@ export default class StatisticPage extends BaseComponent {
         const guessedBlockTitle = h2(['title'], 'I know');
         const guessedCount = span([styles.count, styles.green], String(this.guessedSentences.length));
         const guessedTitleWrapper = div([styles['title-wrapper']]);
-        const guessedSentencesList = StatisticPage.createSentencesList(this.guessedSentences);
+        const guessedSentencesList = this.createSentencesList(this.guessedSentences, this.guessedAudioExamples);
         guessedTitleWrapper.appendChildren([guessedBlockTitle, guessedCount]);
         guessedBlock.appendChildren([guessedTitleWrapper, guessedSentencesList]);
 
@@ -78,23 +90,35 @@ export default class StatisticPage extends BaseComponent {
             this.guessedSentences = gameState.guessedToStatistic;
             this.notGuessedSentences = gameState.notGuessedToStatistic;
             this.artworkData = gameState.artwork;
+            this.guessedAudioExamples = gameState.guessedAudioExamples;
+            this.notGuessedAudioExamples = gameState.notGuessedAudioExamples;
         } else {
             this.guessedSentences = [];
             this.notGuessedSentences = [];
             this.artworkData = null;
+            this.guessedAudioExamples = [];
+            this.notGuessedAudioExamples = [];
         }
     }
 
-    static createSentencesList(sentencesList: string[][]) {
+    private createSentencesList(sentencesList: string[][], audioExamples: string[]) {
         const ulElement = ul([styles.list]);
 
         if (sentencesList) {
-            sentencesList.forEach((sentence) => {
-                const liElement = li(['list-item'], sentence.join(' '));
+            sentencesList.forEach((sentence, index) => {
+                const liElement = li([styles['list-item']], sentence.join(' '));
+                const audioIconWrapper = div([styles['audio-icon-wrapper']]);
+                const audioIcon = img([styles['audio-img']]);
+                audioIcon.setAttribute(ImageAttribute.SRC, audioIconImage);
+                audioIconWrapper.addListener('click', () => {
+                    this.handleAudioIconClick(audioExamples[index], audioIcon);
+                });
+                audioIconWrapper.append(audioIcon);
+                liElement.append(audioIconWrapper);
                 ulElement.append(liElement);
             });
         } else {
-            ulElement.append(li(['list-item'], ''));
+            ulElement.append(li([styles['list-item']], ''));
         }
 
         return ulElement;
@@ -103,6 +127,21 @@ export default class StatisticPage extends BaseComponent {
     private continueGame = () => {
         if (this.setAppState) {
             this.setAppState(AppPage.MAIN_PAGE);
+        }
+    };
+
+    private handleAudioIconClick = (example: string, iconElement: BaseComponent) => {
+        const audio = new Audio();
+
+        if (!this.isPlaying) {
+            iconElement.setAttribute(ImageAttribute.SRC, playingIconImage);
+            audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/${example}`;
+            audio.play();
+            this.isPlaying = true;
+            audio.onended = () => {
+                this.isPlaying = false;
+                iconElement.setAttribute(ImageAttribute.SRC, audioIconImage);
+            };
         }
     };
 }
