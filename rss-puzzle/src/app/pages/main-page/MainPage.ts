@@ -69,6 +69,10 @@ export default class MainPage extends BaseComponent {
 
     private isSentenceAutocompleted: boolean = false;
 
+    private completedRounds: number[] = [];
+
+    private completedLevels: number[] = [];
+
     constructor(setAppState: (page: string) => void) {
         super({
             tag: 'section',
@@ -319,6 +323,8 @@ export default class MainPage extends BaseComponent {
                     this.levelData,
                     this.guessedAudioExamples,
                     this.noteGuessedAudioExamples,
+                    this.completedRounds,
+                    this.completedLevels,
                 );
             }
         }
@@ -370,6 +376,7 @@ export default class MainPage extends BaseComponent {
 
         if (this.sentence === 10) {
             console.log('next round starts');
+            this.completedRounds.push(this.round);
             this.round += 1;
             this.sentence = 0;
             this.clearGuessedData();
@@ -377,6 +384,8 @@ export default class MainPage extends BaseComponent {
 
         if (this.round === this.roundsCount + 1) {
             console.log('next level starts');
+            this.completedLevels.push(this.level);
+            this.completedRounds = [];
             this.level += 1;
             this.round = 1;
             this.sentence = 0;
@@ -396,6 +405,8 @@ export default class MainPage extends BaseComponent {
             this.levelData,
             this.guessedAudioExamples,
             this.noteGuessedAudioExamples,
+            this.completedRounds,
+            this.completedLevels,
         );
 
         if (this.sentence === 9) {
@@ -404,6 +415,7 @@ export default class MainPage extends BaseComponent {
         }
 
         if (this.level > 6) {
+            this.completedLevels = [];
             this.level = 1;
         }
 
@@ -520,6 +532,8 @@ export default class MainPage extends BaseComponent {
         artworkData: LevelData,
         guessedAudio: string[],
         notGuessedAudio: string[],
+        completedRounds: number[],
+        completedLevels: number[],
     ) {
         const gameState = {
             guessedSentences: guessedSentencesValue,
@@ -529,6 +543,8 @@ export default class MainPage extends BaseComponent {
             artwork: artworkData,
             guessedAudioExamples: guessedAudio,
             notGuessedAudioExamples: notGuessedAudio,
+            completedRounds,
+            completedLevels,
         };
         const gameStateJSON = JSON.stringify(gameState);
 
@@ -563,14 +579,16 @@ export default class MainPage extends BaseComponent {
             this.guessedToStatistic = gameState.guessedToStatistic;
             this.notGuessedToStatistic = gameState.notGuessedToStatistic;
             this.sentence = gameState.sentenceNumber;
+            this.completedRounds = gameState.completedRounds;
+            this.completedLevels = gameState.completedLevels;
         } else {
             this.guessedSentences = [];
             this.guessedToStatistic = [];
             this.notGuessedToStatistic = [];
             this.sentence = 0;
+            this.completedRounds = [];
+            this.completedLevels = [];
         }
-
-        console.log('level before fetching', this.level);
 
         this.fetchData(this.level);
     }
@@ -584,6 +602,8 @@ export default class MainPage extends BaseComponent {
             this.levelData,
             this.guessedAudioExamples,
             this.noteGuessedAudioExamples,
+            this.completedRounds,
+            this.completedLevels,
         );
 
         if (this.setAppState) {

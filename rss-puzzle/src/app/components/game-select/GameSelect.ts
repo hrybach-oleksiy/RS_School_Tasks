@@ -26,10 +26,10 @@ export default class GameSelect extends BaseComponent {
 
     private setBlock() {
         const selectLabel = label(['select-label'], this.title);
-        const selectElement = select(['select']);
+        const selectElement = select([styles.select]);
 
         for (let i = 1; i <= this.optionsCount; i += 1) {
-            const optionElement = option([`${this.title.toLowerCase()}-option`], `${i}`);
+            const optionElement = option([`${this.title.toLowerCase()}-option`, styles.option], `${i}`);
 
             optionElement.setAttribute(FormAttribute.VALUE, `${i}`);
 
