@@ -1,7 +1,7 @@
 import BaseComponent from '../../components/BaseComponent';
 import { div, h2, ul, li, span, button, img } from '../../components/HTMLComponents';
 
-import { ImageAttribute } from '../../../types/enums';
+import { AppPage, ImageAttribute } from '../../../types/enums';
 import { LevelData } from '../../../types/interfaces';
 
 import audioIconImage from '../../../assets/images/audio-icon-statistic.svg';
@@ -75,7 +75,7 @@ export default class StatisticPage extends BaseComponent {
         guessedBlock.appendChildren([guessedTitleWrapper, guessedSentencesList]);
 
         // continue button block
-        const continueButton = button(['btn', styles.button], 'Continue Game');
+        const continueButton = button(['btn', styles.button], 'Continue Game', this.continueGame);
 
         document.body.classList.add('background');
         this.appendChildren([artworkBlock, notGuessedBlock, guessedBlock, continueButton]);
@@ -125,11 +125,11 @@ export default class StatisticPage extends BaseComponent {
         return ulElement;
     }
 
-    // private continueGame = () => {
-    //     if (this.setAppState) {
-    //         this.setAppState(AppPage.MAIN_PAGE);
-    //     }
-    // };
+    private continueGame = () => {
+        if (this.setAppState) {
+            this.setAppState(AppPage.MAIN_PAGE);
+        }
+    };
 
     private handleAudioIconClick = (example: string, iconElement: BaseComponent) => {
         const audio = new Audio();

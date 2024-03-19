@@ -9,6 +9,7 @@ import { GameData, HintsState, LevelData } from '../../../types/interfaces';
 import { FormAttribute, AppPage } from '../../../types/enums';
 
 import styles from './MainPage.module.scss';
+// import levelsStyles from '../../components/game-select/GameSelect.module.scss';
 
 export default class MainPage extends BaseComponent {
     private gameData!: GameData;
@@ -76,7 +77,6 @@ export default class MainPage extends BaseComponent {
 
         this.setAppState = setAppState;
         this.getGameState();
-        this.fetchData(1);
         this.addListener('click', this.handleWordClick);
     }
 
@@ -180,6 +180,7 @@ export default class MainPage extends BaseComponent {
             const resultParts = document.querySelectorAll('.result-template .part');
 
             currentWord.classList.add(styles['remove-animation']);
+
             resultParts.forEach((part) => {
                 part.classList.remove('match');
                 part.classList.remove('mismatch');
@@ -201,8 +202,10 @@ export default class MainPage extends BaseComponent {
             currentWord.classList.add(styles['remove-animation']);
 
             this.addWordsToGuessed(currentWord);
+
             resultBlockTemplates[count].append(currentWord);
             count += 1;
+
             if (count === this.stringLength) {
                 count = 0;
             }
@@ -231,7 +234,7 @@ export default class MainPage extends BaseComponent {
         this.round = 1;
         this.sentence = 0;
         this.fetchData(this.level);
-        MainPage.saveLevelState(currentLevelValue);
+        this.saveLevelState(currentLevelValue);
         localStorage.removeItem('gameState');
     };
 
@@ -246,7 +249,7 @@ export default class MainPage extends BaseComponent {
         this.clearGuessedData();
         this.sentence = 0;
         this.fetchData(this.level);
-        MainPage.saveRoundState(currentRoundValue);
+        this.saveRoundState(currentRoundValue);
         localStorage.removeItem('gameState');
     };
 
@@ -394,6 +397,15 @@ export default class MainPage extends BaseComponent {
             this.noteGuessedAudioExamples,
         );
 
+        if (this.sentence === 9) {
+            this.saveRoundState();
+            this.saveLevelState();
+        }
+
+        if (this.level > 6) {
+            this.level = 1;
+        }
+
         this.fetchData(this.level);
     };
 
@@ -467,15 +479,33 @@ export default class MainPage extends BaseComponent {
         }
     }
 
-    static saveLevelState(value: number) {
-        const levelState = { level: value };
+    private saveLevelState(value?: number) {
+        const currentLevelOptionElement = document.querySelector(`.level-option[selected='true']`) as HTMLOptionElement;
+        let levelValue = Number(currentLevelOptionElement.value);
+
+        if (levelValue === 6 && this.round === this.roundsCount) {
+            levelValue = 1;
+        }
+
+        if (this.round === this.roundsCount && this.level < 6) {
+            levelValue += 1;
+        }
+
+        const levelState = { level: value || levelValue };
         const levelStateJSON = JSON.stringify(levelState);
 
         localStorage.setItem('levelState', levelStateJSON);
     }
 
-    static saveRoundState(value: number) {
-        const roundState = { round: value };
+    private saveRoundState(value?: number) {
+        const currentRoundOptionElement = document.querySelector(`.round-option[selected='true']`) as HTMLOptionElement;
+        let roundValue = Number(currentRoundOptionElement.value) + 1;
+
+        if (roundValue === this.roundsCount + 1) {
+            roundValue = 1;
+        }
+
+        const roundState = { round: value || roundValue };
         const roundStateJSON = JSON.stringify(roundState);
 
         localStorage.setItem('roundState', roundStateJSON);
@@ -538,6 +568,10 @@ export default class MainPage extends BaseComponent {
             this.notGuessedToStatistic = [];
             this.sentence = 0;
         }
+
+        console.log('level before fetching', this.level);
+
+        this.fetchData(this.level);
     }
 
     private openStatisticPage = () => {
@@ -554,6 +588,8 @@ export default class MainPage extends BaseComponent {
         if (this.setAppState) {
             this.setAppState(AppPage.STATISTIC_PAGE);
         }
+
+        this.handleContinueButton();
     };
 
     private clearGuessedData() {
