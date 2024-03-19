@@ -19,7 +19,7 @@ export interface WordsData {
 export interface LevelData {
     id?: string;
     name: string;
-    imageSrc?: string;
+    imageSrc: string;
     cutSrc: string;
     author: string;
     year: string;

@@ -96,7 +96,7 @@ export default class MainPage extends BaseComponent {
         );
 
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
-        this.sourceBlock = new SourceDataBlock(this.words);
+        this.sourceBlock = new SourceDataBlock(this.words, this.levelData.imageSrc);
 
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
         this.checkButton.setTextContent('Check Answer');
@@ -128,6 +128,7 @@ export default class MainPage extends BaseComponent {
             cutSrc: round.levelData.cutSrc,
             author: round.levelData.author,
             year: round.levelData.year,
+            imageSrc: round.levelData.imageSrc,
         };
         console.log(this.correctWordOrder);
 
