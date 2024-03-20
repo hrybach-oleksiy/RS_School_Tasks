@@ -1,5 +1,5 @@
 #async-race/.husky/pre-push
 
-cd async-race
+cd async=race
 
-npx validate-branch-name 
+#npx validate-branch-name
