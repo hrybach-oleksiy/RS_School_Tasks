@@ -1,0 +1,85 @@
+.statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 60%;
+    margin: 20px 0;
+    padding: 20px 15px;
+    background-color: #e1d4c9;
+    border-radius: 100px;
+}
+
+.artwork-block {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.audio-icon-wrapper {
+    order: -1;
+}
+
+.audio-img {
+    width: 40px;
+    cursor: pointer;
+}
+
+.miniature {
+    width: 300px;
+
+    @media screen and (width <= 900px) {
+        width: 200px;
+    }
+}
+
+.not-guessed,
+.guessed {
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+.list-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.title-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #e1d4c9;
+    font-weight: 700;
+    border-radius: 50%;
+}
+
+.red {
+    background-color: #f00;
+}
+
+.green {
+    background-color: #008000;
+}
+
+.button {
+    align-self: center;
+}
