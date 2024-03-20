@@ -1,5 +1,5 @@
-#rss-puzzle/.husky/pre-commit
+#async-race/.husky/pre-push
 
-cd rss-puzzle
+cd async-race
 
 npx validate-branch-name 
