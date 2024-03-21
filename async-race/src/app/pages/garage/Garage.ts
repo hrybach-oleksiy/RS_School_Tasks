@@ -5,13 +5,6 @@ import { Endpoint } from '../../../types/enums';
 
 import styles from './Garage.module.scss';
 
-// div class="container-garage">
-//         <h1 class="title">Garage <span class="count-garage"></span></h1>
-//         <h3 class="title">Page #<span class="count-page">1</span></h3>
-
-//         <div class="container-car"></div>
-// </div>
-
 export default class Garage extends BaseComponent {
     private totalCars: number = 0;
 
