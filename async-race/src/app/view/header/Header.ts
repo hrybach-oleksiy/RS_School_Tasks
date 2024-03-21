@@ -1,38 +1,54 @@
 import BaseComponent from '../../components/BaseComponent';
-import { p, button } from '../../components/HTMLComponents';
-
-import { AppPage } from '../../../types/enums';
+import { p, button, div } from '../../components/HTMLComponents';
 
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
-    private setAppState: (page: string) => void;
-
-    private currentPage: string;
-
-    constructor(setAppState: (page: string) => void, currentPage: string) {
+    constructor() {
         super(
             {
                 tag: 'header',
                 classNames: [styles.header],
             },
-            p([styles['header-title']], 'RSS Puzzle'),
+            p([styles['header-title']], 'Async Race'),
         );
 
-        this.setAppState = setAppState;
-        this.currentPage = currentPage;
         this.setContent();
     }
 
-    setContent() {
-        const logoutButton = button(['btn'], 'Log out', () => {
-            document.body.classList.remove('background');
-            localStorage.clear();
-            this.setAppState(AppPage.LOGIN);
-        });
+    private setContent() {
+        const buttonsWrapper = div([styles.wrapper]);
+        const garageButton = button(['btn', 'header-btn'], 'Garage', Header.changeView);
+        garageButton.addClass(styles.active);
 
-        if (this.currentPage !== AppPage.LOGIN) {
-            this.append(logoutButton);
-        }
+        const winnersButton = button(['btn', 'header-btn'], 'Winners', Header.changeView);
+
+        buttonsWrapper.appendChildren([garageButton, winnersButton]);
+        this.append(buttonsWrapper);
     }
+
+    static changeView = (event: Event) => {
+        const currentButton = event.target as HTMLButtonElement;
+        const pages = document.querySelectorAll('.page');
+        const buttonElements = document.querySelectorAll('.header-btn');
+        const currentView = currentButton.textContent;
+
+        if (currentView === 'Garage') {
+            pages[1].classList.add('hidden');
+            pages[0].classList.remove('hidden');
+        }
+
+        if (currentView === 'Winners') {
+            pages[0].classList.add('hidden');
+            pages[1].classList.remove('hidden');
+        }
+
+        buttonElements.forEach((buttonElement) => {
+            if (buttonElement.classList.contains(styles.active)) {
+                buttonElement.classList.remove(styles.active);
+            } else {
+                buttonElement.classList.add(styles.active);
+            }
+        });
+    };
 }

@@ -1,4 +1,7 @@
 import './scss/styles.scss';
 import './index.html';
 
-console.log('Hello');
+import App from './app/app';
+
+const app = new App();
+app.createLayout();

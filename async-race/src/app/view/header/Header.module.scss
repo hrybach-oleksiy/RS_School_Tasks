@@ -13,3 +13,13 @@
 .header-title {
     font-size: 24px;
 }
+
+.wrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.active {
+    background-color: #994c4c;
+    color: #f0f8ff;
+}
