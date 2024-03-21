@@ -1,5 +1,5 @@
 import BaseComponent from './BaseComponent';
-import Input from './input/Input';
+// import Input from './input/Input';
 import Button from './button/Button';
 
 type EventCallback = EventListener;
@@ -14,14 +14,14 @@ const h2 = (classNames: string[], text: string) => new BaseComponent({ tag: 'h2'
 
 const span = (classNames: string[], text: string) => new BaseComponent({ tag: 'span', classNames, text });
 
-const input = (
-    classNames: string[],
-    id: string,
-    name: string,
-    placeholder: string,
-    required: string,
-    onChange?: EventCallback,
-) => new Input({ classNames, id, name, placeholder, required, onChange });
+// const input = (
+//     classNames: string[],
+//     id: string,
+//     name: string,
+//     placeholder: string,
+//     required: string,
+//     onChange?: EventCallback,
+// ) => new Input({ classNames, id, name, placeholder, required, onChange });
 
 const label = (classNames: string[], text: string) => new BaseComponent({ tag: 'label', classNames, text });
 
@@ -39,4 +39,4 @@ const ul = (classNames: string[]) => new BaseComponent({ tag: 'ul', classNames }
 const li = (classNames: string[], text: string) => new BaseComponent({ tag: 'li', classNames, text });
 const a = (classNames: string[]) => new BaseComponent({ tag: 'a', classNames });
 
-export { div, p, h1, input, button, label, span, h2, img, select, option, ul, li, a };
+export { div, p, h1, button, label, span, h2, img, select, option, ul, li, a };

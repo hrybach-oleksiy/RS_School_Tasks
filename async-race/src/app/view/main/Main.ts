@@ -3,11 +3,13 @@ import BaseComponent from '../../components/BaseComponent';
 import Garage from '../../pages/garage/Garage';
 import Winners from '../../pages/winners/Winners';
 
+import styles from './Main.module.scss';
+
 export default class Main extends BaseComponent {
     constructor() {
         super({
             tag: 'main',
-            classNames: ['main'],
+            classNames: [styles.main],
         });
         this.setPage();
     }

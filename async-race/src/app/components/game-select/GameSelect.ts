@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent';
-import { select, option, label } from '../HTMLComponents';
+// import { select, option, label } from '../HTMLComponents';
 
-import { FormAttribute } from '../../../types/enums';
+// import { FormAttribute } from '../../../types/enums';
 
 import styles from './GameSelect.module.scss';
 
@@ -21,24 +21,24 @@ export default class GameSelect extends BaseComponent {
         this.title = title;
         this.optionsCount = optionsCount;
         this.optionValue = optionValue;
-        this.setBlock();
+        // this.setBlock();
     }
 
-    private setBlock() {
-        const selectLabel = label(['select-label'], this.title);
-        const selectElement = select([styles.select]);
+    // private setBlock() {
+    //     const selectLabel = label(['select-label'], this.title);
+    //     const selectElement = select([styles.select]);
 
-        for (let i = 1; i <= this.optionsCount; i += 1) {
-            const optionElement = option([`${this.title.toLowerCase()}-option`, styles.option], `${i}`);
+    //     for (let i = 1; i <= this.optionsCount; i += 1) {
+    //         const optionElement = option([`${this.title.toLowerCase()}-option`, styles.option], `${i}`);
 
-            optionElement.setAttribute(FormAttribute.VALUE, `${i}`);
+    //         optionElement.setAttribute(FormAttribute.VALUE, `${i}`);
 
-            if (i === this.optionValue) {
-                optionElement.setAttribute(FormAttribute.SELECTED, `true`);
-            }
-            selectElement.append(optionElement);
-        }
+    //         if (i === this.optionValue) {
+    //             optionElement.setAttribute(FormAttribute.SELECTED, `true`);
+    //         }
+    //         selectElement.append(optionElement);
+    //     }
 
-        this.appendChildren([selectLabel, selectElement]);
-    }
+    //     this.appendChildren([selectLabel, selectElement]);
+    // }
 }

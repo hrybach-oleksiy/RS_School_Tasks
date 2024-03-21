@@ -1,4 +1,4 @@
-import { FormAttribute, ImageAttribute, LinkAttribute } from '../../types/enums';
+import { LinkAttribute, ImageAttribute } from '../../types/enums';
 
 interface BaseComponentProps {
     tag?: string;
@@ -6,7 +6,7 @@ interface BaseComponentProps {
     text?: string;
 }
 
-type AttributeType = FormAttribute | ImageAttribute | LinkAttribute;
+type AttributeType = LinkAttribute | ImageAttribute;
 
 export default class BaseComponent {
     private children: BaseComponent[] = [];
@@ -47,7 +47,7 @@ export default class BaseComponent {
         this.node.textContent = content;
     }
 
-    public setAttribute(attribute: FormAttribute | ImageAttribute | LinkAttribute, value: string) {
+    public setAttribute(attribute: LinkAttribute | ImageAttribute, value: string) {
         this.node.setAttribute(attribute, value);
     }
 

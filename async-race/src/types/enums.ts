@@ -1,23 +1,29 @@
-enum FormAttribute {
-    PLACEHOLDER = 'placeholder',
-    TYPE = 'type',
-    NAME = 'name',
-    ID = 'id',
-    FOR = 'for',
-    REQUIRED = 'required',
-    ACTION = 'action',
-    DISABLED = 'disabled',
-    CHECKED = 'checked',
-    VALUE = 'value',
-    SELECTED = 'selected',
+enum Endpoint {
+    GARAGE = 'garage',
+    ENGINE = 'engine',
+    WINNERS = 'winners',
 }
 
-enum AppPage {
-    LOGIN = 'login',
-    START_PAGE = 'start page',
-    MAIN_PAGE = 'main page',
-    STATISTIC_PAGE = 'statistic page',
-}
+// enum FormAttribute {
+//     PLACEHOLDER = 'placeholder',
+//     TYPE = 'type',
+//     NAME = 'name',
+//     ID = 'id',
+//     FOR = 'for',
+//     REQUIRED = 'required',
+//     ACTION = 'action',
+//     DISABLED = 'disabled',
+//     CHECKED = 'checked',
+//     VALUE = 'value',
+//     SELECTED = 'selected',
+// }
+
+// enum AppPage {
+//     LOGIN = 'login',
+//     START_PAGE = 'start page',
+//     MAIN_PAGE = 'main page',
+//     STATISTIC_PAGE = 'statistic page',
+// }
 
 enum ImageAttribute {
     SRC = 'src',
@@ -29,4 +35,4 @@ enum LinkAttribute {
     TARGET = 'target',
 }
 
-export { FormAttribute, AppPage, ImageAttribute, LinkAttribute };
+export { Endpoint, LinkAttribute, ImageAttribute };
