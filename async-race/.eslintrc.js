@@ -34,5 +34,5 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 0,
         'no-console': 'off',
     },
-    ignorePatterns: ['.eslintrc.js'],
+    ignorePatterns: ['.eslintrc.js', 'temp/**/*'],
 };

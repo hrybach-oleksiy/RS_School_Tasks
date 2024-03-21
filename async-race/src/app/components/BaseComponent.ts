@@ -1,4 +1,3 @@
-// import assertIsDefined from '../../utilities/assertIsDefined';
 import { FormAttribute, ImageAttribute, LinkAttribute } from '../../types/enums';
 
 interface BaseComponentProps {
@@ -6,6 +5,8 @@ interface BaseComponentProps {
     classNames?: string[];
     text?: string;
 }
+
+type AttributeType = FormAttribute | ImageAttribute | LinkAttribute;
 
 export default class BaseComponent {
     private children: BaseComponent[] = [];
@@ -50,6 +51,12 @@ export default class BaseComponent {
         this.node.setAttribute(attribute, value);
     }
 
+    public setAttributes(attributes: { [key in AttributeType]: string }) {
+        Object.keys(attributes).forEach((attribute) => {
+            this.node.setAttribute(attribute as string, attributes[attribute as AttributeType]);
+        });
+    }
+
     public removeAttribute(attribute: string) {
         this.node.removeAttribute(attribute);
     }
@@ -86,3 +93,5 @@ export default class BaseComponent {
         this.node.remove();
     }
 }
+
+console.log();
