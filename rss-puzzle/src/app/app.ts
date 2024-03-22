@@ -23,10 +23,6 @@ export default class App {
         if (this.userData) {
             this.appState.currentPage = AppPage.START_PAGE;
         }
-
-        // if (this.userData) {
-        //     this.appState.currentPage = AppPage.STATISTIC_PAGE;
-        // }
     }
 
     public createLayout() {

@@ -9,7 +9,6 @@ import { GameData, HintsState, LevelData } from '../../../types/interfaces';
 import { FormAttribute, AppPage } from '../../../types/enums';
 
 import styles from './MainPage.module.scss';
-// import levelsStyles from '../../components/game-select/GameSelect.module.scss';
 
 export default class MainPage extends BaseComponent {
     private gameData!: GameData;
@@ -100,7 +99,7 @@ export default class MainPage extends BaseComponent {
         );
 
         this.resultBlock = new ResultBlock(this.stringLength, this.guessedSentences);
-        this.sourceBlock = new SourceDataBlock(this.words, this.levelData.imageSrc);
+        this.sourceBlock = new SourceDataBlock(this.words);
 
         this.checkButton.setAttribute(FormAttribute.DISABLED, 'true');
         this.checkButton.setTextContent('Check Answer');
@@ -177,9 +176,6 @@ export default class MainPage extends BaseComponent {
 
         const currentTemplateId = Number(currentWord.getAttribute(FormAttribute.ID)?.slice(-1));
         let count = 0;
-
-        // currentWord.classList.remove('match');
-        // currentWord.classList.remove('mismatch');
 
         if (currentWord.closest('#result') && currentWord.classList.contains('part')) {
             const resultParts = document.querySelectorAll('.result-template .part');
@@ -285,6 +281,8 @@ export default class MainPage extends BaseComponent {
     }
 
     private checkGuess = () => {
+        const MAX_SENTENCE_INDEX = 9;
+
         for (let i = 0; i < this.correctWordOrder.length; i += 1) {
             const word1 = this.correctWordOrder[i];
             const word2 = this.guessedWordOrder[i];
@@ -310,7 +308,7 @@ export default class MainPage extends BaseComponent {
                 this.addGuessedToStatistic();
             }
 
-            if (this.sentence === 9) {
+            if (this.sentence === MAX_SENTENCE_INDEX) {
                 const completeButton = this.autocompleteButton.getNode();
                 completeButton.remove();
                 this.resultsButton.removeClass(styles.hidden);
@@ -372,9 +370,13 @@ export default class MainPage extends BaseComponent {
     }
 
     private handleContinueButton = () => {
+        const MAX_SENTENCE_INDEX = 10;
+        const MAX_LEVEL_INDEX = 6;
+        const PENULTIMATE_SENTENCE_INDEX = 9;
+
         this.sentence += 1;
 
-        if (this.sentence === 10) {
+        if (this.sentence === MAX_SENTENCE_INDEX) {
             console.log('next round starts');
             this.completedRounds.push(this.round);
             this.round += 1;
@@ -409,12 +411,12 @@ export default class MainPage extends BaseComponent {
             this.completedLevels,
         );
 
-        if (this.sentence === 9) {
+        if (this.sentence === PENULTIMATE_SENTENCE_INDEX) {
             this.saveRoundState();
             this.saveLevelState();
         }
 
-        if (this.level > 6) {
+        if (this.level > MAX_LEVEL_INDEX) {
             this.completedLevels = [];
             this.level = 1;
         }
@@ -493,14 +495,15 @@ export default class MainPage extends BaseComponent {
     }
 
     private saveLevelState(value?: number) {
+        const MAX_LEVEL_INDEX = 6;
         const currentLevelOptionElement = document.querySelector(`.level-option[selected='true']`) as HTMLOptionElement;
         let levelValue = Number(currentLevelOptionElement.value);
 
-        if (levelValue === 6 && this.round === this.roundsCount) {
+        if (levelValue === MAX_LEVEL_INDEX && this.round === this.roundsCount) {
             levelValue = 1;
         }
 
-        if (this.round === this.roundsCount && this.level < 6) {
+        if (this.round === this.roundsCount && this.level < MAX_LEVEL_INDEX) {
             levelValue += 1;
         }
 
