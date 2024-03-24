@@ -9,35 +9,35 @@ import Main from './view/main/Main';
 // import { AppPage } from '../types/enums';
 
 export default class App {
-    private root: BaseComponent = div(['app', 'container']);
+  private root: BaseComponent = div(['app', 'container']);
 
-    // private appState: AppState = { currentPage: AppPage.LOGIN };
+  // private appState: AppState = { currentPage: AppPage.LOGIN };
 
-    constructor() {
-        document.body.append(this.root.getNode());
-        document.body.setAttribute('data-theme', 'light');
+  constructor() {
+    document.body.append(this.root.getNode());
+    document.body.setAttribute('data-theme', 'light');
 
-        // if (this.userData) {
-        //     this.appState.currentPage = AppPage.START_PAGE;
-        // }
+    // if (this.userData) {
+    //     this.appState.currentPage = AppPage.START_PAGE;
+    // }
 
-        // if (this.userData) {
-        //     this.appState.currentPage = AppPage.STATISTIC_PAGE;
-        // }
-    }
+    // if (this.userData) {
+    //     this.appState.currentPage = AppPage.STATISTIC_PAGE;
+    // }
+  }
 
-    public createLayout() {
-        this.root.destroyChildren();
-        const header = new Header();
-        const main = new Main();
-        const footer = new Footer();
+  public createLayout() {
+    this.root.destroyChildren();
+    const header = new Header();
+    const main = new Main();
+    const footer = new Footer();
 
-        this.root.appendChildren([header, main, footer]);
-    }
+    this.root.appendChildren([header, main, footer]);
+  }
 
-    // private handleAppState = (page: string) => {
-    //     this.appState.currentPage = page;
-    //     this.getUserData();
-    //     this.createLayout();
-    // };
+  // private handleAppState = (page: string) => {
+  //     this.appState.currentPage = page;
+  //     this.getUserData();
+  //     this.createLayout();
+  // };
 }

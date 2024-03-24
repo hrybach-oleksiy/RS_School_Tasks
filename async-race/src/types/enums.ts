@@ -1,38 +1,38 @@
 enum Endpoint {
-    GARAGE = 'garage',
-    ENGINE = 'engine',
-    WINNERS = 'winners',
+  GARAGE = 'garage',
+  ENGINE = 'engine',
+  WINNERS = 'winners',
 }
 
-// enum FormAttribute {
-//     PLACEHOLDER = 'placeholder',
-//     TYPE = 'type',
-//     NAME = 'name',
-//     ID = 'id',
-//     FOR = 'for',
-//     REQUIRED = 'required',
-//     ACTION = 'action',
-//     DISABLED = 'disabled',
-//     CHECKED = 'checked',
-//     VALUE = 'value',
-//     SELECTED = 'selected',
-// }
+enum HTTPMethod {
+  GET = 'GET',
+  DELETE = 'DELETE',
+  PUT = 'PUT',
+  POST = 'POST',
+}
 
-// enum AppPage {
-//     LOGIN = 'login',
-//     START_PAGE = 'start page',
-//     MAIN_PAGE = 'main page',
-//     STATISTIC_PAGE = 'statistic page',
-// }
+enum FormAttribute {
+  PLACEHOLDER = 'placeholder',
+  TYPE = 'type',
+  NAME = 'name',
+  ID = 'id',
+  FOR = 'for',
+  REQUIRED = 'required',
+  ACTION = 'action',
+  DISABLED = 'disabled',
+  CHECKED = 'checked',
+  VALUE = 'value',
+  SELECTED = 'selected',
+}
 
 enum ImageAttribute {
-    SRC = 'src',
-    ALT = 'alt',
+  SRC = 'src',
+  ALT = 'alt',
 }
 
 enum LinkAttribute {
-    HREF = 'href',
-    TARGET = 'target',
+  HREF = 'href',
+  TARGET = 'target',
 }
 
-export { Endpoint, LinkAttribute, ImageAttribute };
+export { Endpoint, LinkAttribute, ImageAttribute, FormAttribute, HTTPMethod };

@@ -1,0 +1,29 @@
+.car-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 3px dashed #000;
+}
+
+.car-options,
+.car-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.car-controls {
+  padding-bottom: 10px;
+}
+
+.car-title {
+  font-size: 24px;
+}
+
+.button {
+  width: auto;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 110%;
+  border-radius: 0;
+}
