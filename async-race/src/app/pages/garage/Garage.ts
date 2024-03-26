@@ -1,37 +1,24 @@
 import BaseComponent from '../../components/BaseComponent';
 import { h1, h2, span, div, input, button } from '../../components/HTMLComponents';
-import CarBlock from '../../components/car-block/CarBlock';
+// import CarBlock from '../../components/car-block/CarBlock';
+import Pagination from '../../components/pagination/Pagination';
 
 // import View from '../../viewTemp/View';
 
 import { CarData } from '../../../types/interfaces';
 import { FormAttribute } from '../../../types/enums';
 import Model from '../../model/Model';
-import View from '../../view/View';
+// import View from '../../view/View';
 import Controller from '../../controller/Controller';
 
 import styles from './Garage.module.scss';
 import carsBlockStyles from '../../components/car-block/CarBlock.module.scss';
 
-// <div class="generate-cars">
-//   <div class="field-create">
-//     <input class="generate-input_text text-create" type="text" autocomplete placeholder="Enter name сar...">
-//     <input class="generate-input_color color-create" type="color">
-//     <button class="buttons btn-create">create</button>
-//   </div>
-//   <div class="field-update">
-//     <input class="generate-input_text text-update" type="text" autocomplete disabled="true" placeholder="Enter new name сar...">
-//     <input class="generate-input_color color-update" type="color" disabled="true">
-//     <button class="buttons btn-update" disabled="true">update</button>
-//   </div>
-//   <div class="field-control">
-//     <button class="buttons btn-race">race</button>
-//     <button class="buttons btn-reset" disabled>reset</button>
-//     <button class="buttons btn-generate_cars">generate cars</button>
-//   </div>
-// </div>
-
 export default class Garage extends BaseComponent {
+  private controller: Controller = new Controller();
+
+  private model: Model = new Model();
+
   private pageNumber: number = 1;
 
   private totalCarsElement = span(['total-cars'], '');
@@ -60,13 +47,9 @@ export default class Garage extends BaseComponent {
 
   private updateButton = button(['btn', styles.button], 'Update Car');
 
+  private pageNumberCountElement = span(['page-number-count'], `#${this.pageNumber}`);
+
   private updatedID: number = 0;
-
-  private model: Model = new Model();
-
-  private view: View = new View();
-
-  private controller: Controller = new Controller();
 
   constructor() {
     super({
@@ -74,25 +57,32 @@ export default class Garage extends BaseComponent {
       classNames: ['garage', 'page'],
     });
 
-    this.setContent();
+    // this.setContent();
+    // this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    this.init();
     this.addListener('click', this.handleCarOptionsClick);
+  }
+
+  private async init() {
+    await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    await this.model.getAllCars(this.pageNumber);
+    this.setContent();
   }
 
   private setContent() {
     const title = h1([styles.title], 'Garage  ');
-    this.totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
     title.append(this.totalCarsElement);
 
     const pageNumberTitle = h2(['page-number-title'], 'Page ');
-    const pageNumberCount = span(['page-number-count'], `#${this.pageNumber}`);
-    pageNumberTitle.append(pageNumberCount);
+    pageNumberTitle.append(this.pageNumberCountElement);
 
     const generateCarsBlock = this.setGenerateCarBlock();
 
-    this.appendChildren([generateCarsBlock, title, pageNumberTitle, this.carsWrapper]);
+    const isNextBtnActive = this.model.totalCarsValue > this.pageNumber * 7;
+    console.log(this.model.totalCarsValue);
+    const paginationBlock = new Pagination(this.handlePrevButtonClick, this.handleNextButtonClick, isNextBtnActive);
 
-    this.model.getAllCars(this.pageNumber);
-    this.renderCars();
+    this.appendChildren([generateCarsBlock, title, pageNumberTitle, this.carsWrapper, paginationBlock]);
   }
 
   private setGenerateCarBlock() {
@@ -110,7 +100,7 @@ export default class Garage extends BaseComponent {
     this.updateCarInputText.setAttribute(FormAttribute.DISABLED, 'true');
     this.updateCarInputColor.setAttribute(FormAttribute.DISABLED, 'true');
     this.updateButton.setAttribute(FormAttribute.DISABLED, 'true');
-    this.updateButton.addListener('click', this.handleUpdateButton);
+    this.updateButton.addListener('click', this.handleUpdateButtonClick);
 
     updateCarBlockWrapper.appendChildren([this.updateCarInputText, this.updateCarInputColor, this.updateButton]);
 
@@ -119,43 +109,11 @@ export default class Garage extends BaseComponent {
     return generateCarBlockWrapper;
   }
 
-  private renderCars() {
-    this.model
-      .getAllCars(this.pageNumber)
-      .then((cars: CarData[]) => {
-        this.carsWrapper.destroyChildren();
-
-        cars.forEach((car) => {
-          const carProps: CarData = {
-            id: car.id,
-            name: car.name,
-            color: car.color,
-          };
-          const carBlock = new CarBlock(carProps);
-
-          this.carsWrapper.append(carBlock);
-        });
-
-        this.totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
-      })
-      .catch((error: Error) => {
-        console.error('Error occurred while rendering cars on the page:', error);
-        throw error;
-      });
-  }
-
   private handleCarOptionsClick = (event: Event) => {
     const currentButton = event.target as HTMLButtonElement;
 
     if (currentButton.classList.contains('remove') && currentButton.closest(`.${carsBlockStyles['car-options']}`)) {
       const currentID = currentButton.dataset.remove;
-      // this.model
-      //   .deleteCar(Number(currentID))
-      //   .then(() => this.renderCars())
-      //   .catch((error) => {
-      //     console.error('Error occurred while deleting the car:', error);
-      //     throw error;
-      //   });
 
       this.controller.handleDeleteButton(Number(currentID), this.carsWrapper, this.pageNumber);
     }
@@ -175,49 +133,91 @@ export default class Garage extends BaseComponent {
     }
   };
 
-  private handleCreateButtonClick = () => {
+  private handleCreateButtonClick = async () => {
     const newName = (this.createCarInputText.getNode() as HTMLInputElement).value;
     const newColor = (this.createCarInputColor.getNode() as HTMLInputElement).value;
 
     if (!newName) return;
 
-    const carsBody: CarData = {
+    const carsProps: CarData = {
       name: newName,
       color: newColor,
-      id: this.model.totalCarsValue + 1,
     };
 
-    this.model
-      .addCar(carsBody)
-      .then(() => this.renderCars())
-      .catch((error: Error) => {
-        console.error('Error occurred while creating the car:', error);
-        throw error;
-      });
+    await this.model.getAllCars(this.pageNumber);
 
-    // this.controller.handleCreateButton(carsBody, this.carsWrapper, this.pageNumber);
+    await this.controller.handleCreateButton(carsProps, this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    console.log(this.model.totalCarsValue);
+
+    if (this.model.totalCarsValue >= this.pageNumber * 7) {
+      const nextBtn = document.querySelector('.nextBtn');
+      nextBtn?.removeAttribute(FormAttribute.DISABLED);
+    }
 
     (this.createCarInputText.getNode() as HTMLInputElement).value = '';
     (this.createCarInputColor.getNode() as HTMLInputElement).value = '#000000';
   };
 
-  private handleUpdateButton = () => {
+  private handleUpdateButtonClick = () => {
     const updatedName = (this.updateCarInputText.getNode() as HTMLInputElement).value;
     const updatedColor = (this.updateCarInputColor.getNode() as HTMLInputElement).value;
 
-    this.model
-      .updateCar({ name: updatedName, color: updatedColor, id: this.updatedID })
-      .then(() => this.renderCars())
-      .catch((error) => {
-        console.error('Error occurred while updating the car:', error);
-        throw error;
-      })
-      .finally(() => {
-        this.updateButton.setAttribute(FormAttribute.DISABLED, 'true');
-        this.updateCarInputText.setAttribute(FormAttribute.DISABLED, 'true');
-        this.updateCarInputColor.setAttribute(FormAttribute.DISABLED, 'true');
-        (this.updateCarInputText.getNode() as HTMLInputElement).value = '';
-        (this.updateCarInputColor.getNode() as HTMLInputElement).value = '#000000';
-      });
+    const carsProps: CarData = {
+      name: updatedName,
+      color: updatedColor,
+      id: this.updatedID,
+    };
+
+    this.controller.handleUpdateButton(carsProps, this.carsWrapper, this.pageNumber, this.totalCarsElement);
+
+    this.updateButton.setAttribute(FormAttribute.DISABLED, 'true');
+    this.updateCarInputText.setAttribute(FormAttribute.DISABLED, 'true');
+    this.updateCarInputColor.setAttribute(FormAttribute.DISABLED, 'true');
+    (this.updateCarInputText.getNode() as HTMLInputElement).value = '';
+    (this.updateCarInputColor.getNode() as HTMLInputElement).value = '#000000';
+  };
+
+  private handlePrevButtonClick = (event: Event) => {
+    const btn = event.target as HTMLButtonElement;
+    const nextBtn = document.querySelector('.nextBtn');
+    nextBtn?.removeAttribute(FormAttribute.DISABLED);
+
+    btn.removeAttribute(FormAttribute.DISABLED);
+    this.pageNumber -= 1;
+    this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
+
+    if (this.pageNumber === 1) {
+      btn.setAttribute(FormAttribute.DISABLED, 'true');
+    }
+
+    this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+  };
+
+  private handleNextButtonClick = async (event: Event) => {
+    const btn = event.target as HTMLButtonElement;
+
+    await this.model.getAllCars(this.pageNumber);
+
+    const prevBtn = document.querySelector('.prevBtn');
+    prevBtn?.removeAttribute(FormAttribute.DISABLED);
+    btn.removeAttribute(FormAttribute.DISABLED);
+    this.pageNumber += 1;
+    this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
+
+    if (this.pageNumber * 7 >= this.model.totalCarsValue) {
+      btn.setAttribute(FormAttribute.DISABLED, 'true');
+    }
+
+    // if (this.pageNumber * 7 >= this.model.totalCarsValue) {
+    //   btn.setAttribute(FormAttribute.DISABLED, 'true');
+    // } else {
+    //   const prevBtn = document.querySelector('.prevBtn');
+    //   prevBtn?.removeAttribute(FormAttribute.DISABLED);
+    //   btn.removeAttribute(FormAttribute.DISABLED);
+    //   this.pageNumber += 1;
+    //   this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
+    // }
+
+    await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
   };
 }

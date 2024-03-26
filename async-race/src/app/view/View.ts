@@ -6,6 +6,7 @@ import CarBlock from '../components/car-block/CarBlock';
 export default class View {
   static renderCars(cars: CarData[], parent: BaseComponent) {
     parent.destroyChildren();
+
     cars.forEach((car) => {
       const carProps: CarData = {
         id: car.id,
@@ -18,7 +19,5 @@ export default class View {
         parent.append(carBlock);
       }
     });
-
-    // this.totalCarsElement.setTextContent(`(${this.totalCars})`);
   }
 }

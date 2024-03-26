@@ -13,7 +13,6 @@ export default class Model {
   public getAllCars = async (page: number, limit = 7): Promise<CarData[]> => {
     try {
       const response = await fetch(`${this.garageLink}?_page=${page}&_limit=${limit}`, { method: HTTPMethod.GET });
-
       this.totalCars = Number(response.headers.get('X-Total-count'));
 
       return await response.json();
@@ -34,12 +33,12 @@ export default class Model {
     }
   };
 
-  public addCar = async (body: CarData) => {
-    console.log(this.totalCars);
+  public addCar = async (carProps: CarData) => {
+    console.log(carProps);
     try {
       await fetch(this.garageLink, {
         method: HTTPMethod.POST,
-        body: JSON.stringify(body),
+        body: JSON.stringify(carProps),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,11 +49,11 @@ export default class Model {
     }
   };
 
-  public updateCar = async (body: CarData) => {
+  public updateCar = async (carProps: CarData) => {
     try {
-      await fetch(`${this.garageLink}/${body.id}`, {
+      await fetch(`${this.garageLink}/${carProps.id}`, {
         method: HTTPMethod.PUT,
-        body: JSON.stringify(body),
+        body: JSON.stringify(carProps),
         headers: {
           'Content-Type': 'application/json',
         },

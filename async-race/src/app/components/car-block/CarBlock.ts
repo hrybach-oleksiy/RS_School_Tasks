@@ -15,8 +15,8 @@
 
 import BaseComponent from '../BaseComponent';
 
-import { div, button, h3, span } from '../HTMLComponents';
-
+import { div, button, h3 } from '../HTMLComponents';
+import createCarImage from '../../../utilities/cerateCarImage';
 import { CarData } from '../../../types/interfaces';
 
 import styles from './CarBlock.module.scss';
@@ -51,9 +51,11 @@ export default class CarBlock extends BaseComponent {
     const carControls = div([styles['car-controls']]);
     const startButton = button(['btn', styles.button], 'Start');
     const stopButton = button(['btn', styles.button], 'Stop');
-    const testImg = span(['car-img'], color);
-    const imgWrapper = div(['img-wrapper'], testImg);
+    // const carImage = span(['car-img'], createCarImage(color));
+    const imgWrapper = div([styles['img-wrapper']]);
     const finishFlag = div(['finish-flag']);
+
+    imgWrapper.getNode().insertAdjacentHTML('beforeend', createCarImage(color));
     startButton.setAttribute('data-start', String(id));
     stopButton.setAttribute('data-stop', String(id));
     imgWrapper.setAttribute('data-car', String(id));

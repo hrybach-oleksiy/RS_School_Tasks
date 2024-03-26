@@ -12,5 +12,5 @@ export interface InputProps {
 export interface CarData {
   name: string;
   color: string;
-  id: number;
+  id?: number;
 }

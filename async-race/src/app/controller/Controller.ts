@@ -21,15 +21,33 @@ export default class Controller {
     }
   }
 
-  public async handleCreateButton(body: CarData, parent: BaseComponent, pageNumber: number): Promise<void> {
-    const totalCarsElement = document.querySelector('.total-cars') as HTMLElement;
-
-    await this.model.addCar(body);
+  public async handleCreateButton(
+    carsProps: CarData,
+    parent: BaseComponent,
+    pageNumber: number,
+    totalCarsElement: BaseComponent,
+  ): Promise<void> {
+    await this.model.addCar(carsProps);
     const cars = await this.model.getAllCars(pageNumber);
     View.renderCars(cars, parent);
+    totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
+  }
 
-    if (totalCarsElement) {
-      totalCarsElement.textContent = `(${this.model.totalCarsValue})`;
-    }
+  public async handleUpdateButton(
+    carsProps: CarData,
+    parent: BaseComponent,
+    pageNumber: number,
+    totalCarsElement: BaseComponent,
+  ): Promise<void> {
+    await this.model.updateCar(carsProps);
+    const cars = await this.model.getAllCars(pageNumber);
+    View.renderCars(cars, parent);
+    totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
+  }
+
+  public async handleRenderCars(parent: BaseComponent, pageNumber: number, totalCarsElement: BaseComponent) {
+    const cars = await this.model.getAllCars(pageNumber);
+    View.renderCars(cars, parent);
+    totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
   }
 }
