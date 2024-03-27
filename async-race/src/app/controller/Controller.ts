@@ -48,6 +48,10 @@ export default class Controller {
   public async handleRenderCars(parent: BaseComponent, pageNumber: number, totalCarsElement: BaseComponent) {
     const cars = await this.model.getAllCars(pageNumber);
     View.renderCars(cars, parent);
+    console.log(this.model.totalCarsValue);
     totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
+    console.log(this.model.totalCarsValue);
   }
+
+  // public async handleGenerateButton() {}
 }

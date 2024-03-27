@@ -64,6 +64,16 @@ export default class Model {
     }
   };
 
+  public async updateTotalCarsValue() {
+    try {
+      const response = await fetch(`${this.garageLink}`, { method: HTTPMethod.GET });
+      const data = await response.json();
+      this.totalCars = data.length;
+    } catch (error) {
+      console.error('Error updating total cars value:', error);
+    }
+  }
+
   public deleteCar = async (id: number) => {
     try {
       await fetch(`${this.garageLink}/${id}`, {

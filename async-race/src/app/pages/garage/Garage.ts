@@ -2,6 +2,8 @@ import BaseComponent from '../../components/BaseComponent';
 import { h1, h2, span, div, input, button } from '../../components/HTMLComponents';
 // import CarBlock from '../../components/car-block/CarBlock';
 import Pagination from '../../components/pagination/Pagination';
+import getRandomName from '../../../utilities/getRandomName';
+import getRandomColor from '../../../utilities/getRandomColor';
 
 // import View from '../../viewTemp/View';
 
@@ -65,7 +67,7 @@ export default class Garage extends BaseComponent {
 
   private async init() {
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
-    await this.model.getAllCars(this.pageNumber);
+    // await this.model.getAllCars(this.pageNumber);
     this.setContent();
   }
 
@@ -87,7 +89,6 @@ export default class Garage extends BaseComponent {
 
   private setGenerateCarBlock() {
     const generateCarBlockWrapper = div([styles['generate-wrapper']]);
-    const controlCarBlockWrapper = div(['control-wrapper']);
 
     // create block
     const createCarBlockWrapper = div([styles['create-wrapper']]);
@@ -103,6 +104,12 @@ export default class Garage extends BaseComponent {
     this.updateButton.addListener('click', this.handleUpdateButtonClick);
 
     updateCarBlockWrapper.appendChildren([this.updateCarInputText, this.updateCarInputColor, this.updateButton]);
+
+    // controls block
+    const controlCarBlockWrapper = div(['control-wrapper']);
+    const generateButton = button(['btn', styles.button], 'Generate Cars', this.handleGenerateButtonClick);
+
+    controlCarBlockWrapper.appendChildren([generateButton]);
 
     generateCarBlockWrapper.appendChildren([createCarBlockWrapper, updateCarBlockWrapper, controlCarBlockWrapper]);
 
@@ -144,10 +151,8 @@ export default class Garage extends BaseComponent {
       color: newColor,
     };
 
-    await this.model.getAllCars(this.pageNumber);
-
+    await this.model.updateTotalCarsValue();
     await this.controller.handleCreateButton(carsProps, this.carsWrapper, this.pageNumber, this.totalCarsElement);
-    console.log(this.model.totalCarsValue);
 
     if (this.model.totalCarsValue >= this.pageNumber * 7) {
       const nextBtn = document.querySelector('.nextBtn');
@@ -196,7 +201,7 @@ export default class Garage extends BaseComponent {
   private handleNextButtonClick = async (event: Event) => {
     const btn = event.target as HTMLButtonElement;
 
-    await this.model.getAllCars(this.pageNumber);
+    await this.model.updateTotalCarsValue();
 
     const prevBtn = document.querySelector('.prevBtn');
     prevBtn?.removeAttribute(FormAttribute.DISABLED);
@@ -208,16 +213,24 @@ export default class Garage extends BaseComponent {
       btn.setAttribute(FormAttribute.DISABLED, 'true');
     }
 
-    // if (this.pageNumber * 7 >= this.model.totalCarsValue) {
-    //   btn.setAttribute(FormAttribute.DISABLED, 'true');
-    // } else {
-    //   const prevBtn = document.querySelector('.prevBtn');
-    //   prevBtn?.removeAttribute(FormAttribute.DISABLED);
-    //   btn.removeAttribute(FormAttribute.DISABLED);
-    //   this.pageNumber += 1;
-    //   this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
-    // }
-
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+  };
+
+  private handleGenerateButtonClick = async () => {
+    const MAX_CARS_AMOUNT = 100;
+    const btnNext = document.querySelector('.nextBtn');
+    const promises = [];
+
+    for (let i = 0; i < MAX_CARS_AMOUNT; i += 1) {
+      const carProps: CarData = {
+        name: getRandomName(),
+        color: getRandomColor(),
+      };
+
+      promises.push(this.model.addCar(carProps));
+    }
+    await Promise.all(promises);
+    await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    btnNext?.removeAttribute(FormAttribute.DISABLED);
   };
 }
