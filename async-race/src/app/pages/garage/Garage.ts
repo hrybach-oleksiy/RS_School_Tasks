@@ -56,7 +56,7 @@ export default class Garage extends BaseComponent {
   constructor() {
     super({
       tag: 'div',
-      classNames: ['garage', 'page'],
+      classNames: [styles.garage, 'page'],
     });
 
     // this.setContent();
@@ -81,10 +81,17 @@ export default class Garage extends BaseComponent {
     const generateCarsBlock = this.setGenerateCarBlock();
 
     const isNextBtnActive = this.model.totalCarsValue > this.pageNumber * 7;
-    console.log(this.model.totalCarsValue);
     const paginationBlock = new Pagination(this.handlePrevButtonClick, this.handleNextButtonClick, isNextBtnActive);
+    const winnerMessageBlock = div([styles['winner-message'], 'winner-message-js']);
 
-    this.appendChildren([generateCarsBlock, title, pageNumberTitle, this.carsWrapper, paginationBlock]);
+    this.appendChildren([
+      generateCarsBlock,
+      title,
+      pageNumberTitle,
+      this.carsWrapper,
+      paginationBlock,
+      winnerMessageBlock,
+    ]);
   }
 
   private setGenerateCarBlock() {
@@ -106,10 +113,14 @@ export default class Garage extends BaseComponent {
     updateCarBlockWrapper.appendChildren([this.updateCarInputText, this.updateCarInputColor, this.updateButton]);
 
     // controls block
-    const controlCarBlockWrapper = div(['control-wrapper']);
+    const controlCarBlockWrapper = div([styles['controls-wrapper']]);
+    const raceButton = button(['btn', styles.button, 'btn-race'], 'Start Race', this.handleRaceButtonClick);
+    const resetButton = button(['btn', styles.button, 'btn-reset'], 'Reset Race', this.handleResetButtonClick);
     const generateButton = button(['btn', styles.button], 'Generate Cars', this.handleGenerateButtonClick);
 
-    controlCarBlockWrapper.appendChildren([generateButton]);
+    resetButton.setAttribute(FormAttribute.DISABLED, 'true');
+
+    controlCarBlockWrapper.appendChildren([raceButton, resetButton, generateButton]);
 
     generateCarBlockWrapper.appendChildren([createCarBlockWrapper, updateCarBlockWrapper, controlCarBlockWrapper]);
 
@@ -232,5 +243,13 @@ export default class Garage extends BaseComponent {
     await Promise.all(promises);
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
     btnNext?.removeAttribute(FormAttribute.DISABLED);
+  };
+
+  private handleRaceButtonClick = () => {
+    this.controller.handleStartRace(this.pageNumber);
+  };
+
+  private handleResetButtonClick = () => {
+    this.controller.handleStopRace(this.pageNumber);
   };
 }

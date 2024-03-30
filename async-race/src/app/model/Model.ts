@@ -4,6 +4,8 @@ import { CarData } from '../../types/interfaces';
 export default class Model {
   private garageLink: string = `http://127.0.0.1:3000/${Endpoint.GARAGE}`;
 
+  private engineLink: string = `http://127.0.0.1:3000/${Endpoint.ENGINE}`;
+
   private totalCars: number = 0;
 
   public get totalCarsValue() {
@@ -81,6 +83,36 @@ export default class Model {
       });
     } catch (error) {
       console.error('Error occurred while deleting car from the Garage:', error);
+      throw error;
+    }
+  };
+
+  public startEngine = async (id: number) => {
+    try {
+      const response = await fetch(`${this.engineLink}?id=${id}&status=started`, { method: HTTPMethod.PATCH });
+      return await response.json();
+    } catch (error) {
+      console.error('Error occurred while starting Engine:', error);
+      throw error;
+    }
+  };
+
+  public stopEngine = async (id: number) => {
+    try {
+      const response = await fetch(`${this.engineLink}?id=${id}&status=stopped`, { method: HTTPMethod.PATCH });
+      return await response.json();
+    } catch (error) {
+      console.error('Error occurred while stopping Engine:', error);
+      throw error;
+    }
+  };
+
+  public driveEngine = async (id: number) => {
+    try {
+      const response = await fetch(`${this.engineLink}?id=${id}&status=drive`, { method: HTTPMethod.PATCH });
+      return response.status !== 200 ? { success: false } : { ...(await response.json()) };
+    } catch (error) {
+      console.error('Error occurred while driving Engine:', error);
       throw error;
     }
   };

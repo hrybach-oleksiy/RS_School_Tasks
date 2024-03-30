@@ -1,37 +1,35 @@
-// `<div class="car">
-//     <div class="car-options">
-//       <button class="buttons car-options_select" data-select=${id}>Select</button>
-//       <button class="buttons car-options_remove" data-remove=${id}>Remove</button>
-//       <h4 class="car-options_title">${name}</h4>
-//     </div>
-//     <div class="car-control">
-//       <button class="car-control_start" id="start-${id}" data-start=${id} >Start</button>
-//       <button class="car-control_stop" id="stop-${id}" data-stop=${id} disabled="true">Stop</button>
-//       <div class="car-img" id="car-${id}" data-car=${id}>${createImageCarUI(color)}</div>
-//       <div class="flag"></div>
-//     </div>
-//   </div>
-// `;
-
 import BaseComponent from '../BaseComponent';
 
 import { div, button, h3 } from '../HTMLComponents';
 import createCarImage from '../../../utilities/cerateCarImage';
 import { CarData } from '../../../types/interfaces';
-
 import styles from './CarBlock.module.scss';
-// import { FormAttribute } from '../../../types/enums';
+import { FormAttribute } from '../../../types/enums';
 
 export default class CarBlock extends BaseComponent {
   private carProps: CarData;
 
-  constructor(carProps: CarData) {
+  private startRaceHandler: (id: number) => void;
+
+  private stopRaceHandler: (id: number) => void;
+
+  private startButton = button(['btn', styles.button], 'Start', (event: Event) => {
+    this.handleStartCarClick(event);
+  });
+
+  private stopButton = button(['btn', styles.button], 'Stop', (event: Event) => {
+    this.handleStopCarClick(event);
+  });
+
+  constructor(carProps: CarData, startRaceHandler: (id: number) => void, stopRaceHandler: (id: number) => void) {
     super({
       tag: 'div',
-      classNames: [styles['car-wrapper']],
+      classNames: [styles['car-wrapper'], 'car-wrapper-js'],
     });
 
     this.carProps = carProps;
+    this.startRaceHandler = startRaceHandler;
+    this.stopRaceHandler = stopRaceHandler;
     this.setBlock();
   }
 
@@ -49,18 +47,36 @@ export default class CarBlock extends BaseComponent {
 
     // car controls
     const carControls = div([styles['car-controls']]);
-    const startButton = button(['btn', styles.button], 'Start');
-    const stopButton = button(['btn', styles.button], 'Stop');
-    // const carImage = span(['car-img'], createCarImage(color));
     const imgWrapper = div([styles['img-wrapper']]);
     const finishFlag = div(['finish-flag']);
 
+    this.stopButton.setAttribute(FormAttribute.DISABLED, 'true');
+
     imgWrapper.getNode().insertAdjacentHTML('beforeend', createCarImage(color));
-    startButton.setAttribute('data-start', String(id));
-    stopButton.setAttribute('data-stop', String(id));
+    this.startButton.setAttribute('data-start', String(id));
+    this.stopButton.setAttribute('data-stop', String(id));
     imgWrapper.setAttribute('data-car', String(id));
-    carControls.appendChildren([startButton, stopButton, imgWrapper, finishFlag]);
+    carControls.appendChildren([this.startButton, this.stopButton, imgWrapper, finishFlag]);
 
     this.appendChildren([carOptions, carControls]);
   }
+
+  private handleStartCarClick = async (event: Event) => {
+    const currentCar = event.target as HTMLButtonElement;
+    const currentCarID = Number(currentCar.dataset.start);
+    this.startButton.setAttribute(FormAttribute.DISABLED, 'true');
+    this.stopButton.removeAttribute(FormAttribute.DISABLED);
+
+    this.startRaceHandler(currentCarID);
+  };
+
+  private handleStopCarClick = async (event: Event) => {
+    const currentCar = event.target as HTMLButtonElement;
+    const currentCarID = Number(currentCar.dataset.stop);
+
+    this.stopButton.setAttribute(FormAttribute.DISABLED, 'true');
+    this.startButton.removeAttribute(FormAttribute.DISABLED);
+
+    this.stopRaceHandler(currentCarID);
+  };
 }

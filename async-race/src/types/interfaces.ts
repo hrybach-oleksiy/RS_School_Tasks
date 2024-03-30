@@ -14,3 +14,8 @@ export interface CarData {
   color: string;
   id?: number;
 }
+
+export interface AnimatedCarData {
+  [key: string | number]: number | string;
+  id: number;
+}

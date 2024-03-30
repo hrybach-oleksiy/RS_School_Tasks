@@ -1,3 +1,7 @@
+.garage {
+  position: relative;
+}
+
 .generate-wrapper {
   display: flex;
   flex-direction: column;
@@ -26,6 +30,25 @@
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.controls-wrapper {
+  display: flex;
+  gap: 15px;
+}
+
+.winner-message {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60vw;
+  height: 10vh;
+  color: rgb(198, 56, 56);
+  font-size: 3.5vw;
+  font-weight: 500;
+  text-shadow: rgb(228, 145, 12) 1px -2px;
+  transform: translate(-50%, -50%);
+  //   z-index: 10;
 }
 
 .button {

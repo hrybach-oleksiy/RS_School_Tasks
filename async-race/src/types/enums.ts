@@ -9,6 +9,7 @@ enum HTTPMethod {
   DELETE = 'DELETE',
   PUT = 'PUT',
   POST = 'POST',
+  PATCH = 'PATCH',
 }
 
 enum FormAttribute {
