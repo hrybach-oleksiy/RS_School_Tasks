@@ -32,12 +32,14 @@ export default class View {
   }
 
   public renderWinners(winners: WinnerData[], parent: HTMLElement) {
+    const pageNumberCountElem = document.querySelector('.winners .page-number-count');
+    const pageNumberCount = pageNumberCountElem?.textContent?.slice(1);
     const parentElem = parent;
-    // const num = numberPageWinners * 10 - 10;
-    let winnerNumber = 1;
+    let winnerNumber = Number(pageNumberCount) * 10 - 10;
     parentElem.innerHTML = '';
     winners.forEach(async (winner) => {
       const winnerCar = await this.model.getCar(winner.id);
+      winnerNumber += 1;
       const winnerProps: WinnerData = {
         id: winner.id,
         winnerNumber,
@@ -46,7 +48,6 @@ export default class View {
         name: winnerCar.name,
         color: winnerCar.color,
       };
-      winnerNumber += 1;
       const winnerBlock = new WinnerBlock(winnerProps);
       parent.append(winnerBlock.getNode());
     });

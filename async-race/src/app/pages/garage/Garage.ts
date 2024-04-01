@@ -66,6 +66,7 @@ export default class Garage extends BaseComponent {
   }
 
   private async init() {
+    await this.model.updateTotalCarsValue();
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
     // await this.model.getAllCars(this.pageNumber);
     this.setContent();
@@ -79,7 +80,6 @@ export default class Garage extends BaseComponent {
     pageNumberTitle.append(this.pageNumberCountElement);
 
     const generateCarsBlock = this.setGenerateCarBlock();
-
     const isNextBtnActive = this.model.totalCarsValue > this.pageNumber * 7;
     const paginationBlock = new Pagination(this.handlePrevButtonClick, this.handleNextButtonClick, isNextBtnActive);
     const winnerMessageBlock = div([styles['winner-message'], 'winner-message-js']);
@@ -201,7 +201,7 @@ export default class Garage extends BaseComponent {
 
     btn.removeAttribute(FormAttribute.DISABLED);
     this.pageNumber -= 1;
-    this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
+    this.pageNumberCountElement.setTextContent(`#${this.pageNumber}`);
 
     if (this.pageNumber === 1) {
       btn.setAttribute(FormAttribute.DISABLED, 'true');
@@ -219,7 +219,7 @@ export default class Garage extends BaseComponent {
     prevBtn?.removeAttribute(FormAttribute.DISABLED);
     btn.removeAttribute(FormAttribute.DISABLED);
     this.pageNumber += 1;
-    this.pageNumberCountElement.setTextContent(`${this.pageNumber}`);
+    this.pageNumberCountElement.setTextContent(`#${this.pageNumber}`);
 
     if (this.pageNumber * 7 >= this.model.totalCarsValue) {
       btn.setAttribute(FormAttribute.DISABLED, 'true');
