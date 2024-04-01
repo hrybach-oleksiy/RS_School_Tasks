@@ -25,8 +25,6 @@ export default class Winners extends BaseComponent {
 
   private pageNumberCountElement = span(['page-number-count'], `#${this.pageNumber}`);
 
-  private winnersTable: WinnersTable = new WinnersTable();
-
   constructor() {
     super({
       tag: 'div',
@@ -50,11 +48,12 @@ export default class Winners extends BaseComponent {
     const pageNumberTitle = h2(['page-number-title'], 'Page ');
     const isNextBtnActive = this.model.totalWinnersValue > this.pageNumber * 10;
     const paginationBlock = new Pagination(this.handlePrevButtonClick, this.handleNextButtonClick, isNextBtnActive);
+    const winnersTable = new WinnersTable();
 
     title.append(this.totalWinnersElement);
     pageNumberTitle.append(this.pageNumberCountElement);
 
-    this.appendChildren([title, pageNumberTitle, this.winnersWrapper, this.winnersTable, paginationBlock]);
+    this.appendChildren([title, pageNumberTitle, this.winnersWrapper, winnersTable, paginationBlock]);
   }
 
   private handleWinnersPageClick = (event: Event) => {

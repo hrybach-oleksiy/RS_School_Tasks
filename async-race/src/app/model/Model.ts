@@ -124,10 +124,16 @@ export default class Model {
     }
   };
 
-  //   public getAllWinnersAPI = async () => {
-  //     const response = await fetch(`${this.winnerLink}`, { method: 'GET' });
-  //     return response.json();
-  //   };
+  public getAllWinners = async (): Promise<WinnerData[]> => {
+    try {
+      const response = await fetch(`${this.winnerLink}`, { method: HTTPMethod.GET });
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting all winners:', error);
+      throw error;
+    }
+  };
+
   // TODO: make all methods using arrow function
   public getWinners = async (page: number, limit = 10) => {
     try {

@@ -1,9 +1,9 @@
 .winners-table {
-  color: white;
-  font-size: 2vw;
-  border-collapse: collapse;
-  text-align: left;
   width: 100%;
+  color: #fff;
+  font-size: 2vw;
+  text-align: left;
+  border-collapse: collapse;
 }
 
 table,
@@ -13,10 +13,11 @@ td {
 }
 
 thead {
-  background-color: #25413e;
   font-weight: 200;
+  background-color: #25413e;
   border-collapse: collapse;
 }
+
 th,
 td {
   padding: 5px 10px;

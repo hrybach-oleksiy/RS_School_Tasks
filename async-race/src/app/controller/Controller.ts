@@ -5,6 +5,8 @@ import BaseComponent from '../components/BaseComponent';
 import { CarData, AnimatedCarData, WinnerData } from '../../types/interfaces';
 import animateCar from '../../utilities/animateCar';
 
+import { sortByAscending, sortByDescending } from '../../utilities/utils';
+
 import { FormAttribute } from '../../types/enums';
 import assertIsDefined from '../../utilities/assertIsDefined';
 
@@ -194,5 +196,17 @@ export default class Controller {
 
     // resultRace = [];
     // noticeWinner.innerHTML = '';
+  };
+
+  public handleSortWinners = async (order: boolean, parent: HTMLElement, keyValue: keyof WinnerData) => {
+    const winners = await this.model.getAllWinners();
+    let sortedWinners: WinnerData[];
+    if (order) {
+      sortedWinners = sortByAscending(winners, keyValue);
+      this.view.renderWinners(sortedWinners, parent);
+    } else {
+      sortedWinners = sortByDescending(winners, keyValue);
+      this.view.renderWinners(sortedWinners, parent);
+    }
   };
 }
