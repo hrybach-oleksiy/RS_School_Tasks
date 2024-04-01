@@ -1,16 +1,25 @@
 import BaseComponent from '../../components/BaseComponent';
-import { h1, h2, span } from '../../components/HTMLComponents';
+import { h1, h2, span, div } from '../../components/HTMLComponents';
+import WinnersTable from '../../components/winners-table/WinnersTable';
 
-import { Endpoint } from '../../../types/enums';
+import assertIsDefined from '../../../utilities/assertIsDefined';
+
+import Controller from '../../controller/Controller';
 
 import styles from './Winners.module.scss';
 
-export default class Garage extends BaseComponent {
-  private totalWinners: number = 0;
+export default class Winners extends BaseComponent {
+  private controller: Controller = new Controller();
 
   private pageNumber: number = 1;
 
-  private winnersLink: string = `http://127.0.0.1:3000/${Endpoint.WINNERS}`;
+  private winnersWrapper = div([styles['winners-wrapper']]);
+
+  private totalWinnersElement = span(['total-winners'], ``);
+
+  private pageNumberCountElement = span(['page-number-count'], `#${this.pageNumber}`);
+
+  private winnersTable: WinnersTable = new WinnersTable();
 
   constructor() {
     super({
@@ -18,30 +27,29 @@ export default class Garage extends BaseComponent {
       classNames: ['winners', 'page'],
     });
 
-    this.getWinners(this.pageNumber);
+    this.setContent();
+    document.addEventListener('click', (event: Event) => {
+      this.handleWinnersPageClick(event);
+    });
   }
 
   private setContent() {
     const title = h1([styles.title], 'Winners  ');
-    const totalCarsElement = span(['total-winners'], `(${this.totalWinners})`);
-    title.append(totalCarsElement);
-
     const pageNumberTitle = h2(['page-number-title'], 'Page ');
-    const pageNumberCount = span(['page-number-count'], `#${this.pageNumber}`);
-    pageNumberTitle.append(pageNumberCount);
 
-    this.appendChildren([title, pageNumberTitle]);
+    title.append(this.totalWinnersElement);
+    pageNumberTitle.append(this.pageNumberCountElement);
+
+    this.appendChildren([title, pageNumberTitle, this.winnersWrapper, this.winnersTable]);
   }
 
-  private getWinners = async (page: number, limit = 10) => {
-    try {
-      const response = await fetch(`${this.winnersLink}?_page=${page}&_limit=${limit}`, { method: 'GET' });
-      this.totalWinners = Number(response.headers.get('X-Total-count'));
-      this.setContent();
-      return await response.json();
-    } catch (error) {
-      console.error('Error occurred while fetching the list of winners:', error);
-      throw error;
+  private handleWinnersPageClick = (event: Event) => {
+    const currentTargt = event.target as HTMLElement;
+
+    if (currentTargt.classList.contains('winner-btn')) {
+      const winnerParentElem = document.querySelector('.table-container') as HTMLElement;
+      assertIsDefined(winnerParentElem);
+      this.controller.handleRenderWinners(winnerParentElem, this.pageNumber, this.totalWinnersElement);
     }
   };
 }

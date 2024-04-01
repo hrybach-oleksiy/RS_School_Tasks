@@ -1,0 +1,27 @@
+.winners-table {
+  color: white;
+  font-size: 2vw;
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+}
+
+thead {
+  background-color: #25413e;
+  font-weight: 200;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 5px 10px;
+}
+
+tbody {
+  color: #0f0e0e;
+}

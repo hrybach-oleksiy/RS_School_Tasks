@@ -2,7 +2,7 @@ import Model from '../model/Model';
 import View from '../view/View';
 
 import BaseComponent from '../components/BaseComponent';
-import { CarData, AnimatedCarData } from '../../types/interfaces';
+import { CarData, AnimatedCarData, WinnerData } from '../../types/interfaces';
 import animateCar from '../../utilities/animateCar';
 
 import { FormAttribute } from '../../types/enums';
@@ -27,6 +27,8 @@ export default class Controller {
   private animatedCars: { [id: number]: AnimatedCarData } = {};
 
   private winnerCar: SuccessPromise | null = null;
+
+  private winsCount: number = 1;
 
   public async handleDeleteButton(id: number, parent: BaseComponent, pageNumber: number): Promise<void> {
     const totalCarsElement = document.querySelector('.total-cars') as HTMLElement;
@@ -70,6 +72,13 @@ export default class Controller {
     totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
   }
 
+  public async handleRenderWinners(parent: HTMLElement, pageNumber: number, totalWinnersElement: BaseComponent) {
+    const winners = await this.model.getWinners(pageNumber);
+
+    this.view.renderWinners(winners, parent);
+    totalWinnersElement?.setTextContent(`(${this.model.totalWinnersValue})`);
+  }
+
   public handleStartCar = async (id: number) => {
     const parentElement = <HTMLElement>document.querySelector('.car-wrapper-js');
     const car = <HTMLElement>document.querySelector(`[data-car="${id}"]`);
@@ -79,6 +88,7 @@ export default class Controller {
     const animationDistance = fieldWidth - (carLeftPosition + carWidth);
     const winnerMessageElem = document.querySelector('.winner-message-js');
     assertIsDefined(winnerMessageElem);
+    // let winsCount = 1;
 
     try {
       const distanceData = await this.model.startEngine(id);
@@ -94,11 +104,38 @@ export default class Controller {
         window.cancelAnimationFrame(this.animatedCars[id].id);
         // return driveData;
       } else if (this.winnerCar === null) {
-        const winnerTime = (time / 1000).toFixed(2);
+        let winnerTime = (time / 1000).toFixed(2);
         const winnerCar = await this.model.getCar(id);
         const carName = winnerCar.name;
+
         this.winnerCar = { time, id };
         winnerMessageElem.textContent = `${carName} wins the race for ${winnerTime} seconds`;
+        const pastWinner = await this.model.getWinner(id);
+
+        if (Object.keys(pastWinner).length !== 0) {
+          this.winsCount = pastWinner.wins;
+          this.winsCount += 1;
+        }
+
+        if (pastWinner.time < winnerTime) {
+          winnerTime = pastWinner.time;
+        }
+
+        const winnerProps: WinnerData = {
+          id,
+          time: Number(winnerTime),
+          wins: this.winsCount,
+          name: winnerCar.name,
+          color: winnerCar.color,
+        };
+
+        if (this.winsCount > 1) {
+          console.log('update winner works');
+          this.model.updateWinner(winnerProps);
+        } else {
+          console.log('add winner works');
+          await this.model.addWinner(winnerProps);
+        }
 
         setTimeout(() => {
           winnerMessageElem.textContent = '';

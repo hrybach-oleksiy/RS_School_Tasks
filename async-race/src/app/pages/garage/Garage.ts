@@ -127,13 +127,14 @@ export default class Garage extends BaseComponent {
     return generateCarBlockWrapper;
   }
 
-  private handleCarOptionsClick = (event: Event) => {
+  private handleCarOptionsClick = async (event: Event) => {
     const currentButton = event.target as HTMLButtonElement;
 
     if (currentButton.classList.contains('remove') && currentButton.closest(`.${carsBlockStyles['car-options']}`)) {
       const currentID = currentButton.dataset.remove;
 
-      this.controller.handleDeleteButton(Number(currentID), this.carsWrapper, this.pageNumber);
+      await this.controller.handleDeleteButton(Number(currentID), this.carsWrapper, this.pageNumber);
+      await this.model.deleteWinner(Number(currentID));
     }
 
     if (currentButton.classList.contains('update') && currentButton.closest(`.${carsBlockStyles['car-options']}`)) {

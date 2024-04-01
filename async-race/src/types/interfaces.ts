@@ -15,6 +15,12 @@ export interface CarData {
   id?: number;
 }
 
+export interface WinnerData extends CarData {
+  wins: number;
+  time: number;
+  id: number;
+  winnerNumber?: number;
+}
 export interface AnimatedCarData {
   [key: string | number]: number | string;
   id: number;
