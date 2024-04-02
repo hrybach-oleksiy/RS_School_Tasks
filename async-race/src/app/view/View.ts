@@ -49,7 +49,7 @@ export default class View {
         color: winnerCar.color,
       };
       const winnerBlock = new WinnerBlock(winnerProps);
-      parent.append(winnerBlock.getNode());
+      parentElem.append(winnerBlock.getNode());
     });
   }
 }

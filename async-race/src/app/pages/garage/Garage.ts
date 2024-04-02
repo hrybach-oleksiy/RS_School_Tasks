@@ -194,7 +194,7 @@ export default class Garage extends BaseComponent {
     (this.updateCarInputColor.getNode() as HTMLInputElement).value = '#000000';
   };
 
-  private handlePrevButtonClick = (event: Event) => {
+  private handlePrevButtonClick = async (event: Event) => {
     const btn = event.target as HTMLButtonElement;
     const nextBtn = document.querySelector('.nextBtn');
     nextBtn?.removeAttribute(FormAttribute.DISABLED);
@@ -207,7 +207,8 @@ export default class Garage extends BaseComponent {
       btn.setAttribute(FormAttribute.DISABLED, 'true');
     }
 
-    this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    await this.controller.handleStopRace(this.pageNumber);
   };
 
   private handleNextButtonClick = async (event: Event) => {
@@ -226,6 +227,7 @@ export default class Garage extends BaseComponent {
     }
 
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
+    await this.controller.handleStopRace(this.pageNumber);
   };
 
   private handleGenerateButtonClick = async () => {

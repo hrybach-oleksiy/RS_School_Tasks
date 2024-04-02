@@ -48,7 +48,7 @@ export default class CarBlock extends BaseComponent {
     // car controls
     const carControls = div([styles['car-controls']]);
     const imgWrapper = div([styles['img-wrapper']]);
-    const finishFlag = div(['finish-flag']);
+    const finishFlag = div([styles['finish-flag']]);
 
     this.stopButton.setAttribute(FormAttribute.DISABLED, 'true');
 

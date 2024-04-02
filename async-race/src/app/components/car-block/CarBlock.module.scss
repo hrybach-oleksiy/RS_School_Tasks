@@ -12,9 +12,10 @@
   align-items: center;
 }
 
-// .car-controls {
-//   padding-bottom: 10px;
-// }
+.car-controls {
+  position: relative;
+  margin-bottom: 10px;
+}
 
 .car-title {
   font-size: 24px;
@@ -23,13 +24,25 @@
 .img-wrapper {
   position: relative;
   display: flex;
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 25px;
 
   svg {
     position: absolute;
-    top: 30px;
+    top: -13px;
   }
+}
+
+.finish-flag {
+  position: absolute;
+  right: 70px;
+  bottom: -10px;
+  width: 30px;
+  height: 30px;
+  background: url("../../../assets/images/finish-flag.svg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
 }
 
 .button {

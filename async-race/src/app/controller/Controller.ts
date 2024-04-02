@@ -32,6 +32,8 @@ export default class Controller {
 
   private winsCount: number = 1;
 
+  private isRace: boolean = false;
+
   public async handleDeleteButton(id: number, parent: BaseComponent, pageNumber: number): Promise<void> {
     const totalCarsElement = document.querySelector('.total-cars') as HTMLElement;
 
@@ -105,7 +107,7 @@ export default class Controller {
       if (!driveData.success) {
         window.cancelAnimationFrame(this.animatedCars[id].id);
         // return driveData;
-      } else if (this.winnerCar === null) {
+      } else if (this.winnerCar === null && this.isRace) {
         let winnerTime = (time / 1000).toFixed(2);
         const winnerCar = await this.model.getCar(id);
         const carName = winnerCar.name;
@@ -143,6 +145,8 @@ export default class Controller {
           winnerMessageElem.textContent = '';
         }, 4000);
         console.log(`${carName} wins the race for ${winnerTime} seconds`);
+
+        this.isRace = false;
       }
 
       //   return {
@@ -158,15 +162,21 @@ export default class Controller {
   private handleStopCar = async (id: number) => {
     try {
       await this.model.stopEngine(Number(id));
-      window.cancelAnimationFrame(this.animatedCars[id].id);
-      const car = <HTMLElement>document.querySelector(`[data-car="${id}"]`);
-      car.style.transform = 'translateX(0px)';
+      if (this.animatedCars[id]) {
+        window.cancelAnimationFrame(this.animatedCars[id].id);
+        const car = <HTMLElement>document.querySelector(`[data-car="${id}"]`);
+        car.style.transform = 'translateX(0px)';
+      }
     } catch (error) {
       console.error('Error stopping car:', error);
     }
   };
 
   public handleStartRace = async (page: number) => {
+    const disabledBtns = document.querySelectorAll('.car-wrapper-js button');
+    disabledBtns.forEach((btn) => btn.setAttribute(FormAttribute.DISABLED, 'true'));
+
+    this.isRace = true;
     const startBtn = document.querySelector('.btn-race');
     const resetBtn = document.querySelector('.btn-reset');
     startBtn?.setAttribute(FormAttribute.DISABLED, 'true');
@@ -183,6 +193,8 @@ export default class Controller {
   };
 
   public handleStopRace = async (page: number) => {
+    const disabledBtns = document.querySelectorAll('.car-wrapper-js button');
+    disabledBtns.forEach((btn) => btn.removeAttribute(FormAttribute.DISABLED));
     const startBtn = document.querySelector('.btn-race');
     const resetBtn = document.querySelector('.btn-reset');
     const cars = await this.model.getAllCars(page);
@@ -193,14 +205,12 @@ export default class Controller {
     this.winnerCar = null;
     startBtn?.removeAttribute(FormAttribute.DISABLED);
     resetBtn?.setAttribute(FormAttribute.DISABLED, 'true');
-
-    // resultRace = [];
-    // noticeWinner.innerHTML = '';
   };
 
   public handleSortWinners = async (order: boolean, parent: HTMLElement, keyValue: keyof WinnerData) => {
     const winners = await this.model.getAllWinners();
     let sortedWinners: WinnerData[];
+
     if (order) {
       sortedWinners = sortByAscending(winners, keyValue);
       this.view.renderWinners(sortedWinners, parent);

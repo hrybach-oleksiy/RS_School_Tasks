@@ -13,6 +13,10 @@ export default class WinnersTable extends BaseComponent {
 
   private tableContainer: BaseComponent = new BaseComponent({ tag: 'tbody', classNames: ['table-container'] });
 
+  private winsElement = new BaseComponent({ tag: 'th', text: 'Wins', classNames: [styles.wins] });
+
+  private timeElement = new BaseComponent({ tag: 'th', text: 'Best Time', classNames: [styles.time] });
+
   constructor() {
     super({
       tag: 'table',
@@ -28,50 +32,42 @@ export default class WinnersTable extends BaseComponent {
     const numberElement = new BaseComponent({ tag: 'th', text: '#' });
     const carElement = new BaseComponent({ tag: 'th', text: 'Car' });
     const nameElement = new BaseComponent({ tag: 'th', text: 'Name' });
-    const winsElement = new BaseComponent({ tag: 'th', text: 'Wins' });
-    const timeElement = new BaseComponent({ tag: 'th', text: 'Best Time' });
 
-    winsElement.addListener('click', this.handleWinsClick);
-    timeElement.addListener('click', this.handleTimeClick);
+    this.winsElement.addListener('click', this.handleWinsClick);
+    this.timeElement.addListener('click', this.handleTimeClick);
 
-    trElement.appendChildren([numberElement, carElement, nameElement, winsElement, timeElement]);
+    trElement.appendChildren([numberElement, carElement, nameElement, this.winsElement, this.timeElement]);
     theadElement.append(trElement);
 
     this.appendChildren([theadElement, this.tableContainer]);
   }
 
-  // public setHandlers() {
-  //   const winsColElement = document.querySelector('.wins-col');
-  //   const timeColElement = document.querySelector('.time-col');
-  //   console.log(winsColElement);
-  //   console.log(timeColElement);
-  //   if (winsColElement && timeColElement) {
-  //     winsColElement.addEventListener('click', this.handleWinsClick);
-  //     timeColElement.addEventListener('click', this.handleTimeClick);
-  //   }
-  // }
+  private handleWinsClick = async () => {
+    this.timeElement.removeClass(styles.asc);
+    this.winsElement.addClass(styles.asc);
 
-  private handleWinsClick = () => {
-    console.log('wins method works');
     if (this.isWinsAscending) {
-      // false
-      this.controller.handleSortWinners(this.isWinsAscending, this.tableContainer.getNode(), 'wins');
-      this.isWinsAscending = true;
-    } else {
-      // ascending false
-      this.controller.handleSortWinners(this.isWinsAscending, this.tableContainer.getNode(), 'wins');
+      await this.controller.handleSortWinners(this.isWinsAscending, this.tableContainer.getNode(), 'wins');
+      this.winsElement.addClass(styles.clicked);
       this.isWinsAscending = false;
+    } else {
+      await this.controller.handleSortWinners(this.isWinsAscending, this.tableContainer.getNode(), 'wins');
+      this.winsElement.removeClass(styles.clicked);
+      this.isWinsAscending = true;
     }
   };
 
-  private handleTimeClick = () => {
-    console.log('time method works');
+  private handleTimeClick = async () => {
+    this.winsElement.removeClass(styles.asc);
+    this.timeElement.addClass(styles.asc);
     if (this.isTimeAscending) {
-      this.controller.handleSortWinners(this.isTimeAscending, this.tableContainer.getNode(), 'time');
-      this.isTimeAscending = true;
-    } else {
-      this.controller.handleSortWinners(this.isTimeAscending, this.tableContainer.getNode(), 'time');
+      await this.controller.handleSortWinners(this.isTimeAscending, this.tableContainer.getNode(), 'time');
+      this.timeElement.addClass(styles.clicked);
       this.isTimeAscending = false;
+    } else {
+      await this.controller.handleSortWinners(this.isTimeAscending, this.tableContainer.getNode(), 'time');
+      this.timeElement.removeClass(styles.clicked);
+      this.isTimeAscending = true;
     }
   };
 }
