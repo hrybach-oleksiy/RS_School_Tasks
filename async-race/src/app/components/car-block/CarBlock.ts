@@ -1,10 +1,12 @@
 import BaseComponent from '../BaseComponent';
-
 import { div, button, h3 } from '../HTMLComponents';
+
 import createCarImage from '../../../utilities/cerateCarImage';
+
 import { CarData } from '../../../types/interfaces';
-import styles from './CarBlock.module.scss';
 import { FormAttribute } from '../../../types/enums';
+
+import styles from './CarBlock.module.scss';
 
 export default class CarBlock extends BaseComponent {
   private carProps: CarData;
@@ -33,7 +35,7 @@ export default class CarBlock extends BaseComponent {
     this.setBlock();
   }
 
-  private setBlock() {
+  private setBlock(): void {
     const { id, name, color } = this.carProps;
 
     // car options
@@ -41,6 +43,7 @@ export default class CarBlock extends BaseComponent {
     const updateButton = button(['btn', styles.button, 'update'], 'Update Car');
     const removeButton = button(['btn', styles.button, 'remove'], 'Remove Car');
     const carTitle = h3([styles['car-title']], name);
+
     updateButton.setAttribute('data-update', String(id));
     removeButton.setAttribute('data-remove', String(id));
     carOptions.appendChildren([updateButton, removeButton, carTitle]);
@@ -61,16 +64,17 @@ export default class CarBlock extends BaseComponent {
     this.appendChildren([carOptions, carControls]);
   }
 
-  private handleStartCarClick = async (event: Event) => {
+  private handleStartCarClick = async (event: Event): Promise<void> => {
     const currentCar = event.target as HTMLButtonElement;
     const currentCarID = Number(currentCar.dataset.start);
+
     this.startButton.setAttribute(FormAttribute.DISABLED, 'true');
     this.stopButton.removeAttribute(FormAttribute.DISABLED);
 
     this.startRaceHandler(currentCarID);
   };
 
-  private handleStopCarClick = async (event: Event) => {
+  private handleStopCarClick = async (event: Event): Promise<void> => {
     const currentCar = event.target as HTMLButtonElement;
     const currentCarID = Number(currentCar.dataset.stop);
 

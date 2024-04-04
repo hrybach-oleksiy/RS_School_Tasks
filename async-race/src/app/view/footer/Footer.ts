@@ -6,7 +6,7 @@ import { LinkAttribute, ImageAttribute } from '../../../types/enums';
 import courseLogo from '../../../assets/images/school-logo.svg';
 import gitHubLogo from '../../../assets/images/github-logo.svg';
 
-import styles from './footer.module.scss';
+import styles from './Footer.module.scss';
 
 export default class Footer extends BaseComponent {
   constructor() {
@@ -17,7 +17,7 @@ export default class Footer extends BaseComponent {
     this.setBlock();
   }
 
-  private setBlock() {
+  private setBlock(): void {
     const copyrightElement = div([styles.copyright]);
     const gitHubLink = a([styles.link]);
     const courseLink = a([styles.link]);

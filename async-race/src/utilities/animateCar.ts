@@ -16,10 +16,6 @@ const animateCar = (car: HTMLElement, distance: number, duration: number) => {
     if (elapsed < 1) {
       animatedCarIDs.id = window.requestAnimationFrame(step);
     }
-    // if (progress >= 1 && !btnResetRace.hasAttribute('disabled')) {
-    //   if (resultRace.length === 0) addWinner(car, duration);
-    //   resultRace.push(car);
-    // }
   }
 
   animatedCarIDs.id = window.requestAnimationFrame(step);

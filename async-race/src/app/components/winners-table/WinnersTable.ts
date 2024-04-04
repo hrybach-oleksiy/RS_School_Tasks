@@ -1,6 +1,6 @@
-import BaseComponent from '../BaseComponent';
-
 import Controller from '../../controller/Controller';
+
+import BaseComponent from '../BaseComponent';
 
 import styles from './WinnersTable.module.scss';
 
@@ -26,7 +26,7 @@ export default class WinnersTable extends BaseComponent {
     this.setContent();
   }
 
-  private setContent() {
+  private setContent(): void {
     const theadElement = new BaseComponent({ tag: 'thead' });
     const trElement = new BaseComponent({ tag: 'tr' });
     const numberElement = new BaseComponent({ tag: 'th', text: '#' });
@@ -42,7 +42,7 @@ export default class WinnersTable extends BaseComponent {
     this.appendChildren([theadElement, this.tableContainer]);
   }
 
-  private handleWinsClick = async () => {
+  private handleWinsClick = async (): Promise<void> => {
     this.timeElement.removeClass(styles.asc);
     this.winsElement.addClass(styles.asc);
 
@@ -57,9 +57,10 @@ export default class WinnersTable extends BaseComponent {
     }
   };
 
-  private handleTimeClick = async () => {
+  private handleTimeClick = async (): Promise<void> => {
     this.winsElement.removeClass(styles.asc);
     this.timeElement.addClass(styles.asc);
+
     if (this.isTimeAscending) {
       await this.controller.handleSortWinners(this.isTimeAscending, this.tableContainer.getNode(), 'time');
       this.timeElement.addClass(styles.clicked);

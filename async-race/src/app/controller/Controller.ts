@@ -2,25 +2,18 @@ import Model from '../model/Model';
 import View from '../view/View';
 
 import BaseComponent from '../components/BaseComponent';
+
 import { CarData, AnimatedCarData, WinnerData } from '../../types/interfaces';
-import animateCar from '../../utilities/animateCar';
-
-import { sortByAscending, sortByDescending } from '../../utilities/utils';
-
 import { FormAttribute } from '../../types/enums';
+
+import animateCar from '../../utilities/animateCar';
 import assertIsDefined from '../../utilities/assertIsDefined';
+import { sortByAscending, sortByDescending } from '../../utilities/utils';
 
 interface SuccessPromise {
   time: number;
   id: number;
 }
-
-// interface BrokenEnginePromise {
-//   success: boolean;
-// }
-
-// type PromiseResult = SuccessPromise | BrokenEnginePromise;
-
 export default class Controller {
   private model: Model = new Model();
 
@@ -38,7 +31,9 @@ export default class Controller {
     const totalCarsElement = document.querySelector('.total-cars') as HTMLElement;
 
     await this.model.deleteCar(id);
+
     const cars = await this.model.getAllCars(pageNumber);
+
     View.renderCars(cars, parent, this.handleStartCar, this.handleStopCar);
 
     if (totalCarsElement) {
@@ -53,7 +48,9 @@ export default class Controller {
     totalCarsElement: BaseComponent,
   ): Promise<void> {
     await this.model.addCar(carsProps);
+
     const cars = await this.model.getAllCars(pageNumber);
+
     View.renderCars(cars, parent, this.handleStartCar, this.handleStopCar);
     totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
   }
@@ -65,25 +62,36 @@ export default class Controller {
     totalCarsElement: BaseComponent,
   ): Promise<void> {
     await this.model.updateCar(carsProps);
+
     const cars = await this.model.getAllCars(pageNumber);
+
     View.renderCars(cars, parent, this.handleStartCar, this.handleStopCar);
     totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
   }
 
-  public async handleRenderCars(parent: BaseComponent, pageNumber: number, totalCarsElement: BaseComponent) {
+  public async handleRenderCars(
+    parent: BaseComponent,
+    pageNumber: number,
+    totalCarsElement: BaseComponent,
+  ): Promise<void> {
     const cars = await this.model.getAllCars(pageNumber);
+
     View.renderCars(cars, parent, this.handleStartCar, this.handleStopCar);
     totalCarsElement.setTextContent(`(${this.model.totalCarsValue})`);
   }
 
-  public async handleRenderWinners(parent: HTMLElement, pageNumber: number, totalWinnersElement: BaseComponent) {
+  public async handleRenderWinners(
+    parent: HTMLElement,
+    pageNumber: number,
+    totalWinnersElement: BaseComponent,
+  ): Promise<void> {
     const winners = await this.model.getWinners(pageNumber);
 
     this.view.renderWinners(winners, parent);
     totalWinnersElement?.setTextContent(`(${this.model.totalWinnersValue})`);
   }
 
-  public handleStartCar = async (id: number) => {
+  public handleStartCar = async (id: number): Promise<void> => {
     const parentElement = <HTMLElement>document.querySelector('.car-wrapper-js');
     const car = <HTMLElement>document.querySelector(`[data-car="${id}"]`);
     const fieldWidth = parentElement.clientWidth;
@@ -91,8 +99,8 @@ export default class Controller {
     const carWidth = car.offsetWidth;
     const animationDistance = fieldWidth - (carLeftPosition + carWidth);
     const winnerMessageElem = document.querySelector('.winner-message-js');
+
     assertIsDefined(winnerMessageElem);
-    // let winsCount = 1;
 
     try {
       const distanceData = await this.model.startEngine(id);
@@ -106,15 +114,14 @@ export default class Controller {
 
       if (!driveData.success) {
         window.cancelAnimationFrame(this.animatedCars[id].id);
-        // return driveData;
       } else if (this.winnerCar === null && this.isRace) {
-        let winnerTime = (time / 1000).toFixed(2);
         const winnerCar = await this.model.getCar(id);
         const carName = winnerCar.name;
+        const pastWinner = await this.model.getWinner(id);
+        let winnerTime = Number((time / 1000).toFixed(2));
 
         this.winnerCar = { time, id };
         winnerMessageElem.textContent = `${carName} wins the race for ${winnerTime} seconds`;
-        const pastWinner = await this.model.getWinner(id);
 
         if (Object.keys(pastWinner).length !== 0) {
           this.winsCount = pastWinner.wins;
@@ -134,10 +141,8 @@ export default class Controller {
         };
 
         if (this.winsCount > 1) {
-          console.log('update winner works');
-          this.model.updateWinner(winnerProps);
+          await this.model.updateWinner(winnerProps);
         } else {
-          console.log('add winner works');
           await this.model.addWinner(winnerProps);
         }
 
@@ -148,23 +153,18 @@ export default class Controller {
 
         this.isRace = false;
       }
-
-      //   return {
-      //     time,
-      //     id,
-      //   };
     } catch (error) {
       console.error('Error starting car:', error);
-      //   return false;
     }
   };
 
-  private handleStopCar = async (id: number) => {
+  private handleStopCar = async (id: number): Promise<void> => {
     try {
       await this.model.stopEngine(Number(id));
       if (this.animatedCars[id]) {
-        window.cancelAnimationFrame(this.animatedCars[id].id);
         const car = <HTMLElement>document.querySelector(`[data-car="${id}"]`);
+
+        window.cancelAnimationFrame(this.animatedCars[id].id);
         car.style.transform = 'translateX(0px)';
       }
     } catch (error) {
@@ -172,16 +172,17 @@ export default class Controller {
     }
   };
 
-  public handleStartRace = async (page: number) => {
+  public handleStartRace = async (page: number): Promise<void> => {
     const disabledBtns = document.querySelectorAll('.car-wrapper-js button');
-    disabledBtns.forEach((btn) => btn.setAttribute(FormAttribute.DISABLED, 'true'));
-
-    this.isRace = true;
     const startBtn = document.querySelector('.btn-race');
     const resetBtn = document.querySelector('.btn-reset');
+
+    disabledBtns.forEach((btn) => btn.setAttribute(FormAttribute.DISABLED, 'true'));
     startBtn?.setAttribute(FormAttribute.DISABLED, 'true');
+
+    this.isRace = true;
+
     const cars = await this.model.getAllCars(page);
-    //   cars.forEach((car) => this.handleStartCar(Number(car.id)));
     const promises = cars.map((car) => this.handleStartCar(Number(car.id)));
 
     try {
@@ -192,12 +193,13 @@ export default class Controller {
     }
   };
 
-  public handleStopRace = async (page: number) => {
+  public handleStopRace = async (page: number): Promise<void> => {
     const disabledBtns = document.querySelectorAll('.car-wrapper-js button');
-    disabledBtns.forEach((btn) => btn.removeAttribute(FormAttribute.DISABLED));
     const startBtn = document.querySelector('.btn-race');
     const resetBtn = document.querySelector('.btn-reset');
     const cars = await this.model.getAllCars(page);
+
+    disabledBtns.forEach((btn) => btn.removeAttribute(FormAttribute.DISABLED));
 
     cars.forEach((car) => {
       this.handleStopCar(Number(car.id));
@@ -207,7 +209,7 @@ export default class Controller {
     resetBtn?.setAttribute(FormAttribute.DISABLED, 'true');
   };
 
-  public handleSortWinners = async (order: boolean, parent: HTMLElement, keyValue: keyof WinnerData) => {
+  public handleSortWinners = async (order: boolean, parent: HTMLElement, keyValue: keyof WinnerData): Promise<void> => {
     const winners = await this.model.getAllWinners();
     let sortedWinners: WinnerData[];
 

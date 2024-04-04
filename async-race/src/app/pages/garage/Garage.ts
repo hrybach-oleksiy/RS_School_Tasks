@@ -1,17 +1,14 @@
+import Model from '../../model/Model';
+import Controller from '../../controller/Controller';
+
 import BaseComponent from '../../components/BaseComponent';
 import { h1, h2, span, div, input, button } from '../../components/HTMLComponents';
-// import CarBlock from '../../components/car-block/CarBlock';
 import Pagination from '../../components/pagination/Pagination';
 import getRandomName from '../../../utilities/getRandomName';
 import getRandomColor from '../../../utilities/getRandomColor';
 
-// import View from '../../viewTemp/View';
-
 import { CarData } from '../../../types/interfaces';
 import { FormAttribute } from '../../../types/enums';
-import Model from '../../model/Model';
-// import View from '../../view/View';
-import Controller from '../../controller/Controller';
 
 import styles from './Garage.module.scss';
 import carsBlockStyles from '../../components/car-block/CarBlock.module.scss';
@@ -53,26 +50,25 @@ export default class Garage extends BaseComponent {
 
   private updatedID: number = 0;
 
+  private carPerPage = 7;
+
   constructor() {
     super({
       tag: 'div',
       classNames: [styles.garage, 'page'],
     });
 
-    // this.setContent();
-    // this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
     this.init();
     this.addListener('click', this.handleCarOptionsClick);
   }
 
-  private async init() {
+  private async init(): Promise<void> {
     await this.model.updateTotalCarsValue();
     await this.controller.handleRenderCars(this.carsWrapper, this.pageNumber, this.totalCarsElement);
-    // await this.model.getAllCars(this.pageNumber);
     this.setContent();
   }
 
-  private setContent() {
+  private setContent(): void {
     const title = h1([styles.title], 'Garage  ');
     title.append(this.totalCarsElement);
 
@@ -80,7 +76,7 @@ export default class Garage extends BaseComponent {
     pageNumberTitle.append(this.pageNumberCountElement);
 
     const generateCarsBlock = this.setGenerateCarBlock();
-    const isNextBtnActive = this.model.totalCarsValue > this.pageNumber * 7;
+    const isNextBtnActive = this.model.totalCarsValue > this.pageNumber * this.carPerPage;
     const paginationBlock = new Pagination(this.handlePrevButtonClick, this.handleNextButtonClick, isNextBtnActive);
     const winnerMessageBlock = div([styles['winner-message'], 'winner-message-js']);
 
@@ -94,7 +90,7 @@ export default class Garage extends BaseComponent {
     ]);
   }
 
-  private setGenerateCarBlock() {
+  private setGenerateCarBlock(): BaseComponent {
     const generateCarBlockWrapper = div([styles['generate-wrapper']]);
 
     // create block
@@ -127,7 +123,7 @@ export default class Garage extends BaseComponent {
     return generateCarBlockWrapper;
   }
 
-  private handleCarOptionsClick = async (event: Event) => {
+  private handleCarOptionsClick = async (event: Event): Promise<void> => {
     const currentButton = event.target as HTMLButtonElement;
 
     if (currentButton.classList.contains('remove') && currentButton.closest(`.${carsBlockStyles['car-options']}`)) {
@@ -152,7 +148,7 @@ export default class Garage extends BaseComponent {
     }
   };
 
-  private handleCreateButtonClick = async () => {
+  private handleCreateButtonClick = async (): Promise<void> => {
     const newName = (this.createCarInputText.getNode() as HTMLInputElement).value;
     const newColor = (this.createCarInputColor.getNode() as HTMLInputElement).value;
 
@@ -166,7 +162,7 @@ export default class Garage extends BaseComponent {
     await this.model.updateTotalCarsValue();
     await this.controller.handleCreateButton(carsProps, this.carsWrapper, this.pageNumber, this.totalCarsElement);
 
-    if (this.model.totalCarsValue >= this.pageNumber * 7) {
+    if (this.model.totalCarsValue >= this.pageNumber * this.carPerPage) {
       const nextBtn = document.querySelector('.nextBtn');
       nextBtn?.removeAttribute(FormAttribute.DISABLED);
     }
@@ -175,7 +171,7 @@ export default class Garage extends BaseComponent {
     (this.createCarInputColor.getNode() as HTMLInputElement).value = '#000000';
   };
 
-  private handleUpdateButtonClick = () => {
+  private handleUpdateButtonClick = (): void => {
     const updatedName = (this.updateCarInputText.getNode() as HTMLInputElement).value;
     const updatedColor = (this.updateCarInputColor.getNode() as HTMLInputElement).value;
 
@@ -194,7 +190,7 @@ export default class Garage extends BaseComponent {
     (this.updateCarInputColor.getNode() as HTMLInputElement).value = '#000000';
   };
 
-  private handlePrevButtonClick = async (event: Event) => {
+  private handlePrevButtonClick = async (event: Event): Promise<void> => {
     const btn = event.target as HTMLButtonElement;
     const nextBtn = document.querySelector('.nextBtn');
     nextBtn?.removeAttribute(FormAttribute.DISABLED);
@@ -211,18 +207,18 @@ export default class Garage extends BaseComponent {
     await this.controller.handleStopRace(this.pageNumber);
   };
 
-  private handleNextButtonClick = async (event: Event) => {
+  private handleNextButtonClick = async (event: Event): Promise<void> => {
     const btn = event.target as HTMLButtonElement;
+    const prevBtn = document.querySelector('.prevBtn');
 
     await this.model.updateTotalCarsValue();
 
-    const prevBtn = document.querySelector('.prevBtn');
     prevBtn?.removeAttribute(FormAttribute.DISABLED);
     btn.removeAttribute(FormAttribute.DISABLED);
     this.pageNumber += 1;
     this.pageNumberCountElement.setTextContent(`#${this.pageNumber}`);
 
-    if (this.pageNumber * 7 >= this.model.totalCarsValue) {
+    if (this.pageNumber * this.carPerPage >= this.model.totalCarsValue) {
       btn.setAttribute(FormAttribute.DISABLED, 'true');
     }
 
@@ -230,7 +226,7 @@ export default class Garage extends BaseComponent {
     await this.controller.handleStopRace(this.pageNumber);
   };
 
-  private handleGenerateButtonClick = async () => {
+  private handleGenerateButtonClick = async (): Promise<void> => {
     const MAX_CARS_AMOUNT = 100;
     const btnNext = document.querySelector('.nextBtn');
     const promises = [];
@@ -248,7 +244,7 @@ export default class Garage extends BaseComponent {
     btnNext?.removeAttribute(FormAttribute.DISABLED);
   };
 
-  private handleRaceButtonClick = () => {
+  private handleRaceButtonClick = (): void => {
     this.controller.handleStartRace(this.pageNumber);
   };
 

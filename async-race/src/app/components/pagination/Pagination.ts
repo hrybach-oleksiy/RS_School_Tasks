@@ -1,11 +1,9 @@
 import BaseComponent from '../BaseComponent';
-
 import { button } from '../HTMLComponents';
 
 import { FormAttribute } from '../../../types/enums';
 
 import styles from './Pagination.module.scss';
-// import { FormAttribute } from '../../../types/enums';
 
 type PaginationHandler = (event: Event) => void;
 
@@ -28,7 +26,7 @@ export default class Pagination extends BaseComponent {
     this.setBlock();
   }
 
-  private setBlock() {
+  private setBlock(): void {
     const prevButton = button(['btn', styles.button, 'prevBtn'], 'Previous Page', (event) => {
       this.onPrevBtnClick(event);
     });

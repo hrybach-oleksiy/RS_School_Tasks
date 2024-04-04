@@ -25,12 +25,12 @@ export default class BaseComponent {
     }
   }
 
-  public append(child: BaseComponent) {
+  public append(child: BaseComponent): void {
     this.children.push(child);
     this.node.append(child.getNode());
   }
 
-  public appendChildren(children: BaseComponent[]) {
+  public appendChildren(children: BaseComponent[]): void {
     children.forEach((el) => {
       this.append(el);
     });
@@ -44,25 +44,25 @@ export default class BaseComponent {
     return this.children;
   }
 
-  public setTextContent(content: string) {
+  public setTextContent(content: string): void {
     this.node.textContent = content;
   }
 
-  public setAttribute(attribute: AttributeType | DataAttribute, value: string) {
+  public setAttribute(attribute: AttributeType | DataAttribute, value: string): void {
     this.node.setAttribute(attribute, value);
   }
 
-  public setAttributes(attributes: { [key in AttributeType]: string }) {
+  public setAttributes(attributes: { [key in AttributeType]: string }): void {
     Object.keys(attributes).forEach((attribute) => {
       this.node.setAttribute(attribute as string, attributes[attribute as AttributeType]);
     });
   }
 
-  public getAttribute(value: string) {
+  public getAttribute(value: string): string | null {
     return this.node.getAttribute(value);
   }
 
-  public removeAttribute(attribute: string) {
+  public removeAttribute(attribute: string): void {
     this.node.removeAttribute(attribute);
   }
 
@@ -74,26 +74,26 @@ export default class BaseComponent {
     this.node.classList.remove(className);
   }
 
-  public toggleClass(className: string) {
+  public toggleClass(className: string): void {
     this.node.classList.toggle(className);
   }
 
-  public addListener(event: string, listener: EventListener, options: boolean | AddEventListenerOptions = false) {
+  public addListener(event: string, listener: EventListener, options: boolean | AddEventListenerOptions = false): void {
     this.node.addEventListener(event, listener, options);
   }
 
-  public removeListener(event: string, listener: EventListener, options: boolean | EventListenerOptions = false) {
+  public removeListener(event: string, listener: EventListener, options: boolean | EventListenerOptions = false): void {
     this.node.removeEventListener(event, listener, options);
   }
 
-  public destroyChildren() {
+  public destroyChildren(): void {
     this.children.forEach((child) => {
       child.destroy();
     });
     this.children.length = 0;
   }
 
-  public destroy() {
+  public destroy(): void {
     this.destroyChildren();
     this.node.remove();
   }

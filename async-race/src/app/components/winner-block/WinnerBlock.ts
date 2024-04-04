@@ -1,8 +1,9 @@
 import BaseComponent from '../BaseComponent';
 
-// import { div, button, h3 } from '../HTMLComponents';
 import createCarImage from '../../../utilities/cerateCarImage';
+
 import { WinnerData } from '../../../types/interfaces';
+
 import styles from './WinnerBlock.module.scss';
 
 export default class WinnerBlock extends BaseComponent {
@@ -18,9 +19,8 @@ export default class WinnerBlock extends BaseComponent {
     this.setBlock();
   }
 
-  private setBlock() {
+  private setBlock(): void {
     const { time, wins, name, color, winnerNumber } = this.winnerProps;
-
     const numberCol = new BaseComponent({ tag: 'td', classNames: [styles.col], text: String(winnerNumber) });
     const carCol = new BaseComponent({ tag: 'td', classNames: [styles.col] });
     const nameCol = new BaseComponent({ tag: 'td', classNames: [styles.col], text: name });

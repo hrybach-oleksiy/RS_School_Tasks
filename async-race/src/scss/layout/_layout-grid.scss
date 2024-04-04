@@ -1,14 +1,14 @@
 .layout-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(200px, 296px));
-    gap: 2.2vw;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 296px));
+  gap: 2.2vw;
+  justify-content: center;
 
-    @include media-tablet {
-        grid-template-columns: repeat(2, minmax(200px, 296px));
-    }
+  @include media-tablet {
+    grid-template-columns: repeat(2, minmax(200px, 296px));
+  }
 
-    @include media-mobile {
-        grid-template-columns: 1fr;
-    }
+  @include media-mobile {
+    grid-template-columns: 1fr;
+  }
 }

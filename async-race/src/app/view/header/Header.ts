@@ -1,11 +1,9 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button, div } from '../../components/HTMLComponents';
-// import Controller from '../../controller/Controller';
 
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
-  //   private controller: Controller = new Controller();
   constructor() {
     super(
       {
@@ -18,9 +16,10 @@ export default class Header extends BaseComponent {
     this.setContent();
   }
 
-  private setContent() {
+  private setContent(): void {
     const buttonsWrapper = div([styles.wrapper]);
     const garageButton = button(['btn', 'header-btn'], 'Garage', Header.changeView);
+
     garageButton.addClass(styles.active);
 
     const winnersButton = button(['btn', 'header-btn', 'winner-btn'], 'Winners', Header.changeView);
@@ -29,7 +28,7 @@ export default class Header extends BaseComponent {
     this.append(buttonsWrapper);
   }
 
-  static changeView = (event: Event) => {
+  static changeView = (event: Event): void => {
     const currentButton = event.target as HTMLButtonElement;
     const pages = document.querySelectorAll('.page');
     const buttonElements = document.querySelectorAll('.header-btn');

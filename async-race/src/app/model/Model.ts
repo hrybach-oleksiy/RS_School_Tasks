@@ -1,5 +1,5 @@
 import { Endpoint, HTTPMethod } from '../../types/enums';
-import { CarData, WinnerData } from '../../types/interfaces';
+import { CarData, WinnerData, CarEngineData, DriveEngineData } from '../../types/interfaces';
 
 export default class Model {
   private garageLink: string = `http://127.0.0.1:3000/${Endpoint.GARAGE}`;
@@ -43,7 +43,7 @@ export default class Model {
     }
   };
 
-  public addCar = async (carProps: CarData) => {
+  public addCar = async (carProps: CarData): Promise<void> => {
     try {
       await fetch(this.garageLink, {
         method: HTTPMethod.POST,
@@ -58,7 +58,7 @@ export default class Model {
     }
   };
 
-  public updateCar = async (carProps: CarData) => {
+  public updateCar = async (carProps: CarData): Promise<void> => {
     try {
       await fetch(`${this.garageLink}/${carProps.id}`, {
         method: HTTPMethod.PUT,
@@ -73,7 +73,7 @@ export default class Model {
     }
   };
 
-  public async updateTotalCarsValue() {
+  public async updateTotalCarsValue(): Promise<void> {
     try {
       const response = await fetch(`${this.garageLink}`, { method: HTTPMethod.GET });
       const data = await response.json();
@@ -83,7 +83,7 @@ export default class Model {
     }
   }
 
-  public deleteCar = async (id: number) => {
+  public deleteCar = async (id: number): Promise<void> => {
     try {
       await fetch(`${this.garageLink}/${id}`, {
         method: HTTPMethod.DELETE,
@@ -94,7 +94,7 @@ export default class Model {
     }
   };
 
-  public startEngine = async (id: number) => {
+  public startEngine = async (id: number): Promise<CarEngineData> => {
     try {
       const response = await fetch(`${this.engineLink}?id=${id}&status=started`, { method: HTTPMethod.PATCH });
       return await response.json();
@@ -104,7 +104,7 @@ export default class Model {
     }
   };
 
-  public stopEngine = async (id: number) => {
+  public stopEngine = async (id: number): Promise<CarEngineData> => {
     try {
       const response = await fetch(`${this.engineLink}?id=${id}&status=stopped`, { method: HTTPMethod.PATCH });
       return await response.json();
@@ -114,7 +114,7 @@ export default class Model {
     }
   };
 
-  public driveEngine = async (id: number) => {
+  public driveEngine = async (id: number): Promise<DriveEngineData> => {
     try {
       const response = await fetch(`${this.engineLink}?id=${id}&status=drive`, { method: HTTPMethod.PATCH });
       return response.status !== 200 ? { success: false } : { ...(await response.json()) };
@@ -134,8 +134,7 @@ export default class Model {
     }
   };
 
-  // TODO: make all methods using arrow function
-  public getWinners = async (page: number, limit = 10) => {
+  public getWinners = async (page: number, limit = 10): Promise<WinnerData[]> => {
     try {
       const response = await fetch(`${this.winnerLink}?_page=${page}&_limit=${limit}`, { method: HTTPMethod.GET });
       this.totalWinners = Number(response.headers.get('X-Total-count'));
@@ -146,7 +145,7 @@ export default class Model {
     }
   };
 
-  public async updateTotalWinnersValue() {
+  public async updateTotalWinnersValue(): Promise<void> {
     try {
       const response = await fetch(`${this.winnerLink}`, { method: HTTPMethod.GET });
       const data = await response.json();
@@ -156,7 +155,7 @@ export default class Model {
     }
   }
 
-  public getWinner = async (id: number) => {
+  public getWinner = async (id: number): Promise<WinnerData> => {
     try {
       const response = await fetch(`${this.winnerLink}/${id}`, { method: HTTPMethod.GET });
 
@@ -182,7 +181,7 @@ export default class Model {
     }
   };
 
-  public deleteWinner = async (id: number) => {
+  public deleteWinner = async (id: number): Promise<void> => {
     try {
       await fetch(`${this.winnerLink}/${id}`, {
         method: HTTPMethod.DELETE,
@@ -193,7 +192,7 @@ export default class Model {
     }
   };
 
-  public updateWinner = async (winnerProps: CarData) => {
+  public updateWinner = async (winnerProps: CarData): Promise<void> => {
     try {
       await fetch(`${this.winnerLink}/${winnerProps.id}`, {
         method: HTTPMethod.PUT,

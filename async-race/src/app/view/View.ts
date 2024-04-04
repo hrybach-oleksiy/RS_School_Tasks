@@ -1,10 +1,10 @@
-import { CarData, WinnerData } from '../../types/interfaces';
+import Model from '../model/Model';
 import BaseComponent from '../components/BaseComponent';
 
 import CarBlock from '../components/car-block/CarBlock';
 import WinnerBlock from '../components/winner-block/WinnerBlock';
 
-import Model from '../model/Model';
+import { CarData, WinnerData } from '../../types/interfaces';
 
 export default class View {
   private model: Model = new Model();
@@ -14,7 +14,7 @@ export default class View {
     parent: BaseComponent,
     startRaceHandler: (id: number) => void,
     stopRaceHandler: (id: number) => void,
-  ) {
+  ): void {
     parent.destroyChildren();
 
     cars.forEach((car) => {
@@ -31,11 +31,12 @@ export default class View {
     });
   }
 
-  public renderWinners(winners: WinnerData[], parent: HTMLElement) {
+  public renderWinners(winners: WinnerData[], parent: HTMLElement): void {
+    const CAR_PER_PAGE = 10;
     const pageNumberCountElem = document.querySelector('.winners .page-number-count');
     const pageNumberCount = pageNumberCountElem?.textContent?.slice(1);
     const parentElem = parent;
-    let winnerNumber = Number(pageNumberCount) * 10 - 10;
+    let winnerNumber = Number(pageNumberCount) * CAR_PER_PAGE - CAR_PER_PAGE;
     parentElem.innerHTML = '';
     winners.forEach(async (winner) => {
       const winnerCar = await this.model.getCar(winner.id);

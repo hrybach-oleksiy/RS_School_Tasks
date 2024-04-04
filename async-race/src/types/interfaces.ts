@@ -25,3 +25,10 @@ export interface AnimatedCarData {
   [key: string | number]: number | string;
   id: number;
 }
+
+export interface CarEngineData {
+  velocity: number;
+  distance: number;
+}
+
+export type DriveEngineData = { success: true | false };

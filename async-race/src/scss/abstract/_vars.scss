@@ -13,53 +13,37 @@ $shadow: rgb(0 0 0 / 34.2%);
 $border-light: #c1b6ad;
 $border-dark: #665f55;
 
-// themes
-// $themes: (
-//   light: (
-//     text: $backdrop,
-//     // bg: $light,
-//     bg: red,
-//     accent: $accent,
-//   ),
-//   dark: (
-//     text: $light,
-//     // bg: $backdrop,
-//     bg: blue,
-//     accent: #abcabc,
-//   ),
-// );
-
 // TODO: Export themes to separate file
 $themes: (
-    "light": (
-        "primary": $container,
-        "light": $light,
-        "background": $border-light,
-        "border": $backdrop,
-        "text": $dark,
-        "shadow": $shadow,
-        "body": $body,
-        "button": $body,
-    ),
-    "dark": (
-        "primary": $accent,
-        "light": $border-dark,
-        "background": $backdrop,
-        "border": $body,
-        "text": $light,
-        "shadow": $shadow,
-        "body": $backdrop,
-        "button": $container,
-    ),
+  "light": (
+    "primary": $container,
+    "light": $light,
+    "background": $border-light,
+    "border": $backdrop,
+    "text": $dark,
+    "shadow": $shadow,
+    "body": $body,
+    "button": $body,
+  ),
+  "dark": (
+    "primary": $accent,
+    "light": $border-dark,
+    "background": $backdrop,
+    "border": $body,
+    "text": $light,
+    "shadow": $shadow,
+    "body": $backdrop,
+    "button": $container,
+  ),
 );
 
 @each $theme-name, $properties in $themes {
-    body[data-theme="#{$theme-name}"] {
-        // define a css variable for each property
-        @each $name, $property in $properties {
-            --#{$name}: #{$property};
-        }
+  body[data-theme="#{$theme-name}"] {
+    // define a css variable for each property
+    @each $name, $property in $properties {
+      --#{$name}: #{$property};
     }
+  }
 }
 
 // media

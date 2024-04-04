@@ -14,7 +14,7 @@ export default class Main extends BaseComponent {
     this.setPage();
   }
 
-  private setPage() {
+  private setPage(): void {
     this.destroyChildren();
 
     const garageBlock = new Garage();
