@@ -1,0 +1,5 @@
+#async-race/.husky/pre-push
+
+cd fun-chat
+
+npx validate-branch-name

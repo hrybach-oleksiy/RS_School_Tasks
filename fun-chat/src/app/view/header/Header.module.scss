@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  color: #f0f8ff;
+  font-weight: 600;
+  line-height: 150%;
+  background-color: #25413e;
+  border: 1px solid #f0f8ff;
+}
+
+.header-title {
+  font-size: 24px;
+}
+
+.wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.active {
+  color: #f0f8ff;
+  background-color: #994c4c;
+}

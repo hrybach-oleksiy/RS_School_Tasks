@@ -1,0 +1,7 @@
+#async-race/.husky/pre-commit
+
+cd fun-chat
+
+npx lint-staged
+
+

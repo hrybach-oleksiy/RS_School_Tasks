@@ -1,0 +1,9 @@
+.hidden {
+  display: none;
+}
+
+.app {
+  display: grid;
+  grid-template-rows: 80px 1fr 80px;
+  min-height: 100vh;
+}

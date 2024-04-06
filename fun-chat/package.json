@@ -1,5 +1,5 @@
 {
-  "name": "Async Race",
+  "name": "Fun Chat",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,12 +9,12 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "stylelint": "stylelint '**/*{.css,.scss}'",
     "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix",
-    "deploy": "npm run build && npx gh-pages -d dist -e async-race",
+    "deploy": "npm run build && npx gh-pages -d dist -e fun-chat",
     "format": "npx prettier --write .",
     "ci:format": "prettier --check .",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "prepare": "cd .. && husky async-race/.husky"
+    "prepare": "cd .. && husky fun-chat/.husky"
   },
   "keywords": [],
   "author": "",
