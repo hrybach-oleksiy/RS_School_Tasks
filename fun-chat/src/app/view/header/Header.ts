@@ -1,10 +1,14 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button, div } from '../../components/HTMLComponents';
 
+import Router from '../../router/Router';
+
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
-  constructor() {
+  private router: Router;
+
+  constructor(router: Router) {
     super(
       {
         tag: 'header',
@@ -12,19 +16,21 @@ export default class Header extends BaseComponent {
       },
       p([styles['header-title']], 'Fun Chat'),
     );
-
+    this.router = router;
     this.setContent();
   }
 
   private setContent(): void {
     const buttonsWrapper = div([styles.wrapper]);
-    const garageButton = button(['btn', 'header-btn'], 'First Button');
+    const logoutButton = button(['btn', 'header-btn'], 'Log Out', this.handleLogoutButtonClick);
 
-    garageButton.addClass(styles.active);
+    // garageButton.addClass(styles.active);
 
-    const winnersButton = button(['btn', 'header-btn', 'winner-btn'], 'Second Button');
-
-    buttonsWrapper.appendChildren([garageButton, winnersButton]);
+    buttonsWrapper.appendChildren([logoutButton]);
     this.append(buttonsWrapper);
   }
+
+  private handleLogoutButtonClick = () => {
+    this.router.navigate('login');
+  };
 }

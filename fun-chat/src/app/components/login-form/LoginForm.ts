@@ -6,6 +6,8 @@ import assertIsDefined from '../../../utilities/utils';
 
 import styles from './LoginForm.module.scss';
 
+import Router from '../../router/Router';
+
 export default class LoginForm extends BaseComponent {
   private nameInput?: BaseComponent;
 
@@ -17,11 +19,15 @@ export default class LoginForm extends BaseComponent {
 
   private isSurnameValid: boolean = false;
 
-  constructor() {
+  private router: Router;
+
+  constructor(router: Router) {
     super({
       tag: 'form',
       classNames: [styles.form, 'form'],
     });
+    this.router = router;
+
     this.setAttribute(FormAttribute.ACTION, '');
 
     this.setForm();
@@ -34,6 +40,7 @@ export default class LoginForm extends BaseComponent {
       // if (setAppState) {
       //   setAppState(AppPage.START_PAGE);
       // }
+      this.router.navigate('chat');
     });
   }
 

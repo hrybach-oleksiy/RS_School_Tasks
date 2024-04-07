@@ -1,3 +1,5 @@
+// import BaseComponent from '../app/components/BaseComponent';
+
 export interface InputProps {
   classNames?: string[];
   id: string;
@@ -9,26 +11,11 @@ export interface InputProps {
   onChange?: EventListener;
 }
 
-export interface CarData {
-  name: string;
-  color: string;
-  id?: number;
+export interface RoutesPath {
+  path: string;
+  callback: () => void;
 }
 
-export interface WinnerData extends CarData {
-  wins: number;
-  time: number;
-  id: number;
-  winnerNumber?: number;
-}
-export interface AnimatedCarData {
-  [key: string | number]: number | string;
-  id: number;
-}
-
-export interface CarEngineData {
-  velocity: number;
-  distance: number;
-}
-
-export type DriveEngineData = { success: true | false };
+// export interface RoutesPath {
+//   path: string;
+// }

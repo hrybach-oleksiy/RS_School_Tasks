@@ -105,11 +105,35 @@ module.exports = {
     ],
   },
   plugins: [
+    // new HtmlWebpackPlugin({
+    //   template: path.join(__dirname, 'src', 'index.html'),
+    //   inject: true,
+    //   chunks: ['index'],
+    //   filename: 'index.html',
+    //   minify: {
+    //     collapseWhitespace: isProd,
+    //     removeComments: isProd,
+    //     removeRedundantAttributes: isProd,
+    //     useShortDoctype: isProd,
+    //   },
+    // }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'index.html'),
       inject: true,
       chunks: ['index'],
       filename: 'index.html',
+      minify: {
+        collapseWhitespace: isProd,
+        removeComments: isProd,
+        removeRedundantAttributes: isProd,
+        useShortDoctype: isProd,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', '404.html'),
+      inject: true,
+      chunks: ['404'],
+      filename: '404.html',
       minify: {
         collapseWhitespace: isProd,
         removeComments: isProd,
@@ -132,8 +156,14 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
+  // devServer: {
+  //   watchFiles: path.join(__dirname, 'src'),
+  //   port: 9000,
+  // },
   devServer: {
-    watchFiles: path.join(__dirname, 'src'),
-    port: 9000,
+    historyApiFallback: true, // Дозволяє обробляти всі запити і направляти їх до index.html
+    static: './', // Вказує кореневу директорію для сервера
+    hot: true, // Включає гарячу перезавантаження
+    port: 9000, // Порт сервера
   },
 };
