@@ -1,17 +1,3 @@
-enum Endpoint {
-  GARAGE = 'garage',
-  ENGINE = 'engine',
-  WINNERS = 'winners',
-}
-
-enum HTTPMethod {
-  GET = 'GET',
-  DELETE = 'DELETE',
-  PUT = 'PUT',
-  POST = 'POST',
-  PATCH = 'PATCH',
-}
-
 enum FormAttribute {
   PLACEHOLDER = 'placeholder',
   TYPE = 'type',
@@ -36,4 +22,12 @@ enum LinkAttribute {
   TARGET = 'target',
 }
 
-export { Endpoint, LinkAttribute, ImageAttribute, FormAttribute, HTTPMethod };
+enum UserRequestType {
+  LOGIN = 'USER_LOGIN',
+  LOGOUT = 'USER_LOGOUT',
+  ACTIVE = 'USER_ACTIVE',
+  INACTIVE = 'USER_INACTIVE',
+  ERROR = 'ERROR',
+}
+
+export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType };

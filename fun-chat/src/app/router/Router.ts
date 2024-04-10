@@ -1,16 +1,13 @@
 import { RoutesPath } from '../../types/interfaces';
 
 export default class Router {
-  private pathSegmentsToKeep: number;
-
   private routes: RoutesPath[];
 
-  constructor(routes: RoutesPath[], pathSegmentsToKeep: number) {
+  constructor(routes: RoutesPath[]) {
     this.routes = routes;
-    this.pathSegmentsToKeep = pathSegmentsToKeep;
     document.addEventListener('DOMContentLoaded', () => {
       const currentPath = window.location.pathname.split('/').slice(1).join('/');
-      console.log('location after loading', currentPath);
+      // console.log('location after loading', currentPath);
       this.navigate(currentPath);
     });
   }
@@ -26,12 +23,12 @@ export default class Router {
     // window.history.pushState({}, '', `/${pathnameApp}/${url}`);
     window.history.pushState({}, '', `/${url}`);
     // console.log(`${pathnameApp}/${url}`);
-    console.log(url);
+    // console.log(url);
 
     const pathParts = url.split('/');
-    console.log(pathParts);
+    // console.log(pathParts);
     const route = this.routes.find((item) => item.path === pathParts[pathParts.length - 1]);
-    console.log(route);
+    // console.log(route);
 
     if (typeof route === 'undefined') {
       console.log('There are now such page');

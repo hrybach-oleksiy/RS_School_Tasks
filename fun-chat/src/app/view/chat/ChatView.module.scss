@@ -1,0 +1,13 @@
+.chat {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.user-list-wrapper,
+.message-field-wrapper {
+  border: 1px solid #000;
+  border-radius: 15px;
+}

@@ -1,7 +1,11 @@
-export default function assertIsDefined<T>(value: T): asserts value is NonNullable<T> {
+function assertIsDefined<T>(value: T): asserts value is NonNullable<T> {
   if (value === undefined || value === null) {
     throw new Error(`${value} is not defined`);
   }
 }
 
-// export { assertIsDefined };
+function isFirstLetterUppercase(value: string) {
+  return /^[A-Z]/.test(value);
+}
+
+export { assertIsDefined, isFirstLetterUppercase };

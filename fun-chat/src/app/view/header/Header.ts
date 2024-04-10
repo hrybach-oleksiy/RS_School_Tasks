@@ -1,14 +1,14 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button, div } from '../../components/HTMLComponents';
 
-import Router from '../../router/Router';
-
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
-  private router: Router;
+  private logoutButton = button(['btn', 'header-btn'], 'Log Out');
 
-  constructor(router: Router) {
+  private logoutCallback: () => void;
+
+  constructor(logoutCallback: () => void) {
     super(
       {
         tag: 'header',
@@ -16,21 +16,40 @@ export default class Header extends BaseComponent {
       },
       p([styles['header-title']], 'Fun Chat'),
     );
-    this.router = router;
+    this.logoutCallback = logoutCallback;
+    this.logoutButton.removeClass('hidden');
     this.setContent();
   }
 
   private setContent(): void {
     const buttonsWrapper = div([styles.wrapper]);
-    const logoutButton = button(['btn', 'header-btn'], 'Log Out', this.handleLogoutButtonClick);
+    this.logoutButton.addListener('click', this.handleLogoutButtonClick);
+    this.logoutButton.addListener('click', this.handleUserLogout);
 
-    // garageButton.addClass(styles.active);
+    if (window.location.pathname !== '/chat') {
+      this.logoutButton.addClass('hidden');
+    }
 
-    buttonsWrapper.appendChildren([logoutButton]);
+    buttonsWrapper.appendChildren([this.logoutButton]);
     this.append(buttonsWrapper);
   }
 
   private handleLogoutButtonClick = () => {
-    this.router.navigate('login');
+    this.logoutButton.addClass('hidden');
+  };
+
+  // static getUserData = (): UserLoginData | undefined => {
+  //   const userDataJson = localStorage.getItem('userData');
+
+  //   if (userDataJson) {
+  //     const userData = JSON.parse(userDataJson);
+  //     return userData;
+  //   }
+
+  //   return undefined;
+  // };
+
+  private handleUserLogout = (): void => {
+    this.logoutCallback();
   };
 }
