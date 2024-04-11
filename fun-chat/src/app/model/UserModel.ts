@@ -19,7 +19,6 @@ export default class UserModel {
         },
       },
     };
-
     this.ws.send(JSON.stringify(request));
   };
 

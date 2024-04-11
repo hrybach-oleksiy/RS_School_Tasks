@@ -26,7 +26,7 @@ export default class Header extends BaseComponent {
     this.logoutButton.addListener('click', this.handleLogoutButtonClick);
     this.logoutButton.addListener('click', this.handleUserLogout);
 
-    if (window.location.pathname !== '/chat') {
+    if (window.location.hash !== '#chat') {
       this.logoutButton.addClass('hidden');
     }
 

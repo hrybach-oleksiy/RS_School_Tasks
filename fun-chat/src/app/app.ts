@@ -16,6 +16,7 @@ import { UserData } from '../types/interfaces';
 
 import LoginView from './view/login/LoginView';
 import ChatView from './view/chat/ChatView';
+import NotFoundView from './view/not-found/NotFoundView';
 
 export default class App {
   private ws: WebSocket;
@@ -27,6 +28,8 @@ export default class App {
   private chatView: ChatView;
 
   private authController: AuthController;
+
+  private notFoundView: NotFoundView;
 
   private root: BaseComponent = div(['app']);
 
@@ -41,11 +44,13 @@ export default class App {
     document.body.setAttribute('data-theme', 'light');
 
     this.ws = new WebSocket('ws://127.0.0.1:4000');
-    const routes = this.createRoutes();
-    this.router = new Router(routes);
+
     this.userModel = new UserModel(this.ws);
     this.authView = new LoginView(this.userModel.loginUser, this.setUserData);
     this.chatView = new ChatView();
+    this.notFoundView = new NotFoundView();
+    const routes = this.createRoutes();
+    this.router = new Router(routes);
     this.authController = new AuthController(this.userModel, this.authView, this.chatView, this.router);
 
     this.ws.onmessage = (event) => {
@@ -69,8 +74,8 @@ export default class App {
   private createRoutes() {
     return [
       {
-        path: '',
-        callback: () => {
+        path: '/',
+        render: () => {
           this.main.destroyChildren();
           // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
           this.authView.setForm();
@@ -79,20 +84,30 @@ export default class App {
       },
       {
         path: 'chat',
-        callback: () => {
+        render: () => {
           this.main.destroyChildren();
           // const chatPage = new ChatView();
           this.chatView.setPage();
           this.main.append(this.chatView);
+          this.userModel.getActiveUser();
+          this.userModel.getInActiveUser();
         },
       },
       {
         path: 'login',
-        callback: () => {
+        render: () => {
           this.main.destroyChildren();
           // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
           this.authView.setForm();
           this.main.append(this.authView);
+        },
+      },
+      {
+        path: '404',
+        render: () => {
+          this.main.destroyChildren();
+          this.notFoundView.setPage();
+          this.main.append(this.notFoundView);
         },
       },
     ];
@@ -112,7 +127,6 @@ export default class App {
 
   static getUserData = (): UserData | null => {
     const userDataJSON = sessionStorage.getItem('userData');
-    console.log(userDataJSON);
 
     if (userDataJSON) {
       const userData = JSON.parse(userDataJSON);

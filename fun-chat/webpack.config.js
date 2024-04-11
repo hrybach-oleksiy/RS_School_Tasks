@@ -129,18 +129,6 @@ module.exports = {
         useShortDoctype: isProd,
       },
     }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', '404.html'),
-      inject: true,
-      chunks: ['404'],
-      filename: '404.html',
-      minify: {
-        collapseWhitespace: isProd,
-        removeComments: isProd,
-        removeRedundantAttributes: isProd,
-        useShortDoctype: isProd,
-      },
-    }),
     new FileManagerPlugin({
       events: {
         onStart: {

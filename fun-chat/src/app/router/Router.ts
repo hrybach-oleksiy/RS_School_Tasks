@@ -5,38 +5,28 @@ export default class Router {
 
   constructor(routes: RoutesPath[]) {
     this.routes = routes;
-    document.addEventListener('DOMContentLoaded', () => {
-      const currentPath = window.location.pathname.split('/').slice(1).join('/');
-      // console.log('location after loading', currentPath);
-      this.navigate(currentPath);
-    });
+    // window.addEventListener('DOMContentLoaded', this.locationHandler);
+    window.addEventListener('hashchange', this.locationHandler);
+
+    this.locationHandler();
   }
 
-  public navigate(url: string) {
-    // console.log(window.location.pathname.split('/'));
-    // const pathnameApp = window.location.pathname.split('/').slice(1, this.pathSegmentsToKeep).join('/');
-    // const pathnameApp = window.location.pathname;
-    //   .split('/')
-    //   .slice(1, this.pathSegmentsToKeep + 1)
-    //   .join('/');
-    // console.log(pathnameApp);
-    // window.history.pushState({}, '', `/${pathnameApp}/${url}`);
-    window.history.pushState({}, '', `/${url}`);
-    // console.log(`${pathnameApp}/${url}`);
-    // console.log(url);
+  private locationHandler = () => {
+    let location = window.location.hash.replace('#', '');
+    if (location.length === 0) {
+      location = '/';
+    }
 
-    const pathParts = url.split('/');
-    // console.log(pathParts);
-    const route = this.routes.find((item) => item.path === pathParts[pathParts.length - 1]);
-    // console.log(route);
+    const route = this.routes.find((item) => item.path === location);
 
     if (typeof route === 'undefined') {
       console.log('There are now such page');
+      const notFoundRoute = this.routes[this.routes.length - 1];
+
+      notFoundRoute.render();
       return;
     }
 
-    route.callback();
-  }
+    route.render();
+  };
 }
-
-// https://github.com/MikAleinik/spa-deploy/tree/main

@@ -69,7 +69,7 @@ export default class AuthController {
   private userLoginResponse = (payload: UserLoginResponsePayload) => {
     const logOutBtn = document.querySelector('.header-btn');
     console.log(`User ${payload.user.login} logged in successfully`);
-    this.router.navigate('chat');
+    window.location.hash = 'chat';
     this.model.getActiveUser();
     this.model.getInActiveUser();
 
@@ -78,7 +78,8 @@ export default class AuthController {
 
   private userLogoutResponse = (payload: UserLoginResponsePayload) => {
     console.log(`User ${payload.user.login} logged out successfully`);
-    this.router.navigate('login');
+    window.location.hash = 'login';
+    console.log(this);
   };
 
   private getActiveUsersResponse = (payload: GetAllUsersPayload) => {

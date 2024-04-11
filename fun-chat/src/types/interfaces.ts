@@ -15,7 +15,7 @@ export interface InputProps {
 
 export interface RoutesPath {
   path: string;
-  callback: () => void;
+  render: () => void;
 }
 
 export type PayloadType =
