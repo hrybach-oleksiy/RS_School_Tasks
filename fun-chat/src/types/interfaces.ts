@@ -42,7 +42,7 @@ export interface UserLoginResponsePayload {
 }
 
 export interface GetAllUsersPayload {
-  users: UserLoginResponsePayload[];
+  users: { login: string; isLogined: boolean }[];
 }
 
 export interface UserLoginErrorPayload {

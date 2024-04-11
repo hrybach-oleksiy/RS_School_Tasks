@@ -70,15 +70,10 @@ export default class AuthController {
     const logOutBtn = document.querySelector('.header-btn');
     console.log(`User ${payload.user.login} logged in successfully`);
     this.router.navigate('chat');
+    this.model.getActiveUser();
+    this.model.getInActiveUser();
 
     logOutBtn?.classList.remove('hidden');
-
-    // Redirect or perform further actions upon successful login
-
-    // else if (response.type === UserRequestType.ERROR) {
-    //   // this.authView.displayErrorMessage(response.payload.error);
-    //   console.log('Error');
-    // }
   };
 
   private userLogoutResponse = (payload: UserLoginResponsePayload) => {
@@ -87,8 +82,7 @@ export default class AuthController {
   };
 
   private getActiveUsersResponse = (payload: GetAllUsersPayload) => {
-    // this.chatView.renderUsers(payload.users);
-    console.log(this, payload);
+    this.chatView.renderUsers(payload.users);
 
     // Redirect or perform further actions upon successful login
 
@@ -99,8 +93,7 @@ export default class AuthController {
   };
 
   private getInActiveUsersResponse = (payload: GetAllUsersPayload) => {
-    // this.chatView.renderUsers(payload.users);
-    console.log(this, payload);
+    this.chatView.renderUsers(payload.users);
   };
 
   static handleError = (payload: UserLoginErrorPayload) => {

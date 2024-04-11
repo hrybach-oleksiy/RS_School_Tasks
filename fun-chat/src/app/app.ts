@@ -72,27 +72,27 @@ export default class App {
         path: '',
         callback: () => {
           this.main.destroyChildren();
-          const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
-          loginPage.setForm();
-          this.main.append(loginPage);
+          // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
+          this.authView.setForm();
+          this.main.append(this.authView);
         },
       },
       {
         path: 'chat',
         callback: () => {
           this.main.destroyChildren();
-          const chatPage = new ChatView();
-          chatPage.setPage();
-          this.main.append(chatPage);
+          // const chatPage = new ChatView();
+          this.chatView.setPage();
+          this.main.append(this.chatView);
         },
       },
       {
         path: 'login',
         callback: () => {
           this.main.destroyChildren();
-          const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
-          loginPage.setForm();
-          this.main.append(loginPage);
+          // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
+          this.authView.setForm();
+          this.main.append(this.authView);
         },
       },
     ];
