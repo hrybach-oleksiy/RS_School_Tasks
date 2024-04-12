@@ -11,3 +11,26 @@
   border: 1px solid #000;
   border-radius: 15px;
 }
+
+.active-user,
+.inactive-user {
+  padding-left: 20px;
+}
+
+.active-user::before,
+.inactive-user::before {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 50%;
+  content: "";
+}
+
+.active-user::before {
+  background-color: #008000;
+}
+
+.inactive-user::before {
+  background-color: #f00;
+}

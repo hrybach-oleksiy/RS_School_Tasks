@@ -1,20 +1,11 @@
 // import { assertIsDefined } from '../../../utilities/utils';
+import { UserData } from '../../../types/interfaces';
 import BaseComponent from '../../components/BaseComponent';
 import { div, ul, li } from '../../components/HTMLComponents';
 
-// import { LinkAttribute, ImageAttribute } from '../../../types/enums';
-// import { GetAllUsersPayload } from '../../../types/interfaces';
-
-// import courseLogo from '../../../assets/images/school-logo.svg';
-// import gitHubLogo from '../../../assets/images/github-logo.svg';
-
 import styles from './ChatView.module.scss';
 
-// import Router from '../../router/Router';
-
 export default class ChatView extends BaseComponent {
-  // private router: Router;
-
   private userListWrapperElem = div([styles['user-list-wrapper']]);
 
   private userList = ul(['user-list']);
@@ -24,9 +15,6 @@ export default class ChatView extends BaseComponent {
       tag: 'div',
       classNames: [styles.chat],
     });
-
-    // this.router = router;
-    // this.setPage();
   }
 
   public setPage() {
@@ -38,17 +26,32 @@ export default class ChatView extends BaseComponent {
   }
 
   public renderUsers = (users: { login: string; isLogined: boolean }[]) => {
-    // this.userList.destroyChildren();
-    // const userListElement = document.querySelector('.user-list');
-    // assertIsDefined(userListElement);
-    // console.log(userListElement);
-    // console.log(this);
+    const currentUser = ChatView.getUserData()?.login;
 
-    users.forEach((user) => {
-      const liElem = li(['list-item'], user.login);
-      this.userList.append(liElem);
-    });
+    users
+      .filter((user) => user.login !== currentUser)
+      .forEach((user) => {
+        const liElem = li(['list-item'], user.login);
 
-    // this.userListWrapperElem.append(this.userList);
+        if (user.isLogined) {
+          liElem.addClass(styles['active-user']);
+        } else {
+          liElem.addClass(styles['inactive-user']);
+        }
+
+        this.userList.append(liElem);
+      });
+  };
+
+  static getUserData = (): UserData | null => {
+    const userDataJSON = sessionStorage.getItem('userData');
+
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
+
+      return userData;
+    }
+
+    return null;
   };
 }

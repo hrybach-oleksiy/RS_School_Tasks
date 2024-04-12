@@ -1,4 +1,4 @@
-import { RoutesPath } from '../../types/interfaces';
+import { RoutesPath, UserData } from '../../types/interfaces';
 
 export default class Router {
   private routes: RoutesPath[];
@@ -12,9 +12,23 @@ export default class Router {
   }
 
   private locationHandler = () => {
+    const userData = Router.getUserData();
     let location = window.location.hash.replace('#', '');
-    if (location.length === 0) {
+
+    if (location.length === 0 && !userData) {
       location = '/';
+      console.log(window.location.href);
+    } else if (location.length === 0 && userData) {
+      location = 'chat';
+      console.log(window.location.href);
+    }
+
+    if (userData) {
+      location = 'chat';
+      console.log(window.location.pathname);
+    } else {
+      location = '/';
+      console.log(window.location);
     }
 
     const route = this.routes.find((item) => item.path === location);
@@ -28,5 +42,17 @@ export default class Router {
     }
 
     route.render();
+  };
+
+  static getUserData = (): UserData | null => {
+    const userDataJSON = sessionStorage.getItem('userData');
+
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
+
+      return userData;
+    }
+
+    return null;
   };
 }

@@ -67,13 +67,13 @@ export default class AuthController {
   };
 
   private userLoginResponse = (payload: UserLoginResponsePayload) => {
-    const logOutBtn = document.querySelector('.header-btn');
+    const logOutBlock = document.querySelector('.header-block');
     console.log(`User ${payload.user.login} logged in successfully`);
     window.location.hash = 'chat';
     this.model.getActiveUser();
     this.model.getInActiveUser();
 
-    logOutBtn?.classList.remove('hidden');
+    logOutBlock?.classList.remove('hidden');
   };
 
   private userLogoutResponse = (payload: UserLoginResponsePayload) => {

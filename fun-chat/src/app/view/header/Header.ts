@@ -1,9 +1,11 @@
 import BaseComponent from '../../components/BaseComponent';
-import { p, button, div } from '../../components/HTMLComponents';
+import { p, button, div, h2 } from '../../components/HTMLComponents';
 
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
+  private buttonsWrapper = div([styles.wrapper, 'header-block']);
+
   private logoutButton = button(['btn', 'header-btn'], 'Log Out');
 
   private logoutCallback: () => void;
@@ -22,20 +24,24 @@ export default class Header extends BaseComponent {
   }
 
   private setContent(): void {
-    const buttonsWrapper = div([styles.wrapper]);
     this.logoutButton.addListener('click', this.handleLogoutButtonClick);
     this.logoutButton.addListener('click', this.handleUserLogout);
 
     if (window.location.hash !== '#chat') {
-      this.logoutButton.addClass('hidden');
+      this.buttonsWrapper.addClass('hidden');
     }
 
-    buttonsWrapper.appendChildren([this.logoutButton]);
-    this.append(buttonsWrapper);
+    this.append(this.buttonsWrapper);
   }
 
   private handleLogoutButtonClick = () => {
-    this.logoutButton.addClass('hidden');
+    this.buttonsWrapper.addClass('hidden');
+  };
+
+  public addUserName = (name: string): void => {
+    const userNameElem = h2(['user-name'], `User: ${name}`);
+
+    this.buttonsWrapper.appendChildren([userNameElem, this.logoutButton]);
   };
 
   // static getUserData = (): UserLoginData | undefined => {

@@ -60,12 +60,21 @@ export default class App {
     };
 
     this.userData = App.getUserData();
+
+    this.ws.onopen = () => {
+      if (this.userData) {
+        this.userModel.loginUser(this.userData.login, this.userData.password);
+      }
+    };
   }
 
   public createLayout() {
-    // this.root.destroyChildren();
     const header = new Header(this.handleUserLogout);
-    // const main = new Main(this.router);
+
+    if (this.userData) {
+      header.addUserName(this.userData.login);
+    }
+
     const footer = new Footer();
 
     this.root.appendChildren([header, this.main, footer]);
@@ -89,8 +98,11 @@ export default class App {
           // const chatPage = new ChatView();
           this.chatView.setPage();
           this.main.append(this.chatView);
-          this.userModel.getActiveUser();
-          this.userModel.getInActiveUser();
+
+          this.ws.onopen = () => {
+            this.userModel.getActiveUser();
+            this.userModel.getInActiveUser();
+          };
         },
       },
       {
@@ -118,6 +130,7 @@ export default class App {
       const { login, password } = this.userData;
       this.userModel.logoutUser(login, password);
       sessionStorage.removeItem('userData');
+      this.userData = null;
     }
   };
 
