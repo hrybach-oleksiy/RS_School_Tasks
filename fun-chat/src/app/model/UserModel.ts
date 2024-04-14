@@ -1,4 +1,4 @@
-import { UserRequestType } from '../../types/enums';
+import { UserRequestType, MessageRequestType } from '../../types/enums';
 import { ServerRequest } from '../../types/interfaces';
 
 export default class UserModel {
@@ -54,6 +54,33 @@ export default class UserModel {
       payload: null,
     };
 
+    this.ws.send(JSON.stringify(request));
+  };
+
+  public sendMessage = (receiver: string, text: string): void => {
+    const request: ServerRequest = {
+      id: null,
+      type: MessageRequestType.SEND,
+      payload: {
+        message: {
+          to: receiver,
+          text,
+        },
+      },
+    };
+    this.ws.send(JSON.stringify(request));
+  };
+
+  public receiveMessage = (sender: string): void => {
+    const request: ServerRequest = {
+      id: null,
+      type: MessageRequestType.FROM,
+      payload: {
+        user: {
+          login: sender,
+        },
+      },
+    };
     this.ws.send(JSON.stringify(request));
   };
 }

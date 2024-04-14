@@ -1,0 +1,28 @@
+.message-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 50%;
+  padding: 10px;
+  color: #ebeae9;
+  background-color: #25413e;
+  border-radius: 20px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.message-body {
+  flex-grow: 1;
+  padding: 10px;
+  color: #0f0e0e;
+  background-color: #ebeae9;
+  border-radius: 20px;
+}
+
+.align-right {
+  align-self: flex-end;
+  background-color: #665f55;
+}

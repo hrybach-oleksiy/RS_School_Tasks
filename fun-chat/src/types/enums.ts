@@ -30,4 +30,12 @@ enum UserRequestType {
   ERROR = 'ERROR',
 }
 
-export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType };
+enum MessageRequestType {
+  SEND = 'MSG_SEND',
+  FROM = 'MSG_FROM_USER',
+  READ = 'MSG_READ',
+  DELETE = 'MSG_DELETE',
+  EDIT = 'MSG_EDIT',
+}
+
+export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType, MessageRequestType };

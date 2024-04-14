@@ -23,6 +23,8 @@ export default class App {
 
   private userModel: UserModel;
 
+  private header: Header;
+
   private authView: LoginView;
 
   private chatView: ChatView;
@@ -46,8 +48,9 @@ export default class App {
     this.ws = new WebSocket('ws://127.0.0.1:4000');
 
     this.userModel = new UserModel(this.ws);
+    this.header = new Header(this.handleUserLogout);
     this.authView = new LoginView(this.userModel.loginUser, this.setUserData);
-    this.chatView = new ChatView();
+    this.chatView = new ChatView(this.userModel.sendMessage, this.userModel.receiveMessage);
     this.notFoundView = new NotFoundView();
     const routes = this.createRoutes();
     this.router = new Router(routes);
@@ -64,20 +67,15 @@ export default class App {
     this.ws.onopen = () => {
       if (this.userData) {
         this.userModel.loginUser(this.userData.login, this.userData.password);
+        this.header.addUserName(this.userData.login);
       }
     };
   }
 
   public createLayout() {
-    const header = new Header(this.handleUserLogout);
-
-    if (this.userData) {
-      header.addUserName(this.userData.login);
-    }
-
     const footer = new Footer();
 
-    this.root.appendChildren([header, this.main, footer]);
+    this.root.appendChildren([this.header, this.main, footer]);
   }
 
   private createRoutes() {

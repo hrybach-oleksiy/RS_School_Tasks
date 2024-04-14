@@ -7,12 +7,14 @@ import {
   UserLoginResponsePayload,
   ServerRequest,
   PayloadType,
-  UserLoginErrorPayload,
-  GetAllUsersPayload,
+  ErrorPayload,
+  UsersPayload,
+  MessagePayload,
+  MessagesPayload,
 } from '../../types/interfaces';
 // import { UserRequestType } from '../../types/enums';
 import BaseComponent from '../components/BaseComponent';
-import { UserRequestType } from '../../types/enums';
+import { UserRequestType, MessageRequestType } from '../../types/enums';
 
 import Router from '../router/Router';
 
@@ -43,21 +45,31 @@ export default class AuthController {
 
       case UserRequestType.LOGOUT:
         currentPayload = response.payload as UserLoginResponsePayload;
-        this.userLogoutResponse(currentPayload);
+        AuthController.userLogoutResponse(currentPayload);
         break;
 
       case UserRequestType.ACTIVE:
-        currentPayload = response.payload as GetAllUsersPayload;
+        currentPayload = response.payload as UsersPayload;
         this.getActiveUsersResponse(currentPayload);
         break;
 
       case UserRequestType.INACTIVE:
-        currentPayload = response.payload as GetAllUsersPayload;
+        currentPayload = response.payload as UsersPayload;
         this.getInActiveUsersResponse(currentPayload);
         break;
 
+      case MessageRequestType.SEND:
+        currentPayload = response.payload as MessagePayload;
+        this.messageSendResponse(currentPayload);
+        break;
+
+      case MessageRequestType.FROM:
+        currentPayload = response.payload as MessagesPayload;
+        this.messageFromResponse(currentPayload);
+        break;
+
       case UserRequestType.ERROR:
-        currentPayload = response.payload as UserLoginErrorPayload;
+        currentPayload = response.payload as ErrorPayload;
         AuthController.handleError(currentPayload);
         break;
 
@@ -76,13 +88,12 @@ export default class AuthController {
     logOutBlock?.classList.remove('hidden');
   };
 
-  private userLogoutResponse = (payload: UserLoginResponsePayload) => {
+  static userLogoutResponse = (payload: UserLoginResponsePayload) => {
     console.log(`User ${payload.user.login} logged out successfully`);
     window.location.hash = 'login';
-    console.log(this);
   };
 
-  private getActiveUsersResponse = (payload: GetAllUsersPayload) => {
+  private getActiveUsersResponse = (payload: UsersPayload) => {
     this.chatView.renderUsers(payload.users);
 
     // Redirect or perform further actions upon successful login
@@ -93,11 +104,21 @@ export default class AuthController {
     // }
   };
 
-  private getInActiveUsersResponse = (payload: GetAllUsersPayload) => {
+  private getInActiveUsersResponse = (payload: UsersPayload) => {
     this.chatView.renderUsers(payload.users);
   };
 
-  static handleError = (payload: UserLoginErrorPayload) => {
+  private messageSendResponse = (payload: MessagePayload) => {
+    console.log(`Message ${payload.message.text} to the user ${payload.message.to} was successfully sent`);
+    this.chatView.renderMessage(payload);
+  };
+
+  private messageFromResponse = (payload: MessagesPayload) => {
+    // console.log(`Messages from ${payload.messages} were successfully displayed`);
+    this.chatView.renderAllMessages(payload.messages);
+  };
+
+  static handleError = (payload: ErrorPayload) => {
     const modalContent = new BaseComponent({
       tag: 'div',
       classNames: ['modal-error'],
@@ -108,6 +129,10 @@ export default class AuthController {
     modal.addCloseBtn('Close');
     modal.open();
   };
+
+  // private handleSendMessage = () => {
+
+  // }
 
   // public handleUserLogin() {
   //   const userDataJSON = localStorage.getItem('userData');
