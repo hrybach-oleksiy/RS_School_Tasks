@@ -8,6 +8,7 @@ import MessageBlock from '../../components/message/MessageBlock';
 import styles from './ChatView.module.scss';
 import messageStyles from '../../components/message/MessageBlock.module.scss';
 import { assertIsDefined } from '../../../utilities/utils';
+import ContextMenu from '../../components/context-menu/ContextMenu';
 
 export default class ChatView extends BaseComponent {
   private messageFieldWrapperElem = div([styles['message-field-wrapper']]);
@@ -83,8 +84,6 @@ export default class ChatView extends BaseComponent {
     assertIsDefined(author);
 
     const messageBlock = new MessageBlock(messageData.message, author);
-    console.log('receiver', receiver);
-    console.log('current user', this.currentUser);
 
     if (receiver === this.currentUser) {
       messageBlock.addClass(messageStyles['align-right']);
@@ -103,8 +102,32 @@ export default class ChatView extends BaseComponent {
       if (receiver === this.currentUser) {
         messageBlock.addClass(messageStyles['align-right']);
       }
+
+      if (receiver !== this.currentUser) {
+        messageBlock.addListener('contextmenu', (event: Event) => {
+          event.preventDefault();
+
+          const allMenus = document.querySelectorAll('.context-menu-js');
+          allMenus.forEach((menu) => {
+            menu.remove();
+          });
+
+          const contextMenu = new ContextMenu(ChatView.deleteMessage, ChatView.editMessage);
+
+          contextMenu.show(messageBlock);
+        });
+      }
+
       this.messagesWrapper.append(messageBlock);
     });
+  };
+
+  static deleteMessage = () => {
+    console.log('message deleted');
+  };
+
+  static editMessage = () => {
+    console.log('message edited');
   };
 
   static getUserData = (): UserData | null => {
