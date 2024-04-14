@@ -50,6 +50,8 @@ export type PayloadType =
   | UsersPayload
   | MessagePayload
   | MessageFromPayload
+  | MessageDeletePayload
+  | MessageDeleteResponsePayload
   | MessagesPayload
   | ErrorPayload
   | null;
@@ -98,6 +100,21 @@ export interface MessagesPayload {
 export interface MessageFromPayload {
   user: {
     login: string;
+  };
+}
+
+export interface MessageDeletePayload {
+  message: {
+    id: string;
+  };
+}
+
+export interface MessageDeleteResponsePayload {
+  message: {
+    id: string;
+    status?: {
+      isDeleted: boolean;
+    };
   };
 }
 

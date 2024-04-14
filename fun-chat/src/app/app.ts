@@ -50,7 +50,11 @@ export default class App {
     this.userModel = new UserModel(this.ws);
     this.header = new Header(this.handleUserLogout);
     this.authView = new LoginView(this.userModel.loginUser, this.setUserData);
-    this.chatView = new ChatView(this.userModel.sendMessage, this.userModel.receiveMessage);
+    this.chatView = new ChatView(
+      this.userModel.sendMessage,
+      this.userModel.receiveMessage,
+      this.userModel.removeMessage,
+    );
     this.notFoundView = new NotFoundView();
     const routes = this.createRoutes();
     this.router = new Router(routes);

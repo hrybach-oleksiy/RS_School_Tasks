@@ -25,6 +25,8 @@ export default class ChatView extends BaseComponent {
 
   private receiveMessageCallback: (sender: string) => void;
 
+  private removeMessageCallback: (id: string) => void;
+
   private currentUser: string | undefined = '';
 
   private messageData: UserMessagePayload = {
@@ -37,6 +39,7 @@ export default class ChatView extends BaseComponent {
   constructor(
     sendMessageCallback: (receiver: string, text: string) => void,
     receiveMessageCallback: (sender: string) => void,
+    removeMessageCallback: (id: string) => void,
   ) {
     super({
       tag: 'div',
@@ -45,6 +48,7 @@ export default class ChatView extends BaseComponent {
 
     this.sendMessageCallback = sendMessageCallback;
     this.receiveMessageCallback = receiveMessageCallback;
+    this.removeMessageCallback = removeMessageCallback;
   }
 
   public setPage() {
@@ -112,7 +116,7 @@ export default class ChatView extends BaseComponent {
             menu.remove();
           });
 
-          const contextMenu = new ContextMenu(ChatView.deleteMessage, ChatView.editMessage);
+          const contextMenu = new ContextMenu(this.removeMessageCallback, ChatView.editMessage);
 
           contextMenu.show(messageBlock);
         });
@@ -122,7 +126,21 @@ export default class ChatView extends BaseComponent {
     });
   };
 
-  static deleteMessage = () => {
+  public deleteMessage = (id: string) => {
+    const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
+
+    messages.forEach((message) => {
+      const currentID = message.dataset.message;
+
+      if (currentID === id) {
+        message.remove();
+      }
+    });
+
+    console.log(this);
+
+    // this.removeMessageCallback(id);
+
     console.log('message deleted');
   };
 

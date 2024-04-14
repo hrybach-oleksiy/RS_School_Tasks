@@ -1,14 +1,15 @@
+import { assertIsDefined } from '../../../utilities/utils';
 import BaseComponent from '../BaseComponent';
 import { ul, li } from '../HTMLComponents';
 
 import styles from './ContextMenu.module.scss';
 
 export default class ContextMenu extends BaseComponent {
-  private onDelete: () => void;
+  private onDelete: (id: string) => void;
 
   private onEdit: () => void;
 
-  constructor(onDelete: () => void, onEdit: () => void) {
+  constructor(onDelete: (id: string) => void, onEdit: () => void) {
     super({
       tag: 'div',
       classNames: [styles['context-menu'], 'context-menu-js'],
@@ -20,16 +21,6 @@ export default class ContextMenu extends BaseComponent {
       }
     });
 
-    // document.addEventListener('contextmenu', (event) => {
-    //   const allMenus = document.querySelectorAll(`.${styles['context-menu']}`);
-    //   console.log(allMenus);
-    //   allMenus.forEach((menu) => {
-    //     if (menu !== event.target) {
-    //       menu.remove();
-    //     }
-    //   });
-    // });
-
     this.setBlock();
     this.onDelete = onDelete;
     this.onEdit = onEdit;
@@ -40,8 +31,12 @@ export default class ContextMenu extends BaseComponent {
     const deleteElement = li([styles['menu-item']], 'Delete');
     const editElement = li([styles['menu-item']], 'Edit');
 
-    deleteElement.addListener('click', () => {
-      this.onDelete();
+    deleteElement.addListener('click', (event: Event) => {
+      const currentMessage = (event.target as HTMLElement).closest('.message-block-js') as HTMLElement;
+      const currentID = currentMessage.dataset.message;
+
+      assertIsDefined(currentID);
+      this.onDelete(currentID);
       this.remove();
     });
 

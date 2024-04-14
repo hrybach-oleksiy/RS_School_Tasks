@@ -15,12 +15,15 @@ export default class MessageBlock extends BaseComponent {
   constructor(messageProps: MessageData, author: string) {
     super({
       tag: 'div',
-      classNames: [styles['message-block']],
+      classNames: [styles['message-block'], 'message-block-js'],
     });
 
     this.messageProps = messageProps;
     this.author = author;
 
+    assertIsDefined(this.messageProps.id);
+
+    this.setAttribute(`data-message`, this.messageProps.id);
     this.setPage(this.messageProps);
   }
 

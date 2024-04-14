@@ -83,4 +83,18 @@ export default class UserModel {
     };
     this.ws.send(JSON.stringify(request));
   };
+
+  public removeMessage = (id: string): void => {
+    console.log('remove message method works');
+    const request: ServerRequest = {
+      id: null,
+      type: MessageRequestType.DELETE,
+      payload: {
+        message: {
+          id,
+        },
+      },
+    };
+    this.ws.send(JSON.stringify(request));
+  };
 }

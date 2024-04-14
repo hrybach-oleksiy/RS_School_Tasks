@@ -11,6 +11,7 @@ import {
   UsersPayload,
   MessagePayload,
   MessagesPayload,
+  MessageDeleteResponsePayload,
 } from '../../types/interfaces';
 // import { UserRequestType } from '../../types/enums';
 import BaseComponent from '../components/BaseComponent';
@@ -68,6 +69,11 @@ export default class AuthController {
         this.messageFromResponse(currentPayload);
         break;
 
+      case MessageRequestType.DELETE:
+        currentPayload = response.payload as MessageDeleteResponsePayload;
+        this.messageDeleteResponse(currentPayload);
+        break;
+
       case UserRequestType.ERROR:
         currentPayload = response.payload as ErrorPayload;
         AuthController.handleError(currentPayload);
@@ -116,6 +122,11 @@ export default class AuthController {
   private messageFromResponse = (payload: MessagesPayload) => {
     // console.log(`Messages from ${payload.messages} were successfully displayed`);
     this.chatView.renderAllMessages(payload.messages);
+  };
+
+  private messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
+    console.log(`Message with ID ${payload.message.id} is with the Status ${payload.message.status?.isDeleted}`);
+    this.chatView.deleteMessage(payload.message.id);
   };
 
   static handleError = (payload: ErrorPayload) => {
