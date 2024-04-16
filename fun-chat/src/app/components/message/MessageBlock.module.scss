@@ -24,6 +24,11 @@
   border-radius: 20px;
 }
 
+.message-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .align-right {
   align-self: flex-end;
   background-color: #665f55;

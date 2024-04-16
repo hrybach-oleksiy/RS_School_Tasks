@@ -97,4 +97,19 @@ export default class UserModel {
     };
     this.ws.send(JSON.stringify(request));
   };
+
+  public changeMessage = (id: string, text: string): void => {
+    console.log('change message method works');
+    const request: ServerRequest = {
+      id: null,
+      type: MessageRequestType.EDIT,
+      payload: {
+        message: {
+          id,
+          text,
+        },
+      },
+    };
+    this.ws.send(JSON.stringify(request));
+  };
 }

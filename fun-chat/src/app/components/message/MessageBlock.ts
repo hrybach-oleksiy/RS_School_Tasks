@@ -40,7 +40,7 @@ export default class MessageBlock extends BaseComponent {
     const messageText = p(['text'], messageData.text);
     messageBody.append(messageText);
 
-    const messageFooter = div(['message-footer']);
+    const messageFooter = div([styles['message-footer']]);
     const messageStatus = messageData.status?.isDelivered ? 'delivered' : 'not delivered';
     const editedStatus = messageData.status?.isEdited ? 'edited' : '';
     const messageStatusElement = span(['message-status'], messageStatus);
@@ -50,8 +50,4 @@ export default class MessageBlock extends BaseComponent {
 
     this.appendChildren([messageHeader, messageBody, messageFooter]);
   }
-
-  // public setMessageAuthor = (authorName: string) => {
-  //   this.messageAuthor = authorName;
-  // };
 }

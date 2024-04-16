@@ -12,12 +12,14 @@ import {
   MessagePayload,
   MessagesPayload,
   MessageDeleteResponsePayload,
+  MessageEditResponsePayload,
 } from '../../types/interfaces';
 // import { UserRequestType } from '../../types/enums';
 import BaseComponent from '../components/BaseComponent';
 import { UserRequestType, MessageRequestType } from '../../types/enums';
 
 import Router from '../router/Router';
+import { assertIsDefined } from '../../utilities/utils';
 
 export default class AuthController {
   private model: UserModel;
@@ -71,7 +73,12 @@ export default class AuthController {
 
       case MessageRequestType.DELETE:
         currentPayload = response.payload as MessageDeleteResponsePayload;
-        this.messageDeleteResponse(currentPayload);
+        AuthController.messageDeleteResponse(currentPayload);
+        break;
+
+      case MessageRequestType.EDIT:
+        currentPayload = response.payload as MessageEditResponsePayload;
+        AuthController.messageEditResponse(currentPayload);
         break;
 
       case UserRequestType.ERROR:
@@ -124,9 +131,17 @@ export default class AuthController {
     this.chatView.renderAllMessages(payload.messages);
   };
 
-  private messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
+  static messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
     console.log(`Message with ID ${payload.message.id} is with the Status ${payload.message.status?.isDeleted}`);
-    this.chatView.deleteMessage(payload.message.id);
+    ChatView.deleteMessage(payload.message.id);
+  };
+
+  static messageEditResponse = (payload: MessageEditResponsePayload) => {
+    const { status, id, text } = payload.message;
+    assertIsDefined(text);
+    assertIsDefined(status);
+    console.log(`Message with ID ${id} is with the Status ${status.isEdited}`);
+    ChatView.renderEditedMessage(id, text, status.isEdited);
   };
 
   static handleError = (payload: ErrorPayload) => {

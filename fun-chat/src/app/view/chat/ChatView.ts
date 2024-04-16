@@ -6,6 +6,7 @@ import { div, ul, li, input, button, p, span } from '../../components/HTMLCompon
 import MessageBlock from '../../components/message/MessageBlock';
 
 import styles from './ChatView.module.scss';
+
 import messageStyles from '../../components/message/MessageBlock.module.scss';
 import { assertIsDefined } from '../../../utilities/utils';
 import ContextMenu from '../../components/context-menu/ContextMenu';
@@ -17,7 +18,15 @@ export default class ChatView extends BaseComponent {
 
   private userList = ul(['user-list']);
 
-  private messageInputElem = input([styles['message-input']], 'message', 'message', 'text', 'Type the Message');
+  private messageInputElem = input(
+    [styles['message-input'], 'message-input-js'],
+    'message',
+    'message',
+    'text',
+    'Type the Message',
+  );
+
+  private messageForm = new BaseComponent({ tag: 'form', classNames: [styles['message-form']] });
 
   private messagesWrapper = div([styles['message-wrapper']]);
 
@@ -27,19 +36,25 @@ export default class ChatView extends BaseComponent {
 
   private removeMessageCallback: (id: string) => void;
 
+  private changeMessageCallback: (id: string, text: string) => void;
+
   private currentUser: string | undefined = '';
 
   private messageData: UserMessagePayload = {
     message: {
+      id: '',
       to: '',
       text: '',
     },
   };
 
+  private messageBtnElem = button(['btn'], 'Send');
+
   constructor(
     sendMessageCallback: (receiver: string, text: string) => void,
     receiveMessageCallback: (sender: string) => void,
     removeMessageCallback: (id: string) => void,
+    changeMessageCallback: (id: string, text: string) => void,
   ) {
     super({
       tag: 'div',
@@ -49,6 +64,7 @@ export default class ChatView extends BaseComponent {
     this.sendMessageCallback = sendMessageCallback;
     this.receiveMessageCallback = receiveMessageCallback;
     this.removeMessageCallback = removeMessageCallback;
+    this.changeMessageCallback = changeMessageCallback;
   }
 
   public setPage() {
@@ -93,6 +109,10 @@ export default class ChatView extends BaseComponent {
       messageBlock.addClass(messageStyles['align-right']);
     }
     this.messagesWrapper.append(messageBlock);
+    this.messagesWrapper.getNode().scrollTo({
+      top: this.messagesWrapper.getNode().scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
   public renderAllMessages = (messages: MessageData[]) => {
@@ -116,7 +136,7 @@ export default class ChatView extends BaseComponent {
             menu.remove();
           });
 
-          const contextMenu = new ContextMenu(this.removeMessageCallback, ChatView.editMessage);
+          const contextMenu = new ContextMenu(this.removeMessageCallback, this.editMessage);
 
           contextMenu.show(messageBlock);
         });
@@ -126,7 +146,27 @@ export default class ChatView extends BaseComponent {
     });
   };
 
-  public deleteMessage = (id: string) => {
+  static renderEditedMessage = (id: string, text: string, status: boolean) => {
+    const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
+
+    messages.forEach((message) => {
+      const currentID = message.dataset.message;
+
+      if (currentID === id) {
+        const currentMessage = message;
+        const textField = currentMessage.querySelector<HTMLElement>('.text');
+        const statusField = currentMessage.querySelector<HTMLElement>('.message-edited');
+        const editedStatus = status ? 'edited' : '';
+
+        assertIsDefined(textField);
+        assertIsDefined(statusField);
+        statusField.textContent = editedStatus;
+        textField.textContent = text;
+      }
+    });
+  };
+
+  static deleteMessage = (id: string) => {
     const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
 
     messages.forEach((message) => {
@@ -136,16 +176,27 @@ export default class ChatView extends BaseComponent {
         message.remove();
       }
     });
-
-    console.log(this);
-
-    // this.removeMessageCallback(id);
-
-    console.log('message deleted');
   };
 
-  static editMessage = () => {
-    console.log('message edited');
+  public editMessage = (id: string, text: string) => {
+    const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
+    const messageInput = document.querySelector<HTMLInputElement>('.message-input-js');
+    this.messageData.message.id = id;
+    this.messageData.message.text = text;
+
+    assertIsDefined(messageInput);
+
+    messages.forEach((message) => {
+      const currentID = message.dataset.message;
+
+      if (currentID === id) {
+        messageInput.value = text;
+        this.messageBtnElem.setTextContent('Edit');
+      }
+    });
+
+    this.messageForm.removeListener('submit', this.sendMessageHandler);
+    this.messageForm.addListener('submit', this.editMessageHandler);
   };
 
   static getUserData = (): UserData | null => {
@@ -163,29 +214,17 @@ export default class ChatView extends BaseComponent {
   private setMessageField = (userName: string, userStatus: boolean): void => {
     const messageFieldHeader = div([styles['message-field-header']]);
 
-    const messageForm = new BaseComponent({ tag: 'form', classNames: [styles['message-form']] });
-
-    const messageBtnElem = button(['btn'], 'Send');
     const userNameElem = span([styles['user-name']], userName);
     const userStatusElem = span(
       [styles['user-status'], userStatus ? styles['user-online'] : styles['user-offline']],
       userStatus ? 'online' : 'offline',
     );
 
-    messageForm.addListener('submit', (event: Event) => {
-      event.preventDefault();
-      this.setMessageData();
-
-      const receiver = this.messageData.message.to;
-      const messageText = this.messageData.message.text;
-
-      this.sendMessageCallback(receiver, messageText);
-      (messageForm.getNode() as HTMLFormElement).reset();
-    });
+    this.messageForm.addListener('submit', this.sendMessageHandler);
 
     messageFieldHeader.appendChildren([userNameElem, userStatusElem]);
-    messageForm.appendChildren([this.messageInputElem, messageBtnElem]);
-    this.messageFieldWrapperElem.appendChildren([messageFieldHeader, this.messagesWrapper, messageForm]);
+    this.messageForm.appendChildren([this.messageInputElem, this.messageBtnElem]);
+    this.messageFieldWrapperElem.appendChildren([messageFieldHeader, this.messagesWrapper, this.messageForm]);
   };
 
   private addMessageField = (userName: string, userStatus: boolean): void => {
@@ -198,5 +237,29 @@ export default class ChatView extends BaseComponent {
     const messageText = messageInput.value;
 
     this.messageData.message.text = messageText;
+  };
+
+  private sendMessageHandler = (event: Event) => {
+    event.preventDefault();
+    this.setMessageData();
+
+    const receiver = this.messageData.message.to;
+    const messageText = this.messageData.message.text;
+
+    this.sendMessageCallback(receiver, messageText);
+    (this.messageForm.getNode() as HTMLFormElement).reset();
+  };
+
+  private editMessageHandler = (event: Event) => {
+    event.preventDefault();
+    this.setMessageData();
+    const messageID = this.messageData.message.id;
+    const messageText = this.messageData.message.text;
+
+    this.changeMessageCallback(messageID, messageText);
+    (this.messageForm.getNode() as HTMLFormElement).reset();
+    this.messageBtnElem.setTextContent('Send');
+    this.messageForm.removeListener('submit', this.editMessageHandler);
+    this.messageForm.addListener('submit', this.sendMessageHandler);
   };
 }

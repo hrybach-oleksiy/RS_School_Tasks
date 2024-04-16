@@ -54,6 +54,7 @@ export default class App {
       this.userModel.sendMessage,
       this.userModel.receiveMessage,
       this.userModel.removeMessage,
+      this.userModel.changeMessage,
     );
     this.notFoundView = new NotFoundView();
     const routes = this.createRoutes();

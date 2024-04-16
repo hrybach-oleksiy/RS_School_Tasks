@@ -52,6 +52,7 @@ export type PayloadType =
   | MessageFromPayload
   | MessageDeletePayload
   | MessageDeleteResponsePayload
+  | MessageEditResponsePayload
   | MessagesPayload
   | ErrorPayload
   | null;
@@ -85,6 +86,7 @@ export interface ErrorPayload {
 
 export interface UserMessagePayload {
   message: {
+    id: string;
     to: string;
     text: string;
   };
@@ -114,6 +116,16 @@ export interface MessageDeleteResponsePayload {
     id: string;
     status?: {
       isDeleted: boolean;
+    };
+  };
+}
+
+export interface MessageEditResponsePayload {
+  message: {
+    id: string;
+    text?: string;
+    status?: {
+      isEdited: boolean;
     };
   };
 }

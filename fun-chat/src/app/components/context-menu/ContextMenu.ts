@@ -7,9 +7,9 @@ import styles from './ContextMenu.module.scss';
 export default class ContextMenu extends BaseComponent {
   private onDelete: (id: string) => void;
 
-  private onEdit: () => void;
+  private onEdit: (id: string, text: string) => void;
 
-  constructor(onDelete: (id: string) => void, onEdit: () => void) {
+  constructor(onDelete: (id: string) => void, onEdit: (id: string, text: string) => void) {
     super({
       tag: 'div',
       classNames: [styles['context-menu'], 'context-menu-js'],
@@ -40,8 +40,15 @@ export default class ContextMenu extends BaseComponent {
       this.remove();
     });
 
-    editElement.addListener('click', () => {
-      this.onEdit();
+    editElement.addListener('click', (event: Event) => {
+      const currentMessage = (event.target as HTMLElement).closest('.message-block-js') as HTMLElement;
+      const messageText = currentMessage.querySelector<HTMLElement>('.text')?.textContent;
+      const currentID = currentMessage.dataset.message;
+
+      assertIsDefined(currentID);
+      assertIsDefined(messageText);
+
+      this.onEdit(currentID, messageText);
       this.remove();
     });
 
