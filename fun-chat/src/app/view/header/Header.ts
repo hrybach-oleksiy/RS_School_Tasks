@@ -8,6 +8,10 @@ export default class Header extends BaseComponent {
 
   private logoutButton = button(['btn', 'header-btn'], 'Log Out');
 
+  private aboutButton = button(['btn'], 'About');
+
+  private userNameElem = h2(['user-name'], '');
+
   private logoutCallback: () => void;
 
   constructor(logoutCallback: () => void) {
@@ -19,43 +23,30 @@ export default class Header extends BaseComponent {
       p([styles['header-title']], 'Fun Chat'),
     );
     this.logoutCallback = logoutCallback;
-    this.logoutButton.removeClass('hidden');
     this.setContent();
   }
 
   private setContent(): void {
-    this.logoutButton.addListener('click', this.handleLogoutButtonClick);
     this.logoutButton.addListener('click', this.handleUserLogout);
-
-    if (window.location.hash !== '#chat') {
-      this.buttonsWrapper.addClass('hidden');
-    }
-
+    this.aboutButton.addListener('click', Header.handleAboutButtonClick);
+    this.buttonsWrapper.append(this.aboutButton);
     this.append(this.buttonsWrapper);
   }
 
-  private handleLogoutButtonClick = () => {
-    this.buttonsWrapper.addClass('hidden');
+  public addHeaderBlocks = (name: string): void => {
+    this.userNameElem.setTextContent(`User: ${name}`);
+    this.buttonsWrapper.appendChildren([this.logoutButton, this.userNameElem]);
   };
-
-  public addUserName = (name: string): void => {
-    const userNameElem = h2(['user-name'], `User: ${name}`);
-
-    this.buttonsWrapper.appendChildren([userNameElem, this.logoutButton]);
-  };
-
-  // static getUserData = (): UserLoginData | undefined => {
-  //   const userDataJson = localStorage.getItem('userData');
-
-  //   if (userDataJson) {
-  //     const userData = JSON.parse(userDataJson);
-  //     return userData;
-  //   }
-
-  //   return undefined;
-  // };
 
   private handleUserLogout = (): void => {
+    this.userNameElem.destroy();
+    this.logoutButton.getNode().remove();
     this.logoutCallback();
+
+    sessionStorage.setItem('currentLocation', 'login');
+  };
+
+  static handleAboutButtonClick = (): void => {
+    window.location.hash = 'about';
   };
 }

@@ -15,21 +15,15 @@ export default class Router {
     const userData = Router.getUserData();
     let location = window.location.hash.replace('#', '');
 
-    if (location.length === 0 && !userData) {
-      location = '/';
-      console.log(window.location.href);
-    } else if (location.length === 0 && userData) {
+    if (location === 'login' && userData) {
       location = 'chat';
-      console.log(window.location.href);
+    } else if (location === 'chat' && !userData) {
+      location = 'login';
+    } else if (location.length === 0) {
+      location = userData ? 'chat' : 'login';
     }
 
-    if (userData) {
-      location = 'chat';
-      console.log(window.location.pathname);
-    } else {
-      location = '/';
-      console.log(window.location);
-    }
+    window.location.hash = location;
 
     const route = this.routes.find((item) => item.path === location);
 

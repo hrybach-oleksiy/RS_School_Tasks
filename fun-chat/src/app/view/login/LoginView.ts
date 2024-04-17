@@ -41,6 +41,8 @@ export default class LoginView extends BaseComponent {
     this.addListener('submit', (event) => {
       event.preventDefault();
       this.saveUserData();
+
+      sessionStorage.setItem('currentLocation', 'chat');
     });
 
     document.addEventListener('keydown', this.handleKeyDown);

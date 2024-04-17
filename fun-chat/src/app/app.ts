@@ -5,6 +5,7 @@ import Header from './view/header/Header';
 import Main from './view/main/Main';
 import Footer from './view/footer/Footer';
 import Modal from './components/modal/Modal';
+import AboutView from './view/about/AboutView';
 
 import Router from './router/Router';
 
@@ -18,6 +19,7 @@ import { UserData } from '../types/interfaces';
 import LoginView from './view/login/LoginView';
 import ChatView from './view/chat/ChatView';
 import NotFoundView from './view/not-found/NotFoundView';
+// import { assertIsDefined } from '../utilities/utils';
 
 export default class App {
   private ws: WebSocket;
@@ -30,6 +32,8 @@ export default class App {
 
   private chatView: ChatView;
 
+  private aboutView: AboutView;
+
   private authController: AuthController;
 
   private notFoundView: NotFoundView;
@@ -41,6 +45,8 @@ export default class App {
   private main: Main = new Main();
 
   private userData: UserData | null = null;
+
+  // private currentLocation: string | null = 'login';
 
   constructor() {
     document.body.append(this.root.getNode());
@@ -58,9 +64,12 @@ export default class App {
       this.userModel.changeMessage,
     );
     this.notFoundView = new NotFoundView();
+    this.aboutView = new AboutView();
     const routes = this.createRoutes();
     this.router = new Router(routes);
     this.authController = new AuthController(this.userModel, this.authView, this.chatView, this.router);
+
+    sessionStorage.setItem('currentLocation', 'login');
 
     // this.ws.onmessage = (event) => {
     //   const response = JSON.parse(event.data);
@@ -86,10 +95,12 @@ export default class App {
 
     this.userData = App.getUserData();
 
+    // this.currentLocation = App.getCurrentLocation();
+
     this.ws.onopen = () => {
       if (this.userData) {
         this.userModel.loginUser(this.userData.login, this.userData.password);
-        this.header.addUserName(this.userData.login);
+        this.header.addHeaderBlocks(this.userData.login);
       }
     };
 
@@ -119,7 +130,6 @@ export default class App {
         path: '/',
         render: () => {
           this.main.destroyChildren();
-          // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
           this.authView.setForm();
           this.main.append(this.authView);
         },
@@ -128,9 +138,12 @@ export default class App {
         path: 'chat',
         render: () => {
           this.main.destroyChildren();
-          // const chatPage = new ChatView();
           this.chatView.setPage();
           this.main.append(this.chatView);
+
+          if (this.userData) {
+            this.header.addHeaderBlocks(this.userData.login);
+          }
 
           this.ws.onopen = () => {
             this.userModel.getActiveUser();
@@ -142,9 +155,16 @@ export default class App {
         path: 'login',
         render: () => {
           this.main.destroyChildren();
-          // const loginPage = new LoginView(this.userModel.loginUser, this.setUserData);
           this.authView.setForm();
           this.main.append(this.authView);
+        },
+      },
+      {
+        path: 'about',
+        render: () => {
+          this.main.destroyChildren();
+          this.aboutView.setPage();
+          this.main.append(this.aboutView);
         },
       },
       {
@@ -167,6 +187,12 @@ export default class App {
     }
   };
 
+  // public handleAboutPageClose = () => {
+  //   const { currentLocation } = this;
+  //   assertIsDefined(currentLocation);
+  //   window.location.hash = currentLocation;
+  // };
+
   public setUserData = (newUserData: UserData) => {
     this.userData = newUserData;
   };
@@ -176,13 +202,16 @@ export default class App {
 
     if (userDataJSON) {
       const userData = JSON.parse(userDataJSON);
-      console.log(userData);
 
       return userData;
     }
 
     return null;
   };
+
+  // static getCurrentLocation = (): string | null => {
+  //   return sessionStorage.getItem('currentLocation');
+  // };
 
   private handleServerDisconnect() {
     const reconnectInterval = 3000;
@@ -198,7 +227,6 @@ export default class App {
   private setupWebSocketEventHandlers() {
     this.ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      console.log(response);
       this.authController.handleResponse(response);
     };
 

@@ -16,11 +16,12 @@ export default class NotFoundView extends BaseComponent {
   }
 
   public setPage(): void {
+    this.getNode().innerHTML = '';
     const title = h1(['title'], 'Page not found');
     const backBtn = button(['btn'], 'Back to the Main page');
 
     backBtn.addListener('click', () => {
-      window.location.hash = '';
+      window.location.hash = '/';
     });
     this.appendChildren([title, backBtn]);
   }
