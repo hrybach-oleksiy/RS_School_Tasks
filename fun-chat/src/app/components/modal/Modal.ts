@@ -15,7 +15,7 @@ export default class Modal extends BaseComponent {
   constructor(content: BaseComponent) {
     super({
       tag: 'div',
-      classNames: [styles.modal, styles.hidden],
+      classNames: [styles.modal, styles.hidden, 'modal-js'],
     });
 
     // this.modalElement = ElementCreator.create('div', { class: 'modal hidden' });
@@ -53,7 +53,7 @@ export default class Modal extends BaseComponent {
     }
   };
 
-  private close = () => {
+  public close = () => {
     if (this.isOpen) {
       this.addClass(styles.hidden);
       this.isOpen = false;

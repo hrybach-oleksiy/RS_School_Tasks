@@ -41,12 +41,14 @@ export default class MessageBlock extends BaseComponent {
     messageBody.append(messageText);
 
     const messageFooter = div([styles['message-footer']]);
-    const messageStatus = messageData.status?.isDelivered ? 'delivered' : 'not delivered';
-    const editedStatus = messageData.status?.isEdited ? 'edited' : '';
-    const messageStatusElement = span(['message-status'], messageStatus);
-    const editedStatusElement = span(['message-edited'], editedStatus);
+    const deliveryStatus = messageData.status?.isDelivered ? 'delivered' : 'not delivered';
+    const editStatus = messageData.status?.isEdited ? 'edited' : '';
+    const readStatus = messageData.status?.isReaded ? 'read' : 'not read';
+    const deliveryStatusElement = span(['message-status'], deliveryStatus);
+    const editStatusElement = span(['message-edited'], editStatus);
+    const readStatusElement = span(['message-read'], readStatus);
 
-    messageFooter.appendChildren([editedStatusElement, messageStatusElement]);
+    messageFooter.appendChildren([editStatusElement, deliveryStatusElement, readStatusElement]);
 
     this.appendChildren([messageHeader, messageBody, messageFooter]);
   }

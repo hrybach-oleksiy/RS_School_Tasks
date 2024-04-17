@@ -4,6 +4,7 @@ import { div } from './components/HTMLComponents';
 import Header from './view/header/Header';
 import Main from './view/main/Main';
 import Footer from './view/footer/Footer';
+import Modal from './components/modal/Modal';
 
 import Router from './router/Router';
 
@@ -61,11 +62,27 @@ export default class App {
     this.router = new Router(routes);
     this.authController = new AuthController(this.userModel, this.authView, this.chatView, this.router);
 
-    this.ws.onmessage = (event) => {
-      const response = JSON.parse(event.data);
-      console.log(response);
-      this.authController.handleResponse(response);
-    };
+    // this.ws.onmessage = (event) => {
+    //   const response = JSON.parse(event.data);
+    //   console.log(response);
+    //   this.authController.handleResponse(response);
+    // };
+
+    // this.userData = App.getUserData();
+
+    // this.ws.onopen = () => {
+    //   if (this.userData) {
+    //     this.userModel.loginUser(this.userData.login, this.userData.password);
+    //     this.header.addUserName(this.userData.login);
+    //   }
+    // };
+
+    // this.ws.onclose = () => {
+    //   console.log('Server is down');
+    //   this.handleServerDisconnect();
+    // };
+
+    this.setupWebSocketEventHandlers();
 
     this.userData = App.getUserData();
 
@@ -74,6 +91,19 @@ export default class App {
         this.userModel.loginUser(this.userData.login, this.userData.password);
         this.header.addUserName(this.userData.login);
       }
+    };
+
+    this.ws.onclose = () => {
+      this.handleServerDisconnect();
+      const modalContent = new BaseComponent({
+        tag: 'p',
+        classNames: [],
+        text: 'Connection to the server lost. Attempting to reconnect...',
+      });
+      const modal = new Modal(modalContent);
+      modal.render();
+      modal.open();
+      this.root.append(modal);
     };
   }
 
@@ -153,4 +183,32 @@ export default class App {
 
     return null;
   };
+
+  private handleServerDisconnect() {
+    const reconnectInterval = 3000;
+
+    // console.log('Connection to the server lost. Attempting to reconnect...');
+
+    setTimeout(() => {
+      this.ws = new WebSocket('ws://127.0.0.1:4000');
+      this.setupWebSocketEventHandlers();
+    }, reconnectInterval);
+  }
+
+  private setupWebSocketEventHandlers() {
+    this.ws.onmessage = (event) => {
+      const response = JSON.parse(event.data);
+      console.log(response);
+      this.authController.handleResponse(response);
+    };
+
+    this.ws.onopen = () => {
+      const modal = document.querySelector('.modal-js');
+      modal?.remove();
+    };
+
+    this.ws.onclose = () => {
+      this.handleServerDisconnect();
+    };
+  }
 }
