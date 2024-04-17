@@ -6,4 +6,8 @@
   display: grid;
   grid-template-rows: 80px 1fr 80px;
   min-height: 100vh;
+
+  @media screen and (width <= 680px) {
+    grid-template-rows: auto 1fr 80px;
+  }
 }

@@ -49,7 +49,7 @@ export default class LoginView extends BaseComponent {
   }
 
   public setForm() {
-    const title = h1(['form__title', 'title'], 'Login');
+    const title = h1([styles['form-title'], 'title'], 'Login');
     const nameLabel = label([styles.label], 'Name');
     const passwordLabel = label([styles.label], 'Password');
     const nameErrorMessageElement = div([styles['name-error'], styles.hidden]);

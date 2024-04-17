@@ -18,6 +18,11 @@
   display: flex;
   gap: 20px;
   align-items: center;
+
+  @media screen and (width <= 680px) {
+    flex-direction: column;
+    gap: 5px;
+  }
 }
 
 .active {

@@ -7,6 +7,12 @@
   height: 100%;
 }
 
+.form-title {
+  @media screen and (width <= 900px) {
+    font-size: 46px;
+  }
+}
+
 .text-field {
   display: flex;
   flex-direction: column;

@@ -21,7 +21,7 @@ export default class Footer extends BaseComponent {
     const copyrightElement = div([styles.copyright]);
     const gitHubLink = a([styles.link]);
     const courseLink = a([styles.link]);
-    const copy = span(['copy'], '© 2024, by Hrybach Oleksiy');
+    const copy = span([styles.copy], '© 2024, by Hrybach Oleksiy');
     const gitHubLogoElement = img([styles.img]);
     const courseLogoElement = img([styles.img]);
 

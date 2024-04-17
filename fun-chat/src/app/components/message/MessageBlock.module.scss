@@ -9,11 +9,20 @@
   background-color: #25413e;
   border-radius: 20px;
   cursor: pointer;
+
+  @media screen and (width <= 680px) {
+    padding: 5px;
+    line-height: normal;
+  }
 }
 
 .message-header {
   display: flex;
   justify-content: space-around;
+
+  @media screen and (width <= 680px) {
+    flex-direction: column;
+  }
 }
 
 .message-body {
@@ -22,11 +31,19 @@
   color: #0f0e0e;
   background-color: #ebeae9;
   border-radius: 20px;
+
+  @media screen and (width <= 680px) {
+    padding: 5px;
+  }
 }
 
 .message-footer {
   display: flex;
   justify-content: space-between;
+
+  @media screen and (width <= 680px) {
+    flex-direction: column;
+  }
 }
 
 .align-right {

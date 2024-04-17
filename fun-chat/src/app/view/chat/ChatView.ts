@@ -48,7 +48,7 @@ export default class ChatView extends BaseComponent {
     },
   };
 
-  private messageBtnElem = button(['btn'], 'Send');
+  private messageBtnElem = button(['btn', styles['message-btn']], 'Send');
 
   constructor(
     sendMessageCallback: (receiver: string, text: string) => void,

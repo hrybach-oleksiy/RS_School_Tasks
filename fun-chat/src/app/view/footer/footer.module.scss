@@ -29,3 +29,9 @@
 .footer .img {
   width: 80px;
 }
+
+.copy {
+  @media screen and (width <= 900px) {
+    font-size: 16px;
+  }
+}
