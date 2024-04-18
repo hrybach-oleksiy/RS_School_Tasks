@@ -13,6 +13,9 @@
 }
 
 .user-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   padding: 10px;
   font-size: 24px;
 
@@ -21,9 +24,29 @@
   }
 }
 
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-input {
+  width: 100%;
+  height: 46px;
+  padding: 5px 15px;
+  border-radius: 20px;
+
+  @media screen and (width <= 800px) {
+    height: 23px;
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
 .active-user,
 .inactive-user {
-  // padding-left: 20px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -74,6 +97,13 @@
   max-height: 900px;
   padding: 15px;
   overflow: auto;
+}
+
+.first-message-placeholder {
+  align-self: center;
+  height: 100%;
+  font-weight: 700;
+  font-size: 24px;
 }
 
 .message-form {

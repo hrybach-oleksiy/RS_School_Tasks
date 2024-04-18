@@ -16,7 +16,7 @@ export default class ChatView extends BaseComponent {
 
   private userListWrapperElem = div([styles['user-list-wrapper']]);
 
-  private userList = ul(['user-list']);
+  private userList = ul([styles['user-list']]);
 
   private messageInputElem = input(
     [styles['message-input'], 'message-input-js'],
@@ -25,6 +25,8 @@ export default class ChatView extends BaseComponent {
     'text',
     'Type the Message',
   );
+
+  private searchInput = input([styles['search-input']], 'search-input', 'search-input', 'text', 'Search User');
 
   private messageForm = new BaseComponent({ tag: 'form', classNames: [styles['message-form']] });
 
@@ -69,10 +71,44 @@ export default class ChatView extends BaseComponent {
 
   public setPage() {
     const messageFieldPlaceHolder = p([styles['message-field-placeholder']], 'Select the user to send a message');
+
+    this.searchInput.addListener('input', (event: Event) => {
+      ChatView.searchUsers(event);
+    });
     this.messageFieldWrapperElem.append(messageFieldPlaceHolder);
-    this.userListWrapperElem.append(this.userList);
+    this.userListWrapperElem.appendChildren([this.searchInput, this.userList]);
     this.appendChildren([this.userListWrapperElem, this.messageFieldWrapperElem]);
   }
+
+  private setMessageField = (userName: string, userStatus: boolean): void => {
+    const messageFieldHeader = div([styles['message-field-header']]);
+    const messageFieldPlaceHolder = p([styles['first-message-placeholder']], 'Enter your first message');
+
+    const userNameElem = span([styles['user-name']], userName);
+    const userStatusElem = span(
+      [styles['user-status'], userStatus ? styles['user-online'] : styles['user-offline']],
+      userStatus ? 'online' : 'offline',
+    );
+
+    this.messageForm.addListener('submit', this.sendMessageHandler);
+
+    messageFieldHeader.appendChildren([userNameElem, userStatusElem]);
+    this.messagesWrapper.append(messageFieldPlaceHolder);
+    this.messageForm.appendChildren([this.messageInputElem, this.messageBtnElem]);
+    this.messageFieldWrapperElem.appendChildren([messageFieldHeader, this.messagesWrapper, this.messageForm]);
+  };
+
+  private addMessageField = (userName: string, userStatus: boolean): void => {
+    this.messageFieldWrapperElem.destroyChildren();
+    this.setMessageField(userName, userStatus);
+  };
+
+  private setMessageData = () => {
+    const messageInput = this.messageInputElem.getNode() as HTMLInputElement;
+    const messageText = messageInput.value;
+
+    this.messageData.message.text = messageText;
+  };
 
   public renderUsers = (users: { login: string; isLogined: boolean }[]) => {
     this.currentUser = ChatView.getUserData()?.login;
@@ -108,6 +144,7 @@ export default class ChatView extends BaseComponent {
     if (receiver === this.currentUser) {
       messageBlock.addClass(messageStyles['align-right']);
     }
+    this.messagesWrapper.destroyChildren();
     this.messagesWrapper.append(messageBlock);
     this.messagesWrapper.getNode().scrollTo({
       top: this.messagesWrapper.getNode().scrollHeight,
@@ -116,6 +153,10 @@ export default class ChatView extends BaseComponent {
   };
 
   public renderAllMessages = (messages: MessageData[]) => {
+    if (messages.length) {
+      this.messagesWrapper.destroyChildren();
+    }
+
     messages.forEach((item) => {
       console.log(item);
       const receiver = item.to;
@@ -211,34 +252,6 @@ export default class ChatView extends BaseComponent {
     return null;
   };
 
-  private setMessageField = (userName: string, userStatus: boolean): void => {
-    const messageFieldHeader = div([styles['message-field-header']]);
-
-    const userNameElem = span([styles['user-name']], userName);
-    const userStatusElem = span(
-      [styles['user-status'], userStatus ? styles['user-online'] : styles['user-offline']],
-      userStatus ? 'online' : 'offline',
-    );
-
-    this.messageForm.addListener('submit', this.sendMessageHandler);
-
-    messageFieldHeader.appendChildren([userNameElem, userStatusElem]);
-    this.messageForm.appendChildren([this.messageInputElem, this.messageBtnElem]);
-    this.messageFieldWrapperElem.appendChildren([messageFieldHeader, this.messagesWrapper, this.messageForm]);
-  };
-
-  private addMessageField = (userName: string, userStatus: boolean): void => {
-    this.messageFieldWrapperElem.destroyChildren();
-    this.setMessageField(userName, userStatus);
-  };
-
-  private setMessageData = () => {
-    const messageInput = this.messageInputElem.getNode() as HTMLInputElement;
-    const messageText = messageInput.value;
-
-    this.messageData.message.text = messageText;
-  };
-
   private sendMessageHandler = (event: Event) => {
     event.preventDefault();
     this.setMessageData();
@@ -261,5 +274,18 @@ export default class ChatView extends BaseComponent {
     this.messageBtnElem.setTextContent('Send');
     this.messageForm.removeListener('submit', this.editMessageHandler);
     this.messageForm.addListener('submit', this.sendMessageHandler);
+  };
+
+  static searchUsers = (event: Event): void => {
+    const users = document.querySelectorAll<HTMLElement>('.list-item');
+    const currentValue = (event.target as HTMLInputElement).value.toLowerCase();
+
+    users?.forEach((user) => {
+      const currentUser = user;
+      const userName = user.textContent?.toLowerCase();
+      const isMatch = userName?.includes(currentValue);
+
+      currentUser.style.display = isMatch ? 'block' : 'none';
+    });
   };
 }
