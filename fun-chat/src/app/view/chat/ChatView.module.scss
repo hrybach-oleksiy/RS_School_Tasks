@@ -24,7 +24,8 @@
   }
 }
 
-.user-list {
+.active-user-list,
+.inactive-user-list {
   display: flex;
   flex-direction: column;
   gap: 10px;

@@ -10,13 +10,16 @@ import styles from './ChatView.module.scss';
 import messageStyles from '../../components/message/MessageBlock.module.scss';
 import { assertIsDefined } from '../../../utilities/utils';
 import ContextMenu from '../../components/context-menu/ContextMenu';
+import { FormAttribute } from '../../../types/enums';
 
 export default class ChatView extends BaseComponent {
   private messageFieldWrapperElem = div([styles['message-field-wrapper']]);
 
   private userListWrapperElem = div([styles['user-list-wrapper']]);
 
-  private userList = ul([styles['user-list']]);
+  private activeUserList = ul([styles['active-user-list']]);
+
+  private inActiveUserList = ul([styles['inactive-user-list']]);
 
   private messageInputElem = input(
     [styles['message-input'], 'message-input-js'],
@@ -67,6 +70,8 @@ export default class ChatView extends BaseComponent {
     this.receiveMessageCallback = receiveMessageCallback;
     this.removeMessageCallback = removeMessageCallback;
     this.changeMessageCallback = changeMessageCallback;
+
+    this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
   }
 
   public setPage() {
@@ -75,9 +80,15 @@ export default class ChatView extends BaseComponent {
     this.searchInput.addListener('input', (event: Event) => {
       ChatView.searchUsers(event);
     });
+
+    this.messageInputElem.addListener('input', (event: Event) => {
+      this.handleMessageInput(event);
+    });
+
     this.messageFieldWrapperElem.append(messageFieldPlaceHolder);
-    this.userListWrapperElem.appendChildren([this.searchInput, this.userList]);
+    this.userListWrapperElem.appendChildren([this.searchInput, this.activeUserList, this.inActiveUserList]);
     this.appendChildren([this.userListWrapperElem, this.messageFieldWrapperElem]);
+    console.log('chatview rendered');
   }
 
   private setMessageField = (userName: string, userStatus: boolean): void => {
@@ -110,19 +121,24 @@ export default class ChatView extends BaseComponent {
     this.messageData.message.text = messageText;
   };
 
-  public renderUsers = (users: { login: string; isLogined: boolean }[]) => {
+  public renderActiveUsers = (users: { login: string; isLogined: boolean }[]) => {
     this.currentUser = ChatView.getUserData()?.login;
+    this.activeUserList.getNode().innerHTML = '';
+    // this.inActiveUserList.getNode().innerHTML = '';
+    console.log('active users rendered');
+    console.log(this.activeUserList);
 
     users
       .filter((user) => user.login !== this.currentUser)
       .forEach((user) => {
         const liElem = li(['list-item'], user.login);
+        liElem.addClass(styles['active-user']);
 
-        if (user.isLogined) {
-          liElem.addClass(styles['active-user']);
-        } else {
-          liElem.addClass(styles['inactive-user']);
-        }
+        // if (user.isLogined) {
+        //   liElem.addClass(styles['active-user']);
+        // } else {
+        //   liElem.addClass(styles['inactive-user']);
+        // }
 
         liElem.addListener('click', () => {
           this.addMessageField(user.login, user.isLogined);
@@ -130,8 +146,84 @@ export default class ChatView extends BaseComponent {
           this.receiveMessageCallback(user.login);
         });
 
-        this.userList.append(liElem);
+        this.activeUserList.append(liElem);
       });
+  };
+
+  public renderInActiveUsers = (users: { login: string; isLogined: boolean }[]) => {
+    this.currentUser = ChatView.getUserData()?.login;
+    this.inActiveUserList.getNode().innerHTML = '';
+    // this.activeUserList.getNode().innerHTML = '';
+    console.log('nonactive users rendered');
+    console.log(this.inActiveUserList);
+
+    users
+      .filter((user) => user.login !== this.currentUser)
+      .forEach((user) => {
+        const liElem = li(['list-item'], user.login);
+        liElem.addClass(styles['inactive-user']);
+
+        // if (user.isLogined) {
+        //   liElem.addClass(styles['active-user']);
+        // } else {
+        //   liElem.addClass(styles['inactive-user']);
+        // }
+
+        liElem.addListener('click', () => {
+          this.addMessageField(user.login, user.isLogined);
+          this.messageData.message.to = user.login;
+          this.receiveMessageCallback(user.login);
+        });
+
+        this.inActiveUserList.append(liElem);
+      });
+  };
+
+  public changeUserStatus = (user: { login: string; isLogined: boolean }) => {
+    this.currentUser = ChatView.getUserData()?.login;
+    const users = document.querySelectorAll('.list-item');
+
+    users.forEach((item) => {
+      if (user.login === item.textContent && user.isLogined) {
+        item.classList.add(styles['active-user']);
+      } else if (user.login === item.textContent && !user.isLogined) {
+        item.classList.add(styles['inactive-user']);
+      } else if (user.login !== item.textContent) {
+        const liElem = li(['list-item'], user.login);
+
+        liElem.addListener('click', () => {
+          this.addMessageField(user.login, user.isLogined);
+          this.messageData.message.to = user.login;
+          this.receiveMessageCallback(user.login);
+        });
+
+        if (user.isLogined) {
+          liElem.addClass(styles['active-user']);
+          this.activeUserList.append(liElem);
+        } else {
+          liElem.addClass(styles['inactive-user']);
+          this.inActiveUserList.append(liElem);
+        }
+      }
+    });
+
+    // if (this.currentUser !== user.login) {
+    //   const liElem = li(['list-item'], user.login);
+
+    //   liElem.addListener('click', () => {
+    //     this.addMessageField(user.login, user.isLogined);
+    //     this.messageData.message.to = user.login;
+    //     this.receiveMessageCallback(user.login);
+    //   });
+
+    //   if (user.isLogined) {
+    //     liElem.addClass(styles['active-user']);
+    //     this.activeUserList.append(liElem);
+    //   } else {
+    //     liElem.addClass(styles['inactive-user']);
+    //     this.inActiveUserList.append(liElem);
+    //   }
+    // }
   };
 
   public renderMessage = (messageData: MessagePayload) => {
@@ -261,6 +353,7 @@ export default class ChatView extends BaseComponent {
 
     this.sendMessageCallback(receiver, messageText);
     (this.messageForm.getNode() as HTMLFormElement).reset();
+    this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
   };
 
   private editMessageHandler = (event: Event) => {
@@ -287,5 +380,17 @@ export default class ChatView extends BaseComponent {
 
       currentUser.style.display = isMatch ? 'block' : 'none';
     });
+  };
+
+  private handleMessageInput = (event: Event): void => {
+    console.log('method works');
+    const currentValue = (event.target as HTMLInputElement).value.trim();
+    console.log(currentValue);
+
+    if (!currentValue) {
+      this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
+    } else {
+      this.messageBtnElem.removeAttribute(FormAttribute.DISABLED);
+    }
   };
 }

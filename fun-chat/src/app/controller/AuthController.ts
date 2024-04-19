@@ -61,6 +61,16 @@ export default class AuthController {
         this.getInActiveUsersResponse(currentPayload);
         break;
 
+      // case UserRequestType.EXTERNAL_LOGIN:
+      //   // currentPayload = response.payload as UsersPayload;
+      //   this.userExternalLoginResponse();
+      //   break;
+
+      // case UserRequestType.EXTERNAL_LOGOUT:
+      //   // currentPayload = response.payload as UsersPayload;
+      //   this.userExternalLogoutResponse();
+      //   break;
+
       case MessageRequestType.SEND:
         currentPayload = response.payload as MessagePayload;
         this.messageSendResponse(currentPayload);
@@ -92,13 +102,13 @@ export default class AuthController {
   };
 
   private userLoginResponse = (payload: UserLoginResponsePayload) => {
-    const logOutBlock = document.querySelector('.header-block');
+    // const logOutBlock = document.querySelector('.header-block');
     console.log(`User ${payload.user.login} logged in successfully`);
     window.location.hash = 'chat';
     this.model.getActiveUser();
     this.model.getInActiveUser();
 
-    logOutBlock?.classList.remove('hidden');
+    // logOutBlock?.classList.remove('hidden');
   };
 
   static userLogoutResponse = (payload: UserLoginResponsePayload) => {
@@ -107,18 +117,19 @@ export default class AuthController {
   };
 
   private getActiveUsersResponse = (payload: UsersPayload) => {
-    this.chatView.renderUsers(payload.users);
-
-    // Redirect or perform further actions upon successful login
-
-    // else if (response.type === UserRequestType.ERROR) {
-    //   // this.authView.displayErrorMessage(response.payload.error);
-    //   console.log('Error');
-    // }
+    this.chatView.renderActiveUsers(payload.users);
   };
 
   private getInActiveUsersResponse = (payload: UsersPayload) => {
-    this.chatView.renderUsers(payload.users);
+    this.chatView.renderInActiveUsers(payload.users);
+  };
+
+  private userExternalLoginResponse = () => {
+    this.model.getActiveUser();
+  };
+
+  private userExternalLogoutResponse = () => {
+    this.model.getInActiveUser();
   };
 
   private messageSendResponse = (payload: MessagePayload) => {

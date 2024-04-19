@@ -57,6 +57,34 @@ export default class UserModel {
     this.ws.send(JSON.stringify(request));
   };
 
+  // public loginExternalUser = (login: string): void => {
+  //   const request: ServerRequest = {
+  //     id: null,
+  //     type: UserRequestType.EXTERNAL_LOGIN,
+  //     payload: {
+  //       user: {
+  //         login,
+  //         isLogined: true,
+  //       },
+  //     },
+  //   };
+  //   this.ws.send(JSON.stringify(request));
+  // };
+
+  // public logoutExternalUser = (login: string): void => {
+  //   const request: ServerRequest = {
+  //     id: null,
+  //     type: UserRequestType.EXTERNAL_LOGOUT,
+  //     payload: {
+  //       user: {
+  //         login,
+  //         isLogined: false,
+  //       },
+  //     },
+  //   };
+  //   this.ws.send(JSON.stringify(request));
+  // };
+
   public sendMessage = (receiver: string, text: string): void => {
     const request: ServerRequest = {
       id: null,

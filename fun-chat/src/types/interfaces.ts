@@ -104,13 +104,11 @@ export interface MessageFromPayload {
     login: string;
   };
 }
-
 export interface MessageDeletePayload {
   message: {
     id: string;
   };
 }
-
 export interface MessageDeleteResponsePayload {
   message: {
     id: string;
@@ -119,7 +117,6 @@ export interface MessageDeleteResponsePayload {
     };
   };
 }
-
 export interface MessageEditResponsePayload {
   message: {
     id: string;

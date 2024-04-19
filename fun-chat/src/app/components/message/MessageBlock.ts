@@ -44,11 +44,16 @@ export default class MessageBlock extends BaseComponent {
     const deliveryStatus = messageData.status?.isDelivered ? 'delivered' : 'not delivered';
     const editStatus = messageData.status?.isEdited ? 'edited' : '';
     const readStatus = messageData.status?.isReaded ? 'read' : 'not read';
+
     const deliveryStatusElement = span(['message-status'], deliveryStatus);
     const editStatusElement = span(['message-edited'], editStatus);
     const readStatusElement = span(['message-read'], readStatus);
 
-    messageFooter.appendChildren([editStatusElement, deliveryStatusElement, readStatusElement]);
+    messageFooter.append(editStatusElement);
+
+    if (this.author !== messageData.from) {
+      messageFooter.appendChildren([deliveryStatusElement, readStatusElement]);
+    }
 
     this.appendChildren([messageHeader, messageBody, messageFooter]);
   }
