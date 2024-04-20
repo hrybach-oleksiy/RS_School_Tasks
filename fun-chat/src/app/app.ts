@@ -9,10 +9,10 @@ import AboutView from './view/about/AboutView';
 
 import Router from './router/Router';
 
-import AuthController from './controller/AuthController';
-import UserModel from './model/UserModel';
+import Controller from './controller/Controller';
+import Model from './model/Model';
 
-import { UserData } from '../types/interfaces';
+import { User } from '../types/interfaces';
 
 // import { ServerRequest } from '../types/interfaces';
 
@@ -24,17 +24,17 @@ import NotFoundView from './view/not-found/NotFoundView';
 export default class App {
   private ws: WebSocket;
 
-  private userModel: UserModel;
+  private model: Model;
 
   private header: Header;
 
-  private authView: LoginView;
+  private loginView: LoginView;
 
   private chatView: ChatView;
 
   private aboutView: AboutView;
 
-  private authController: AuthController;
+  private controller: Controller;
 
   private notFoundView: NotFoundView;
 
@@ -44,7 +44,7 @@ export default class App {
 
   private main: Main = new Main();
 
-  private userData: UserData | null = null;
+  private userData: User | null = null;
 
   // private currentLocation: string | null = 'login';
 
@@ -54,22 +54,20 @@ export default class App {
 
     this.ws = new WebSocket('ws://127.0.0.1:4000');
 
-    this.userModel = new UserModel(this.ws);
+    this.model = new Model(this.ws);
     this.header = new Header(this.handleUserLogout);
-    this.authView = new LoginView(this.userModel.loginUser, this.setUserData);
+    this.loginView = new LoginView(this.model.loginUser, this.setUserData);
     this.chatView = new ChatView(
-      this.userModel.sendMessage,
-      this.userModel.receiveMessage,
-      this.userModel.removeMessage,
-      this.userModel.changeMessage,
+      this.model.sendMessage,
+      this.model.fetchMessages,
+      this.model.removeMessage,
+      this.model.changeMessage,
     );
     this.notFoundView = new NotFoundView();
-    this.aboutView = new AboutView();
+    this.aboutView = new AboutView(this.updateUserList);
     const routes = this.createRoutes();
     this.router = new Router(routes);
-    this.authController = new AuthController(this.userModel, this.authView, this.chatView, this.router);
-
-    sessionStorage.setItem('currentLocation', 'login');
+    this.controller = new Controller(this.model, this.loginView, this.chatView, this.router);
 
     // this.ws.onmessage = (event) => {
     //   const response = JSON.parse(event.data);
@@ -95,11 +93,15 @@ export default class App {
 
     this.userData = App.getUserData();
 
+    if (this.userData) {
+      sessionStorage.setItem('currentLocation', 'chat');
+    }
+
     // this.currentLocation = App.getCurrentLocation();
 
     this.ws.onopen = () => {
       if (this.userData) {
-        this.userModel.loginUser(this.userData.login, this.userData.password);
+        this.model.loginUser(this.userData.login, this.userData.password);
         this.header.addHeaderBlocks(this.userData.login);
       }
     };
@@ -130,8 +132,8 @@ export default class App {
         path: '/',
         render: () => {
           this.main.destroyChildren();
-          this.authView.setForm();
-          this.main.append(this.authView);
+          this.loginView.setForm();
+          this.main.append(this.loginView);
         },
       },
       {
@@ -146,8 +148,8 @@ export default class App {
           }
 
           this.ws.onopen = () => {
-            this.userModel.getActiveUser();
-            this.userModel.getInActiveUser();
+            this.model.getActiveUser();
+            this.model.getInActiveUser();
           };
         },
       },
@@ -155,8 +157,8 @@ export default class App {
         path: 'login',
         render: () => {
           this.main.destroyChildren();
-          this.authView.setForm();
-          this.main.append(this.authView);
+          this.loginView.setForm();
+          this.main.append(this.loginView);
         },
       },
       {
@@ -181,7 +183,7 @@ export default class App {
   private handleUserLogout = () => {
     if (this.userData) {
       const { login, password } = this.userData;
-      this.userModel.logoutUser(login, password);
+      this.model.logoutUser(login, password);
       sessionStorage.removeItem('userData');
       this.userData = null;
     }
@@ -193,11 +195,11 @@ export default class App {
   //   window.location.hash = currentLocation;
   // };
 
-  public setUserData = (newUserData: UserData) => {
+  public setUserData = (newUserData: User) => {
     this.userData = newUserData;
   };
 
-  static getUserData = (): UserData | null => {
+  static getUserData = (): User | null => {
     const userDataJSON = sessionStorage.getItem('userData');
 
     if (userDataJSON) {
@@ -227,7 +229,7 @@ export default class App {
   private setupWebSocketEventHandlers() {
     this.ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      this.authController.handleResponse(response);
+      this.controller.handleResponse(response);
     };
 
     this.ws.onopen = () => {
@@ -239,4 +241,9 @@ export default class App {
       this.handleServerDisconnect();
     };
   }
+
+  private updateUserList = () => {
+    this.model.getActiveUser();
+    this.model.getInActiveUser();
+  };
 }

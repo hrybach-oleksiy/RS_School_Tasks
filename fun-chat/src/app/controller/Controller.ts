@@ -1,16 +1,15 @@
-import UserModel from '../model/UserModel';
+import Model from '../model/Model';
 import LoginView from '../view/login/LoginView';
 import ChatView from '../view/chat/ChatView';
 import Modal from '../components/modal/Modal';
 
 import {
-  UserLoginResponsePayload,
+  UserResponsePayload,
   ServerRequest,
-  PayloadType,
   ErrorPayload,
   UsersPayload,
-  MessagePayload,
   MessagesPayload,
+  MessagePayload,
   MessageDeleteResponsePayload,
   MessageEditResponsePayload,
 } from '../../types/interfaces';
@@ -21,8 +20,8 @@ import { UserRequestType, MessageRequestType } from '../../types/enums';
 import Router from '../router/Router';
 import { assertIsDefined } from '../../utilities/utils';
 
-export default class AuthController {
-  private model: UserModel;
+export default class Controller {
+  private model: Model;
 
   private authView: LoginView;
 
@@ -30,7 +29,7 @@ export default class AuthController {
 
   private router: Router;
 
-  constructor(model: UserModel, authView: LoginView, chatView: ChatView, router: Router) {
+  constructor(model: Model, authView: LoginView, chatView: ChatView, router: Router) {
     this.model = model;
     this.authView = authView;
     this.chatView = chatView;
@@ -38,72 +37,64 @@ export default class AuthController {
   }
 
   public handleResponse = (response: ServerRequest) => {
-    let currentPayload: PayloadType;
+    const { type, payload } = response;
 
-    switch (response.type) {
+    switch (type) {
       case UserRequestType.LOGIN:
-        currentPayload = response.payload as UserLoginResponsePayload;
-        this.userLoginResponse(currentPayload);
+        this.userLoginResponse(payload as UserResponsePayload);
         break;
 
       case UserRequestType.LOGOUT:
-        currentPayload = response.payload as UserLoginResponsePayload;
-        AuthController.userLogoutResponse(currentPayload);
+        Controller.userLogoutResponse(payload as UserResponsePayload);
         break;
 
       case UserRequestType.ACTIVE:
-        currentPayload = response.payload as UsersPayload;
-        this.getActiveUsersResponse(currentPayload);
+        this.getActiveUsersResponse(payload as UsersPayload);
         break;
 
       case UserRequestType.INACTIVE:
-        currentPayload = response.payload as UsersPayload;
-        this.getInActiveUsersResponse(currentPayload);
+        this.getInActiveUsersResponse(payload as UsersPayload);
         break;
 
-      // case UserRequestType.EXTERNAL_LOGIN:
-      //   // currentPayload = response.payload as UsersPayload;
-      //   this.userExternalLoginResponse();
-      //   break;
+      case UserRequestType.EXTERNAL_LOGIN:
+        console.log('External User Login - ', (payload as UserResponsePayload).user.login);
+        this.userExternalLoginResponse();
+        break;
 
-      // case UserRequestType.EXTERNAL_LOGOUT:
-      //   // currentPayload = response.payload as UsersPayload;
-      //   this.userExternalLogoutResponse();
-      //   break;
+      case UserRequestType.EXTERNAL_LOGOUT:
+        console.log('External User Logout - ', (payload as UserResponsePayload).user.login);
+        this.userExternalLogoutResponse();
+        break;
 
       case MessageRequestType.SEND:
-        currentPayload = response.payload as MessagePayload;
-        this.messageSendResponse(currentPayload);
+        this.messageSendResponse(payload as MessagePayload);
         break;
 
       case MessageRequestType.FROM:
-        currentPayload = response.payload as MessagesPayload;
-        this.messageFromResponse(currentPayload);
+        this.messageFromResponse(payload as MessagesPayload);
         break;
 
       case MessageRequestType.DELETE:
-        currentPayload = response.payload as MessageDeleteResponsePayload;
-        AuthController.messageDeleteResponse(currentPayload);
+        Controller.messageDeleteResponse(payload as MessageDeleteResponsePayload);
         break;
 
       case MessageRequestType.EDIT:
-        currentPayload = response.payload as MessageEditResponsePayload;
-        AuthController.messageEditResponse(currentPayload);
+        Controller.messageEditResponse(payload as MessageEditResponsePayload);
         break;
 
       case UserRequestType.ERROR:
-        currentPayload = response.payload as ErrorPayload;
-        AuthController.handleError(currentPayload);
+        Controller.handleError(payload as ErrorPayload);
         break;
 
       default:
-        console.error('Unknown payload type:', response.payload);
+        console.error('Unknown payload type:', payload);
     }
   };
 
-  private userLoginResponse = (payload: UserLoginResponsePayload) => {
+  private userLoginResponse = (payload: UserResponsePayload) => {
     // const logOutBlock = document.querySelector('.header-block');
-    console.log(`User ${payload.user.login} logged in successfully`);
+    const { login } = payload.user;
+    console.log(`User ${login} logged in successfully`);
     window.location.hash = 'chat';
     this.model.getActiveUser();
     this.model.getInActiveUser();
@@ -111,8 +102,9 @@ export default class AuthController {
     // logOutBlock?.classList.remove('hidden');
   };
 
-  static userLogoutResponse = (payload: UserLoginResponsePayload) => {
-    console.log(`User ${payload.user.login} logged out successfully`);
+  static userLogoutResponse = (payload: UserResponsePayload) => {
+    const { login } = payload.user;
+    console.log(`User ${login} logged out successfully`);
     window.location.hash = 'login';
   };
 
@@ -125,16 +117,17 @@ export default class AuthController {
   };
 
   private userExternalLoginResponse = () => {
-    this.model.getActiveUser();
+    this.handleExternalUserAction();
   };
 
   private userExternalLogoutResponse = () => {
-    this.model.getInActiveUser();
+    this.handleExternalUserAction();
   };
 
   private messageSendResponse = (payload: MessagePayload) => {
-    console.log(`Message ${payload.message.text} to the user ${payload.message.to} was successfully sent`);
-    this.chatView.renderMessage(payload);
+    const { text, to } = payload.message;
+    console.log(`Message ${text} to the user ${to} was successfully sent`);
+    this.chatView.renderMessage(payload.message);
   };
 
   private messageFromResponse = (payload: MessagesPayload) => {
@@ -143,8 +136,9 @@ export default class AuthController {
   };
 
   static messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
-    console.log(`Message with ID ${payload.message.id} is with the Status ${payload.message.status?.isDeleted}`);
-    ChatView.deleteMessage(payload.message.id);
+    const { id, status } = payload.message;
+    console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
+    ChatView.deleteMessage(id);
   };
 
   static messageEditResponse = (payload: MessageEditResponsePayload) => {
@@ -165,6 +159,13 @@ export default class AuthController {
     modal.render();
     modal.addCloseBtn('Close');
     modal.open();
+  };
+
+  private handleExternalUserAction = () => {
+    this.chatView.activeUserList.destroyChildren();
+    this.chatView.inActiveUserList.destroyChildren();
+    this.model.getActiveUser();
+    this.model.getInActiveUser();
   };
 
   // private handleSendMessage = () => {

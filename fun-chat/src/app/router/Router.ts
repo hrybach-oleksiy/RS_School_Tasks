@@ -1,4 +1,4 @@
-import { RoutesPath, UserData } from '../../types/interfaces';
+import { RoutesPath, User } from '../../types/interfaces';
 
 export default class Router {
   private routes: RoutesPath[];
@@ -38,7 +38,7 @@ export default class Router {
     route.render();
   };
 
-  static getUserData = (): UserData | null => {
+  static getUserData = (): User | null => {
     const userDataJSON = sessionStorage.getItem('userData');
 
     if (userDataJSON) {

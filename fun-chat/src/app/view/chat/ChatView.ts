@@ -1,5 +1,5 @@
 // import { assertIsDefined } from '../../../utilities/utils';
-import { UserData, MessagePayload, UserMessagePayload, MessageData } from '../../../types/interfaces';
+import { User, UserMessagePayload, Message, UserStatus } from '../../../types/interfaces';
 import BaseComponent from '../../components/BaseComponent';
 import { div, ul, li, input, button, p, span } from '../../components/HTMLComponents';
 
@@ -17,9 +17,9 @@ export default class ChatView extends BaseComponent {
 
   private userListWrapperElem = div([styles['user-list-wrapper']]);
 
-  private activeUserList = ul([styles['active-user-list']]);
+  public activeUserList = ul([styles['active-user-list']]);
 
-  private inActiveUserList = ul([styles['inactive-user-list']]);
+  public inActiveUserList = ul([styles['inactive-user-list']]);
 
   private messageInputElem = input(
     [styles['message-input'], 'message-input-js'],
@@ -37,7 +37,7 @@ export default class ChatView extends BaseComponent {
 
   private sendMessageCallback: (receiver: string, text: string) => void;
 
-  private receiveMessageCallback: (sender: string) => void;
+  private fetchMessagesCallback: (sender: string) => void;
 
   private removeMessageCallback: (id: string) => void;
 
@@ -57,7 +57,7 @@ export default class ChatView extends BaseComponent {
 
   constructor(
     sendMessageCallback: (receiver: string, text: string) => void,
-    receiveMessageCallback: (sender: string) => void,
+    fetchMessagesCallback: (sender: string) => void,
     removeMessageCallback: (id: string) => void,
     changeMessageCallback: (id: string, text: string) => void,
   ) {
@@ -67,7 +67,7 @@ export default class ChatView extends BaseComponent {
     });
 
     this.sendMessageCallback = sendMessageCallback;
-    this.receiveMessageCallback = receiveMessageCallback;
+    this.fetchMessagesCallback = fetchMessagesCallback;
     this.removeMessageCallback = removeMessageCallback;
     this.changeMessageCallback = changeMessageCallback;
 
@@ -121,7 +121,7 @@ export default class ChatView extends BaseComponent {
     this.messageData.message.text = messageText;
   };
 
-  public renderActiveUsers = (users: { login: string; isLogined: boolean }[]) => {
+  public renderActiveUsers = (users: UserStatus[]) => {
     this.currentUser = ChatView.getUserData()?.login;
     this.activeUserList.getNode().innerHTML = '';
     // this.inActiveUserList.getNode().innerHTML = '';
@@ -141,16 +141,17 @@ export default class ChatView extends BaseComponent {
         // }
 
         liElem.addListener('click', () => {
+          assertIsDefined(user.isLogined);
           this.addMessageField(user.login, user.isLogined);
           this.messageData.message.to = user.login;
-          this.receiveMessageCallback(user.login);
+          this.fetchMessagesCallback(user.login);
         });
 
         this.activeUserList.append(liElem);
       });
   };
 
-  public renderInActiveUsers = (users: { login: string; isLogined: boolean }[]) => {
+  public renderInActiveUsers = (users: UserStatus[]) => {
     this.currentUser = ChatView.getUserData()?.login;
     this.inActiveUserList.getNode().innerHTML = '';
     // this.activeUserList.getNode().innerHTML = '';
@@ -170,73 +171,40 @@ export default class ChatView extends BaseComponent {
         // }
 
         liElem.addListener('click', () => {
+          assertIsDefined(user.isLogined);
           this.addMessageField(user.login, user.isLogined);
           this.messageData.message.to = user.login;
-          this.receiveMessageCallback(user.login);
+          this.fetchMessagesCallback(user.login);
         });
 
         this.inActiveUserList.append(liElem);
       });
   };
 
-  public changeUserStatus = (user: { login: string; isLogined: boolean }) => {
-    this.currentUser = ChatView.getUserData()?.login;
-    const users = document.querySelectorAll('.list-item');
-
-    users.forEach((item) => {
-      if (user.login === item.textContent && user.isLogined) {
-        item.classList.add(styles['active-user']);
-      } else if (user.login === item.textContent && !user.isLogined) {
-        item.classList.add(styles['inactive-user']);
-      } else if (user.login !== item.textContent) {
-        const liElem = li(['list-item'], user.login);
-
-        liElem.addListener('click', () => {
-          this.addMessageField(user.login, user.isLogined);
-          this.messageData.message.to = user.login;
-          this.receiveMessageCallback(user.login);
-        });
-
-        if (user.isLogined) {
-          liElem.addClass(styles['active-user']);
-          this.activeUserList.append(liElem);
-        } else {
-          liElem.addClass(styles['inactive-user']);
-          this.inActiveUserList.append(liElem);
-        }
-      }
-    });
-
-    // if (this.currentUser !== user.login) {
-    //   const liElem = li(['list-item'], user.login);
-
-    //   liElem.addListener('click', () => {
-    //     this.addMessageField(user.login, user.isLogined);
-    //     this.messageData.message.to = user.login;
-    //     this.receiveMessageCallback(user.login);
-    //   });
-
-    //   if (user.isLogined) {
-    //     liElem.addClass(styles['active-user']);
-    //     this.activeUserList.append(liElem);
-    //   } else {
-    //     liElem.addClass(styles['inactive-user']);
-    //     this.inActiveUserList.append(liElem);
-    //   }
-    // }
-  };
-
-  public renderMessage = (messageData: MessagePayload) => {
-    const receiver = messageData.message.to;
-    const author = receiver === this.currentUser ? messageData.message.from : 'You';
+  public renderMessage = (messageData: Message) => {
+    const receiver = messageData.to;
+    const author = receiver === this.currentUser ? messageData.from : 'You';
     assertIsDefined(author);
 
-    const messageBlock = new MessageBlock(messageData.message, author);
+    const messageBlock = new MessageBlock(messageData, author);
 
     if (receiver === this.currentUser) {
       messageBlock.addClass(messageStyles['align-right']);
+    } else {
+      messageBlock.addListener('contextmenu', (event: Event) => {
+        event.preventDefault();
+
+        const allMenus = document.querySelectorAll('.context-menu-js');
+        allMenus.forEach((menu) => {
+          menu.remove();
+        });
+
+        const contextMenu = new ContextMenu(this.removeMessageCallback, this.editMessage);
+
+        contextMenu.show(messageBlock);
+      });
     }
-    this.messagesWrapper.destroyChildren();
+
     this.messagesWrapper.append(messageBlock);
     this.messagesWrapper.getNode().scrollTo({
       top: this.messagesWrapper.getNode().scrollHeight,
@@ -244,7 +212,7 @@ export default class ChatView extends BaseComponent {
     });
   };
 
-  public renderAllMessages = (messages: MessageData[]) => {
+  public renderAllMessages = (messages: Message[]) => {
     if (messages.length) {
       this.messagesWrapper.destroyChildren();
     }
@@ -332,7 +300,7 @@ export default class ChatView extends BaseComponent {
     this.messageForm.addListener('submit', this.editMessageHandler);
   };
 
-  static getUserData = (): UserData | null => {
+  static getUserData = (): User | null => {
     const userDataJSON = sessionStorage.getItem('userData');
 
     if (userDataJSON) {
@@ -383,9 +351,7 @@ export default class ChatView extends BaseComponent {
   };
 
   private handleMessageInput = (event: Event): void => {
-    console.log('method works');
     const currentValue = (event.target as HTMLInputElement).value.trim();
-    console.log(currentValue);
 
     if (!currentValue) {
       this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');

@@ -23,37 +23,43 @@ export interface UserLoginData {
   password?: string;
 }
 
-export interface MessageStatusData {
-  isDelivered: boolean;
-  isReaded: boolean;
-  isEdited: boolean;
-}
-
-export interface UserData {
+export interface User {
   login: string;
   password: string;
   isLogined?: boolean;
 }
 
-export interface MessageData {
+export interface UserStatus {
+  login: string;
+  isLogined?: boolean;
+}
+export interface MessageStatus {
+  isDelivered: boolean;
+  isReaded: boolean;
+  isEdited: boolean;
+}
+
+export interface Message {
   id?: string;
   from?: string;
   to: string;
   text: string;
   datetime?: number;
-  status?: MessageStatusData;
+  status?: MessageStatus;
 }
 
 export type PayloadType =
-  | UserLoginPayload
-  | UserLoginResponsePayload
+  | UserPayload
+  | UserResponsePayload
   | UsersPayload
   | MessagePayload
-  | MessageFromPayload
+  // | MessagesResponsePayload
+  // | MessageFromPayload
   | MessageDeletePayload
   | MessageDeleteResponsePayload
   | MessageEditResponsePayload
   | MessagesPayload
+  | UserStatus
   | ErrorPayload
   | null;
 export interface ServerRequest {
@@ -62,28 +68,15 @@ export interface ServerRequest {
   payload: PayloadType;
 }
 
-export interface UserLoginPayload {
-  user: UserLoginData;
+export interface UserPayload {
+  user: User;
 }
-
-export interface UserLoginResponsePayload {
-  user: {
-    login: string;
-    isLogined?: boolean;
-  };
+export interface UserResponsePayload {
+  user: UserStatus;
 }
-
 export interface UsersPayload {
-  users: {
-    login: string;
-    isLogined: boolean;
-  }[];
+  users: UserStatus[];
 }
-
-export interface ErrorPayload {
-  error: string;
-}
-
 export interface UserMessagePayload {
   message: {
     id: string;
@@ -92,18 +85,22 @@ export interface UserMessagePayload {
   };
 }
 export interface MessagePayload {
-  message: MessageData;
+  message: Message;
 }
 
 export interface MessagesPayload {
-  messages: MessageData[];
+  messages: Message[];
 }
 
-export interface MessageFromPayload {
-  user: {
-    login: string;
-  };
-}
+// export interface MessagesResponsePayload {
+//   message: Message;
+// }
+
+// export interface MessageFromPayload {
+//   user: {
+//     login: string;
+//   };
+// }
 export interface MessageDeletePayload {
   message: {
     id: string;
@@ -125,6 +122,10 @@ export interface MessageEditResponsePayload {
       isEdited: boolean;
     };
   };
+}
+
+export interface ErrorPayload {
+  error: string;
 }
 
 // type SomeType = {

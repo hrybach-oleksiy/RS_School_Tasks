@@ -1,7 +1,7 @@
 import { UserRequestType, MessageRequestType } from '../../types/enums';
 import { ServerRequest } from '../../types/interfaces';
 
-export default class UserModel {
+export default class Model {
   private ws: WebSocket;
 
   constructor(ws: WebSocket) {
@@ -57,34 +57,6 @@ export default class UserModel {
     this.ws.send(JSON.stringify(request));
   };
 
-  // public loginExternalUser = (login: string): void => {
-  //   const request: ServerRequest = {
-  //     id: null,
-  //     type: UserRequestType.EXTERNAL_LOGIN,
-  //     payload: {
-  //       user: {
-  //         login,
-  //         isLogined: true,
-  //       },
-  //     },
-  //   };
-  //   this.ws.send(JSON.stringify(request));
-  // };
-
-  // public logoutExternalUser = (login: string): void => {
-  //   const request: ServerRequest = {
-  //     id: null,
-  //     type: UserRequestType.EXTERNAL_LOGOUT,
-  //     payload: {
-  //       user: {
-  //         login,
-  //         isLogined: false,
-  //       },
-  //     },
-  //   };
-  //   this.ws.send(JSON.stringify(request));
-  // };
-
   public sendMessage = (receiver: string, text: string): void => {
     const request: ServerRequest = {
       id: null,
@@ -99,7 +71,7 @@ export default class UserModel {
     this.ws.send(JSON.stringify(request));
   };
 
-  public receiveMessage = (sender: string): void => {
+  public fetchMessages = (sender: string): void => {
     const request: ServerRequest = {
       id: null,
       type: MessageRequestType.FROM,

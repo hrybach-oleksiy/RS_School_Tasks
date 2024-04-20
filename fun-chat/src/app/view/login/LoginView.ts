@@ -7,7 +7,7 @@ import { assertIsDefined, isFirstLetterUppercase } from '../../../utilities/util
 
 import styles from './LoginView.module.scss';
 
-import { UserData } from '../../../types/interfaces';
+import { User } from '../../../types/interfaces';
 
 export default class LoginView extends BaseComponent {
   private nameInput?: BaseComponent;
@@ -22,12 +22,9 @@ export default class LoginView extends BaseComponent {
 
   private loginCallback: (login: string, password: string) => void;
 
-  private setUserDataCallback: (userData: UserData) => void;
+  private setUserDataCallback: (userData: User) => void;
 
-  constructor(
-    loginCallback: (login: string, password: string) => void,
-    setUserDataCallback: (userData: UserData) => void,
-  ) {
+  constructor(loginCallback: (login: string, password: string) => void, setUserDataCallback: (userData: User) => void) {
     super({
       tag: 'form',
       classNames: [styles.form, 'form'],
@@ -87,6 +84,8 @@ export default class LoginView extends BaseComponent {
     this.loginButton.setAttribute(FormAttribute.DISABLED, 'true');
 
     this.appendChildren([title, nameTextField, surnameTextField, this.loginButton]);
+
+    console.log('login page rendered');
   }
 
   private toggleLoginButtonState() {

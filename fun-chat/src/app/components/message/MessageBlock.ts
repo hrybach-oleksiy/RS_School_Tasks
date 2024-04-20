@@ -3,16 +3,16 @@ import { div, span, p } from '../HTMLComponents';
 
 import { assertIsDefined, formatDate } from '../../../utilities/utils';
 
-import { MessageData } from '../../../types/interfaces';
+import { Message } from '../../../types/interfaces';
 
 import styles from './MessageBlock.module.scss';
 
 export default class MessageBlock extends BaseComponent {
-  private messageProps: MessageData;
+  private messageProps: Message;
 
   private author: string;
 
-  constructor(messageProps: MessageData, author: string) {
+  constructor(messageProps: Message, author: string) {
     super({
       tag: 'div',
       classNames: [styles['message-block'], 'message-block-js'],
@@ -27,7 +27,7 @@ export default class MessageBlock extends BaseComponent {
     this.setPage(this.messageProps);
   }
 
-  private setPage(messageData: MessageData) {
+  private setPage(messageData: Message) {
     const messageHeader = div([styles['message-header']]);
 
     const authorName = span(['author-name'], this.author);
