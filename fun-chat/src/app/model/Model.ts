@@ -112,4 +112,18 @@ export default class Model {
     };
     this.ws.send(JSON.stringify(request));
   };
+
+  public readMessage = (id: string): void => {
+    console.log('read message method works');
+    const request: ServerRequest = {
+      id: null,
+      type: MessageRequestType.READ,
+      payload: {
+        message: {
+          id,
+        },
+      },
+    };
+    this.ws.send(JSON.stringify(request));
+  };
 }

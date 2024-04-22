@@ -62,6 +62,7 @@ export default class App {
       this.model.fetchMessages,
       this.model.removeMessage,
       this.model.changeMessage,
+      this.model.readMessage,
     );
     this.notFoundView = new NotFoundView();
     this.aboutView = new AboutView(this.updateUserList);

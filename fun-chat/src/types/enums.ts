@@ -38,6 +38,7 @@ enum MessageRequestType {
   READ = 'MSG_READ',
   DELETE = 'MSG_DELETE',
   EDIT = 'MSG_EDIT',
+  DELIVER = 'MSG_DELIVER',
 }
 
 export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType, MessageRequestType };

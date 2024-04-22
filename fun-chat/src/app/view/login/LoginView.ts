@@ -235,7 +235,9 @@ export default class LoginView extends BaseComponent {
   private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && this.isNameValid && this.isPasswordValid) {
       event.preventDefault();
-      this.saveUserData();
+      if (window.location.hash === '#login') {
+        this.saveUserData();
+      }
     }
   };
 

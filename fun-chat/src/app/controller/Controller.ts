@@ -12,6 +12,8 @@ import {
   MessagePayload,
   MessageDeleteResponsePayload,
   MessageEditResponsePayload,
+  MessageDeliverResponsePayload,
+  MessageReadResponsePayload,
 } from '../../types/interfaces';
 // import { UserRequestType } from '../../types/enums';
 import BaseComponent from '../components/BaseComponent';
@@ -28,6 +30,8 @@ export default class Controller {
   private chatView: ChatView;
 
   private router: Router;
+
+  private isMessageFetchingByInitRender: boolean = true;
 
   constructor(model: Model, authView: LoginView, chatView: ChatView, router: Router) {
     this.model = model;
@@ -57,12 +61,11 @@ export default class Controller {
         break;
 
       case UserRequestType.EXTERNAL_LOGIN:
-        console.log('External User Login - ', (payload as UserResponsePayload).user.login);
+        // console.log('External User Login - ', (payload as UserResponsePayload).user.login);
         this.userExternalLoginResponse();
         break;
 
       case UserRequestType.EXTERNAL_LOGOUT:
-        console.log('External User Logout - ', (payload as UserResponsePayload).user.login);
         this.userExternalLogoutResponse();
         break;
 
@@ -71,7 +74,11 @@ export default class Controller {
         break;
 
       case MessageRequestType.FROM:
-        this.messageFromResponse(payload as MessagesPayload);
+        if (this.isMessageFetchingByInitRender) {
+          this.initFetchMessageResponse(payload as MessagesPayload);
+        } else {
+          this.fetchMessageResponse(payload as MessagesPayload);
+        }
         break;
 
       case MessageRequestType.DELETE:
@@ -80,6 +87,24 @@ export default class Controller {
 
       case MessageRequestType.EDIT:
         Controller.messageEditResponse(payload as MessageEditResponsePayload);
+        break;
+
+      case MessageRequestType.DELIVER:
+        // console.log(
+        //   `The message width ID - ${(payload as MessageDeliverResponsePayload).message.id} has a status - ${(
+        //     payload as MessageDeliverResponsePayload
+        //   ).message.status?.isDelivered}`,
+        // );
+        this.messageDeliveryResponse(payload as MessageDeliverResponsePayload);
+        break;
+
+      case MessageRequestType.READ:
+        console.log(
+          `The message width ID - ${(payload as MessageReadResponsePayload).message.id} has a status - ${(
+            payload as MessageReadResponsePayload
+          ).message.status?.isReaded}`,
+        );
+        Controller.messageReadResponse(payload as MessageReadResponsePayload);
         break;
 
       case UserRequestType.ERROR:
@@ -92,14 +117,11 @@ export default class Controller {
   };
 
   private userLoginResponse = (payload: UserResponsePayload) => {
-    // const logOutBlock = document.querySelector('.header-block');
     const { login } = payload.user;
     console.log(`User ${login} logged in successfully`);
     window.location.hash = 'chat';
     this.model.getActiveUser();
     this.model.getInActiveUser();
-
-    // logOutBlock?.classList.remove('hidden');
   };
 
   static userLogoutResponse = (payload: UserResponsePayload) => {
@@ -130,14 +152,20 @@ export default class Controller {
     this.chatView.renderMessage(payload.message);
   };
 
-  private messageFromResponse = (payload: MessagesPayload) => {
+  private fetchMessageResponse = (payload: MessagesPayload) => {
     // console.log(`Messages from ${payload.messages} were successfully displayed`);
     this.chatView.renderAllMessages(payload.messages);
+    // this.isMessageFetchingByInitRender = true;
+  };
+
+  private initFetchMessageResponse = (payload: MessagesPayload) => {
+    this.chatView.addUnreadMessages(payload.messages);
+    this.isMessageFetchingByInitRender = false;
   };
 
   static messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
-    const { id, status } = payload.message;
-    console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
+    const { id } = payload.message;
+    // console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
     ChatView.deleteMessage(id);
   };
 
@@ -147,6 +175,18 @@ export default class Controller {
     assertIsDefined(status);
     console.log(`Message with ID ${id} is with the Status ${status.isEdited}`);
     ChatView.renderEditedMessage(id, text, status.isEdited);
+  };
+
+  private messageDeliveryResponse = (payload: MessageDeliverResponsePayload) => {
+    const { id } = payload.message;
+
+    this.chatView.changeDeliveryStatus(id);
+  };
+
+  static messageReadResponse = (payload: MessageReadResponsePayload) => {
+    const { id } = payload.message;
+    // console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
+    ChatView.readMessage(id);
   };
 
   static handleError = (payload: ErrorPayload) => {
