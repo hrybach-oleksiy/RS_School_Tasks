@@ -85,7 +85,7 @@ export default class Model {
   };
 
   public removeMessage = (id: string): void => {
-    console.log('remove message method works');
+    // console.log('remove message method works');
     const request: ServerRequest = {
       id: null,
       type: MessageRequestType.DELETE,
@@ -99,7 +99,7 @@ export default class Model {
   };
 
   public changeMessage = (id: string, text: string): void => {
-    console.log('change message method works');
+    // console.log('change message method works');
     const request: ServerRequest = {
       id: null,
       type: MessageRequestType.EDIT,
@@ -114,7 +114,7 @@ export default class Model {
   };
 
   public readMessage = (id: string): void => {
-    console.log('read message method works');
+    // console.log('read message method works');
     const request: ServerRequest = {
       id: null,
       type: MessageRequestType.READ,

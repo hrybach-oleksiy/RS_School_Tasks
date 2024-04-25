@@ -21,7 +21,12 @@ export default class NotFoundView extends BaseComponent {
     const backBtn = button(['btn'], 'Back to the Main page');
 
     backBtn.addListener('click', () => {
-      window.location.hash = '/';
+      const isUserLogin = sessionStorage.getItem('userData');
+      if (isUserLogin) {
+        window.location.hash = 'chat';
+      } else {
+        window.location.hash = '/';
+      }
     });
     this.appendChildren([title, backBtn]);
   }

@@ -99,11 +99,11 @@ export default class Controller {
         break;
 
       case MessageRequestType.READ:
-        console.log(
-          `The message width ID - ${(payload as MessageReadResponsePayload).message.id} has a status - ${(
-            payload as MessageReadResponsePayload
-          ).message.status?.isReaded}`,
-        );
+        // console.log(
+        //   `The message width ID - ${(payload as MessageReadResponsePayload).message.id} has a status - ${(
+        //     payload as MessageReadResponsePayload
+        //   ).message.status?.isReaded}`,
+        // );
         Controller.messageReadResponse(payload as MessageReadResponsePayload);
         break;
 
@@ -147,8 +147,8 @@ export default class Controller {
   };
 
   private messageSendResponse = (payload: MessagePayload) => {
-    const { text, to } = payload.message;
-    console.log(`Message ${text} to the user ${to} was successfully sent`);
+    // const { text, to } = payload.message;
+    // console.log(`Message ${text} to the user ${to} was successfully sent`);
     this.chatView.renderMessage(payload.message);
   };
 
@@ -173,7 +173,7 @@ export default class Controller {
     const { status, id, text } = payload.message;
     assertIsDefined(text);
     assertIsDefined(status);
-    console.log(`Message with ID ${id} is with the Status ${status.isEdited}`);
+    // console.log(`Message with ID ${id} is with the Status ${status.isEdited}`);
     ChatView.renderEditedMessage(id, text, status.isEdited);
   };
 

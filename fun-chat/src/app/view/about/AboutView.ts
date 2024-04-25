@@ -32,11 +32,12 @@ export default class AboutView extends BaseComponent {
 
     this.appendChildren([textElement, gitHubLink, backBtn]);
 
-    console.log('about page rendered');
+    // console.log('about page rendered');
   }
 
   private handleCloseButton = () => {
     const currentLocation = sessionStorage.getItem('currentLocation');
+    console.log(currentLocation);
 
     assertIsDefined(currentLocation);
 

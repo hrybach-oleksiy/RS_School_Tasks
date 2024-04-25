@@ -1,6 +1,8 @@
 import BaseComponent from '../../components/BaseComponent';
 import { p, button, div, h2 } from '../../components/HTMLComponents';
 
+import EventManager from '../../event-manager/EventManager';
+
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
@@ -14,7 +16,9 @@ export default class Header extends BaseComponent {
 
   private logoutCallback: () => void;
 
-  constructor(logoutCallback: () => void) {
+  private eventManager: EventManager;
+
+  constructor(logoutCallback: () => void, eventManager: EventManager) {
     super(
       {
         tag: 'header',
@@ -23,6 +27,7 @@ export default class Header extends BaseComponent {
       p([styles['header-title']], 'Fun Chat'),
     );
     this.logoutCallback = logoutCallback;
+    this.eventManager = eventManager;
     this.setContent();
   }
 
@@ -44,6 +49,7 @@ export default class Header extends BaseComponent {
     this.logoutCallback();
 
     sessionStorage.setItem('currentLocation', 'login');
+    this.eventManager.setUseLoginSubmitEventCallback(true);
   };
 
   static handleAboutButtonClick = (): void => {

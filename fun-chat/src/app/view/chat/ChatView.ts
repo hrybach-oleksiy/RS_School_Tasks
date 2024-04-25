@@ -12,6 +12,8 @@ import { assertIsDefined } from '../../../utilities/utils';
 import ContextMenu from '../../components/context-menu/ContextMenu';
 import { FormAttribute } from '../../../types/enums';
 
+import EventManager from '../../event-manager/EventManager';
+
 export default class ChatView extends BaseComponent {
   private messageFieldWrapperElem = div([styles['message-field-wrapper']]);
 
@@ -47,6 +49,8 @@ export default class ChatView extends BaseComponent {
 
   private readMessageCallback: (id: string) => void;
 
+  private eventManager: EventManager;
+
   private currentUser: string | undefined = '';
 
   private messageData: UserMessagePayload = {
@@ -69,6 +73,7 @@ export default class ChatView extends BaseComponent {
     removeMessageCallback: (id: string) => void,
     changeMessageCallback: (id: string, text: string) => void,
     readMessageCallback: (id: string) => void,
+    eventManager: EventManager,
   ) {
     super({
       tag: 'div',
@@ -80,8 +85,10 @@ export default class ChatView extends BaseComponent {
     this.removeMessageCallback = removeMessageCallback;
     this.changeMessageCallback = changeMessageCallback;
     this.readMessageCallback = readMessageCallback;
+    this.eventManager = eventManager;
 
     this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
+    this.eventManager.setSendMessageEventCallback(this.handleKeyDown);
   }
 
   public setPage() {
@@ -112,7 +119,6 @@ export default class ChatView extends BaseComponent {
     this.messageForm.addListener('submit', this.sendMessageHandler);
 
     this.messagesWrapper.addListener('click', this.readMessageHandler);
-    this.messagesWrapper.addListener('scroll', this.readMessageHandler);
 
     messageFieldHeader.appendChildren([userNameElem, userStatusElem]);
     this.messagesWrapper.append(this.messageFieldPlaceHolder);
@@ -198,13 +204,6 @@ export default class ChatView extends BaseComponent {
       });
   };
 
-  // private handleUserListClick = (user: UserStatus) => {
-  //   assertIsDefined(user.isLogined);
-  //   this.addMessageField(user.login, user.isLogined);
-  //   this.messageData.message.to = user.login;
-  //   this.fetchMessagesCallback(user.login);
-  // }
-
   public renderMessage = (messageData: Message) => {
     const receiver = messageData.to;
     const author = receiver === this.currentUser ? messageData.from : 'You';
@@ -282,11 +281,20 @@ export default class ChatView extends BaseComponent {
 
       this.messagesWrapper.append(messageBlock);
     });
+    const separatorPosition = this.separatorElement.getNode().offsetTop;
+    // console.log(separatorPosition);
+    this.messagesWrapper.getNode().scrollTo({
+      top: separatorPosition || this.messagesWrapper.getNode().scrollHeight,
+      behavior: 'smooth', //
+    });
+
+    setTimeout(() => {
+      this.messagesWrapper.addListener('scroll', this.readMessageHandler);
+      this.messagesWrapper.addListener('wheel', this.readMessageHandler);
+    }, 500);
   };
 
   public addUnreadMessages = (messages: Message[]) => {
-    // const users = document.querySelectorAll<HTMLElement>('.user');
-
     messages.forEach((message) => {
       const { from, status } = message;
       const author = from;
@@ -399,6 +407,14 @@ export default class ChatView extends BaseComponent {
     this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
 
     this.readMessageHandler();
+    this.eventManager.setUseLoginSubmitEventCallback(true);
+    // this.messagesWrapper.addListener('click', this.readMessageHandler);
+    // this.messagesWrapper.addListener('scroll', this.readMessageHandler);
+  };
+
+  private handleKeyDown = (event: Event) => {
+    this.sendMessageHandler(event);
+    // console.log('Enter in Chat pressed');
   };
 
   private editMessageHandler = (event: Event) => {
@@ -426,9 +442,9 @@ export default class ChatView extends BaseComponent {
       }
     });
 
-    console.log('message read status was changed');
-    this.messagesWrapper.removeListener('click', this.readMessageHandler);
-    this.messagesWrapper.removeListener('scroll', this.readMessageHandler);
+    // console.log('message read status was changed');
+    // this.messagesWrapper.removeListener('click', this.readMessageHandler);
+    // this.messagesWrapper.removeListener('scroll', this.readMessageHandler);
     this.separatorElement.destroy();
   };
 
@@ -441,7 +457,7 @@ export default class ChatView extends BaseComponent {
       const userName = user.textContent?.toLowerCase();
       const isMatch = userName?.includes(currentValue);
 
-      currentUser.style.display = isMatch ? 'block' : 'none';
+      currentUser.style.display = isMatch ? 'flex' : 'none';
     });
   };
 
@@ -452,6 +468,7 @@ export default class ChatView extends BaseComponent {
       this.messageBtnElem.setAttribute(FormAttribute.DISABLED, 'true');
     } else {
       this.messageBtnElem.removeAttribute(FormAttribute.DISABLED);
+      this.eventManager.setUseLoginSubmitEventCallback(false);
     }
   };
 

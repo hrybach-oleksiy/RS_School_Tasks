@@ -1,6 +1,8 @@
 import BaseComponent from '../../components/BaseComponent';
 import { h1, input, button, div, label } from '../../components/HTMLComponents';
 
+import EventManager from '../../event-manager/EventManager';
+
 import { FormAttribute } from '../../../types/enums';
 // import { UserLoginData } from '../../../types/interfaces';
 import { assertIsDefined, isFirstLetterUppercase } from '../../../utilities/utils';
@@ -24,7 +26,13 @@ export default class LoginView extends BaseComponent {
 
   private setUserDataCallback: (userData: User) => void;
 
-  constructor(loginCallback: (login: string, password: string) => void, setUserDataCallback: (userData: User) => void) {
+  private eventManager: EventManager;
+
+  constructor(
+    loginCallback: (login: string, password: string) => void,
+    setUserDataCallback: (userData: User) => void,
+    eventManager: EventManager,
+  ) {
     super({
       tag: 'form',
       classNames: [styles.form, 'form'],
@@ -32,17 +40,21 @@ export default class LoginView extends BaseComponent {
 
     this.loginCallback = loginCallback;
     this.setUserDataCallback = setUserDataCallback;
+    this.eventManager = eventManager;
 
     this.setAttribute(FormAttribute.ACTION, '');
 
     this.addListener('submit', (event) => {
       event.preventDefault();
       this.saveUserData();
+      this.isNameValid = false;
+      this.isPasswordValid = false;
 
       sessionStorage.setItem('currentLocation', 'chat');
     });
 
-    document.addEventListener('keydown', this.handleKeyDown);
+    // document.addEventListener('keydown', this.handleKeyDown);
+    this.eventManager.setLoginSubmitEventCallback(this.handleKeyDown);
   }
 
   public setForm() {
@@ -85,7 +97,7 @@ export default class LoginView extends BaseComponent {
 
     this.appendChildren([title, nameTextField, surnameTextField, this.loginButton]);
 
-    console.log('login page rendered');
+    // console.log('login page rendered');
   }
 
   private toggleLoginButtonState() {
@@ -143,6 +155,7 @@ export default class LoginView extends BaseComponent {
     const errorMessageElement = document.querySelector<HTMLElement>(`.${styles['name-error']}`);
     const nameRegex = /^[A-Za-z-]+$/;
     const MIN_TEXT_LENGTH = 3;
+    const MAX_TEXT_LENGTH = 10;
 
     assertIsDefined(errorMessageElement);
 
@@ -166,6 +179,12 @@ export default class LoginView extends BaseComponent {
 
     if (inputValue.length < MIN_TEXT_LENGTH) {
       const errorMessage = `Minimum length of the name is ${MIN_TEXT_LENGTH} characters`;
+      LoginView.showErrorMessage(errorMessageElement, errorMessage);
+      return false;
+    }
+
+    if (inputValue.length > MAX_TEXT_LENGTH) {
+      const errorMessage = `Maximum length of the name is ${MAX_TEXT_LENGTH} characters`;
       LoginView.showErrorMessage(errorMessageElement, errorMessage);
       return false;
     }
@@ -232,13 +251,24 @@ export default class LoginView extends BaseComponent {
     this.setUserDataCallback(userData);
   }
 
-  private handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && this.isNameValid && this.isPasswordValid) {
-      event.preventDefault();
-      if (window.location.hash === '#login') {
-        this.saveUserData();
-      }
+  // private handleKeyDown = (event: KeyboardEvent) => {
+  //   if (event.key === 'Enter' && this.isNameValid && this.isPasswordValid) {
+  //     event.preventDefault();
+  //     if (window.location.hash === '#login') {
+  //       this.saveUserData();
+  //     }
+  //     console.log('Enter pressed');
+  //   }
+  // };
+
+  private handleKeyDown = () => {
+    if (this.isNameValid && this.isPasswordValid && window.location.hash === '#login') {
+      this.saveUserData();
+      // this.eventManager.setUseLoginSubmitEventCallback(false);
+      console.log('Enter in Login pressed');
     }
+    this.isNameValid = false;
+    this.isPasswordValid = false;
   };
 
   // displayErrorMessage(message: string) {

@@ -37,7 +37,7 @@ export default class MessageBlock extends BaseComponent {
     messageHeader.appendChildren([authorName, dateElement]);
 
     const messageBody = div([styles['message-body']]);
-    const messageText = p(['text'], messageData.text);
+    const messageText = p([styles.text, 'text'], messageData.text);
     messageBody.append(messageText);
 
     const messageFooter = div([styles['message-footer']]);

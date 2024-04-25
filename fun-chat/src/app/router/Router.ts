@@ -28,7 +28,7 @@ export default class Router {
     const route = this.routes.find((item) => item.path === location);
 
     if (typeof route === 'undefined') {
-      console.log('There are now such page');
+      console.log('There are no such page');
       const notFoundRoute = this.routes[this.routes.length - 1];
 
       notFoundRoute.render();

@@ -8,6 +8,7 @@ import Modal from './components/modal/Modal';
 import AboutView from './view/about/AboutView';
 
 import Router from './router/Router';
+import EventManager from './event-manager/EventManager';
 
 import Controller from './controller/Controller';
 import Model from './model/Model';
@@ -42,27 +43,39 @@ export default class App {
 
   private router: Router;
 
+  private eventManager: EventManager;
+
   private main: Main = new Main();
 
   private userData: User | null = null;
-
-  // private currentLocation: string | null = 'login';
 
   constructor() {
     document.body.append(this.root.getNode());
     document.body.setAttribute('data-theme', 'light');
 
+    // App.setCurrentLocation();
+
     this.ws = new WebSocket('ws://127.0.0.1:4000');
 
+    this.userData = App.getUserData();
+
+    sessionStorage.setItem('currentLocation', 'login');
+
+    if (this.userData) {
+      sessionStorage.setItem('currentLocation', 'chat');
+    }
+
+    this.eventManager = new EventManager();
     this.model = new Model(this.ws);
-    this.header = new Header(this.handleUserLogout);
-    this.loginView = new LoginView(this.model.loginUser, this.setUserData);
+    this.header = new Header(this.handleUserLogout, this.eventManager);
+    this.loginView = new LoginView(this.model.loginUser, this.setUserData, this.eventManager);
     this.chatView = new ChatView(
       this.model.sendMessage,
       this.model.fetchMessages,
       this.model.removeMessage,
       this.model.changeMessage,
       this.model.readMessage,
+      this.eventManager,
     );
     this.notFoundView = new NotFoundView();
     this.aboutView = new AboutView(this.updateUserList);
@@ -92,12 +105,6 @@ export default class App {
 
     this.setupWebSocketEventHandlers();
 
-    this.userData = App.getUserData();
-
-    if (this.userData) {
-      sessionStorage.setItem('currentLocation', 'chat');
-    }
-
     // this.currentLocation = App.getCurrentLocation();
 
     this.ws.onopen = () => {
@@ -126,6 +133,10 @@ export default class App {
 
     this.root.appendChildren([this.header, this.main, footer]);
   }
+
+  // static setCurrentLocation = () => {
+  //   sessionStorage.setItem('currentLocation', 'login');
+  // };
 
   private createRoutes() {
     return [
@@ -211,10 +222,6 @@ export default class App {
 
     return null;
   };
-
-  // static getCurrentLocation = (): string | null => {
-  //   return sessionStorage.getItem('currentLocation');
-  // };
 
   private handleServerDisconnect() {
     const reconnectInterval = 3000;
