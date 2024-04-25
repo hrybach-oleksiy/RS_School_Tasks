@@ -1,18 +1,18 @@
 // import { assertIsDefined } from '../../../utilities/utils';
-import { User, UserMessagePayload, Message, UserStatus } from '../../../types/interfaces';
 import BaseComponent from '../../components/BaseComponent';
 import { div, ul, li, input, button, p, span } from '../../components/HTMLComponents';
 
 import MessageBlock from '../../components/message/MessageBlock';
-
-import styles from './ChatView.module.scss';
-
-import messageStyles from '../../components/message/MessageBlock.module.scss';
-import { assertIsDefined } from '../../../utilities/utils';
+import EventManager from '../../event-manager/EventManager';
 import ContextMenu from '../../components/context-menu/ContextMenu';
+
+import { User, UserMessagePayload, Message, UserStatus } from '../../../types/interfaces';
 import { FormAttribute } from '../../../types/enums';
 
-import EventManager from '../../event-manager/EventManager';
+import { assertIsDefined } from '../../../utilities/utils';
+
+import styles from './ChatView.module.scss';
+import messageStyles from '../../components/message/MessageBlock.module.scss';
 
 export default class ChatView extends BaseComponent {
   private messageFieldWrapperElem = div([styles['message-field-wrapper']]);
@@ -109,7 +109,6 @@ export default class ChatView extends BaseComponent {
 
   private setMessageField = (userName: string, userStatus: boolean): void => {
     const messageFieldHeader = div([styles['message-field-header']]);
-
     const userNameElem = span([styles['user-name']], userName);
     const userStatusElem = span(
       [styles['user-status'], userStatus ? styles['user-online'] : styles['user-offline']],
@@ -117,7 +116,6 @@ export default class ChatView extends BaseComponent {
     );
 
     this.messageForm.addListener('submit', this.sendMessageHandler);
-
     this.messagesWrapper.addListener('click', this.readMessageHandler);
 
     messageFieldHeader.appendChildren([userNameElem, userStatusElem]);
@@ -141,7 +139,6 @@ export default class ChatView extends BaseComponent {
   public renderActiveUsers = (users: UserStatus[]) => {
     this.currentUser = ChatView.getUserData()?.login;
     this.activeUserList.getNode().innerHTML = '';
-    // this.inActiveUserList.getNode().innerHTML = '';
 
     users
       .filter((user) => user.login !== this.currentUser)
@@ -174,7 +171,6 @@ export default class ChatView extends BaseComponent {
   public renderInActiveUsers = (users: UserStatus[]) => {
     this.currentUser = ChatView.getUserData()?.login;
     this.inActiveUserList.getNode().innerHTML = '';
-    // this.activeUserList.getNode().innerHTML = '';
 
     users
       .filter((user) => user.login !== this.currentUser)
@@ -207,6 +203,7 @@ export default class ChatView extends BaseComponent {
   public renderMessage = (messageData: Message) => {
     const receiver = messageData.to;
     const author = receiver === this.currentUser ? messageData.from : 'You';
+
     assertIsDefined(author);
 
     const messageBlock = new MessageBlock(messageData, author);
@@ -219,6 +216,7 @@ export default class ChatView extends BaseComponent {
         event.preventDefault();
 
         const allMenus = document.querySelectorAll('.context-menu-js');
+
         allMenus.forEach((menu) => {
           menu.remove();
         });
@@ -281,8 +279,9 @@ export default class ChatView extends BaseComponent {
 
       this.messagesWrapper.append(messageBlock);
     });
+
     const separatorPosition = this.separatorElement.getNode().offsetTop;
-    // console.log(separatorPosition);
+
     this.messagesWrapper.getNode().scrollTo({
       top: separatorPosition || this.messagesWrapper.getNode().scrollHeight,
       behavior: 'smooth', //
@@ -292,6 +291,26 @@ export default class ChatView extends BaseComponent {
       this.messagesWrapper.addListener('scroll', this.readMessageHandler);
       this.messagesWrapper.addListener('wheel', this.readMessageHandler);
     }, 500);
+  };
+
+  static renderEditedMessage = (id: string, text: string, status?: boolean) => {
+    const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
+
+    messages.forEach((message) => {
+      const currentID = message.dataset.message;
+
+      if (currentID === id) {
+        const currentMessage = message;
+        const textField = currentMessage.querySelector<HTMLElement>('.text');
+        const statusField = currentMessage.querySelector<HTMLElement>('.message-edited');
+        const editedStatus = status ? 'edited' : '';
+
+        assertIsDefined(textField);
+        assertIsDefined(statusField);
+        statusField.textContent = editedStatus;
+        textField.textContent = text;
+      }
+    });
   };
 
   public addUnreadMessages = (messages: Message[]) => {
@@ -311,26 +330,6 @@ export default class ChatView extends BaseComponent {
         if (index !== -1) {
           this.unreadCounts[index].unreadMessages += 1;
         }
-      }
-    });
-  };
-
-  static renderEditedMessage = (id: string, text: string, status: boolean) => {
-    const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
-
-    messages.forEach((message) => {
-      const currentID = message.dataset.message;
-
-      if (currentID === id) {
-        const currentMessage = message;
-        const textField = currentMessage.querySelector<HTMLElement>('.text');
-        const statusField = currentMessage.querySelector<HTMLElement>('.message-edited');
-        const editedStatus = status ? 'edited' : '';
-
-        assertIsDefined(textField);
-        assertIsDefined(statusField);
-        statusField.textContent = editedStatus;
-        textField.textContent = text;
       }
     });
   };
@@ -365,6 +364,7 @@ export default class ChatView extends BaseComponent {
   public editMessage = (id: string, text: string) => {
     const messages = document.querySelectorAll<HTMLElement>('.message-block-js');
     const messageInput = document.querySelector<HTMLInputElement>('.message-input-js');
+
     this.messageData.message.id = id;
     this.messageData.message.text = text;
 
@@ -383,18 +383,6 @@ export default class ChatView extends BaseComponent {
     this.messageForm.addListener('submit', this.editMessageHandler);
   };
 
-  static getUserData = (): User | null => {
-    const userDataJSON = sessionStorage.getItem('userData');
-
-    if (userDataJSON) {
-      const userData = JSON.parse(userDataJSON);
-
-      return userData;
-    }
-
-    return null;
-  };
-
   private sendMessageHandler = (event: Event) => {
     event.preventDefault();
     this.setMessageData();
@@ -408,20 +396,16 @@ export default class ChatView extends BaseComponent {
 
     this.readMessageHandler();
     this.eventManager.setUseLoginSubmitEventCallback(true);
-    // this.messagesWrapper.addListener('click', this.readMessageHandler);
-    // this.messagesWrapper.addListener('scroll', this.readMessageHandler);
-  };
-
-  private handleKeyDown = (event: Event) => {
-    this.sendMessageHandler(event);
-    // console.log('Enter in Chat pressed');
   };
 
   private editMessageHandler = (event: Event) => {
     event.preventDefault();
     this.setMessageData();
+
     const messageID = this.messageData.message.id;
     const messageText = this.messageData.message.text;
+
+    assertIsDefined(messageID);
 
     this.changeMessageCallback(messageID, messageText);
     (this.messageForm.getNode() as HTMLFormElement).reset();
@@ -442,9 +426,6 @@ export default class ChatView extends BaseComponent {
       }
     });
 
-    // console.log('message read status was changed');
-    // this.messagesWrapper.removeListener('click', this.readMessageHandler);
-    // this.messagesWrapper.removeListener('scroll', this.readMessageHandler);
     this.separatorElement.destroy();
   };
 
@@ -470,6 +451,22 @@ export default class ChatView extends BaseComponent {
       this.messageBtnElem.removeAttribute(FormAttribute.DISABLED);
       this.eventManager.setUseLoginSubmitEventCallback(false);
     }
+  };
+
+  private handleKeyDown = (event: Event) => {
+    this.sendMessageHandler(event);
+  };
+
+  static getUserData = (): User | null => {
+    const userDataJSON = sessionStorage.getItem('userData');
+
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
+
+      return userData;
+    }
+
+    return null;
   };
 
   public changeDeliveryStatus = (id: string) => {

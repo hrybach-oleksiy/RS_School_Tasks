@@ -3,13 +3,12 @@ import { h1, input, button, div, label } from '../../components/HTMLComponents';
 
 import EventManager from '../../event-manager/EventManager';
 
-import { FormAttribute } from '../../../types/enums';
-// import { UserLoginData } from '../../../types/interfaces';
+import { User } from '../../../types/interfaces';
+import { FormAttribute, RouteHash } from '../../../types/enums';
+
 import { assertIsDefined, isFirstLetterUppercase } from '../../../utilities/utils';
 
 import styles from './LoginView.module.scss';
-
-import { User } from '../../../types/interfaces';
 
 export default class LoginView extends BaseComponent {
   private nameInput?: BaseComponent;
@@ -50,10 +49,9 @@ export default class LoginView extends BaseComponent {
       this.isNameValid = false;
       this.isPasswordValid = false;
 
-      sessionStorage.setItem('currentLocation', 'chat');
+      sessionStorage.setItem('currentLocation', RouteHash.CHAT);
     });
 
-    // document.addEventListener('keydown', this.handleKeyDown);
     this.eventManager.setLoginSubmitEventCallback(this.handleKeyDown);
   }
 
@@ -96,8 +94,6 @@ export default class LoginView extends BaseComponent {
     this.loginButton.setAttribute(FormAttribute.DISABLED, 'true');
 
     this.appendChildren([title, nameTextField, surnameTextField, this.loginButton]);
-
-    // console.log('login page rendered');
   }
 
   private toggleLoginButtonState() {
@@ -190,6 +186,7 @@ export default class LoginView extends BaseComponent {
     }
 
     LoginView.hideErrorMessage(errorMessageElement);
+
     return true;
   }
 
@@ -213,24 +210,21 @@ export default class LoginView extends BaseComponent {
       return false;
     }
 
-    // if (inputValue.length < MIN_PASSWORD_LENGTH) {
-    //   const errorMessage = `Minimum length of the password is ${MIN_PASSWORD_LENGTH} characters`;
-    //   LoginForm.showErrorMessage(errorMessageElement, errorMessage);
-    //   return false;
-    // }
-
     LoginView.hideErrorMessage(errorMessageElement);
+
     return true;
   }
 
   static showErrorMessage(errorMessageElement: HTMLElement, message: string) {
     const messageElem = errorMessageElement;
+
     errorMessageElement.classList.remove(styles.hidden);
     messageElem.textContent = message;
   }
 
   static hideErrorMessage(errorMessageElement: HTMLElement) {
     const messageElem = errorMessageElement;
+
     errorMessageElement.classList.add(styles.hidden);
     messageElem.textContent = '';
   }
@@ -251,33 +245,12 @@ export default class LoginView extends BaseComponent {
     this.setUserDataCallback(userData);
   }
 
-  // private handleKeyDown = (event: KeyboardEvent) => {
-  //   if (event.key === 'Enter' && this.isNameValid && this.isPasswordValid) {
-  //     event.preventDefault();
-  //     if (window.location.hash === '#login') {
-  //       this.saveUserData();
-  //     }
-  //     console.log('Enter pressed');
-  //   }
-  // };
-
   private handleKeyDown = () => {
     if (this.isNameValid && this.isPasswordValid && window.location.hash === '#login') {
       this.saveUserData();
-      // this.eventManager.setUseLoginSubmitEventCallback(false);
-      console.log('Enter in Login pressed');
     }
+
     this.isNameValid = false;
     this.isPasswordValid = false;
   };
-
-  // displayErrorMessage(message: string) {
-  //   alert(message);
-  // }
-
-  // private clearForm() {
-  //   (this.getNode() as HTMLFormElement).reset();
-  //   this.nameInput?.removeClass(styles.valid);
-  //   this.passwordInput?.removeClass(styles.valid);
-  // }
 }

@@ -1,5 +1,6 @@
+import BaseComponent from '../components/BaseComponent';
+
 import Model from '../model/Model';
-import LoginView from '../view/login/LoginView';
 import ChatView from '../view/chat/ChatView';
 import Modal from '../components/modal/Modal';
 
@@ -10,34 +11,22 @@ import {
   UsersPayload,
   MessagesPayload,
   MessagePayload,
-  MessageDeleteResponsePayload,
-  MessageEditResponsePayload,
-  MessageDeliverResponsePayload,
-  MessageReadResponsePayload,
+  MessageResponsePayload,
 } from '../../types/interfaces';
-// import { UserRequestType } from '../../types/enums';
-import BaseComponent from '../components/BaseComponent';
-import { UserRequestType, MessageRequestType } from '../../types/enums';
+import { UserRequestType, MessageRequestType, RouteHash } from '../../types/enums';
 
-import Router from '../router/Router';
 import { assertIsDefined } from '../../utilities/utils';
 
 export default class Controller {
   private model: Model;
 
-  private authView: LoginView;
-
   private chatView: ChatView;
-
-  private router: Router;
 
   private isMessageFetchingByInitRender: boolean = true;
 
-  constructor(model: Model, authView: LoginView, chatView: ChatView, router: Router) {
+  constructor(model: Model, chatView: ChatView) {
     this.model = model;
-    this.authView = authView;
     this.chatView = chatView;
-    this.router = router;
   }
 
   public handleResponse = (response: ServerRequest) => {
@@ -61,7 +50,6 @@ export default class Controller {
         break;
 
       case UserRequestType.EXTERNAL_LOGIN:
-        // console.log('External User Login - ', (payload as UserResponsePayload).user.login);
         this.userExternalLoginResponse();
         break;
 
@@ -82,29 +70,19 @@ export default class Controller {
         break;
 
       case MessageRequestType.DELETE:
-        Controller.messageDeleteResponse(payload as MessageDeleteResponsePayload);
+        Controller.messageDeleteResponse(payload as MessageResponsePayload);
         break;
 
       case MessageRequestType.EDIT:
-        Controller.messageEditResponse(payload as MessageEditResponsePayload);
+        Controller.messageEditResponse(payload as MessageResponsePayload);
         break;
 
       case MessageRequestType.DELIVER:
-        // console.log(
-        //   `The message width ID - ${(payload as MessageDeliverResponsePayload).message.id} has a status - ${(
-        //     payload as MessageDeliverResponsePayload
-        //   ).message.status?.isDelivered}`,
-        // );
-        this.messageDeliveryResponse(payload as MessageDeliverResponsePayload);
+        this.messageDeliveryResponse(payload as MessageResponsePayload);
         break;
 
       case MessageRequestType.READ:
-        // console.log(
-        //   `The message width ID - ${(payload as MessageReadResponsePayload).message.id} has a status - ${(
-        //     payload as MessageReadResponsePayload
-        //   ).message.status?.isReaded}`,
-        // );
-        Controller.messageReadResponse(payload as MessageReadResponsePayload);
+        Controller.messageReadResponse(payload as MessageResponsePayload);
         break;
 
       case UserRequestType.ERROR:
@@ -119,7 +97,7 @@ export default class Controller {
   private userLoginResponse = (payload: UserResponsePayload) => {
     const { login } = payload.user;
     console.log(`User ${login} logged in successfully`);
-    window.location.hash = 'chat';
+    window.location.hash = RouteHash.CHAT;
     this.model.getActiveUser();
     this.model.getInActiveUser();
   };
@@ -127,7 +105,7 @@ export default class Controller {
   static userLogoutResponse = (payload: UserResponsePayload) => {
     const { login } = payload.user;
     console.log(`User ${login} logged out successfully`);
-    window.location.hash = 'login';
+    window.location.hash = RouteHash.LOGIN;
   };
 
   private getActiveUsersResponse = (payload: UsersPayload) => {
@@ -147,15 +125,11 @@ export default class Controller {
   };
 
   private messageSendResponse = (payload: MessagePayload) => {
-    // const { text, to } = payload.message;
-    // console.log(`Message ${text} to the user ${to} was successfully sent`);
     this.chatView.renderMessage(payload.message);
   };
 
   private fetchMessageResponse = (payload: MessagesPayload) => {
-    // console.log(`Messages from ${payload.messages} were successfully displayed`);
     this.chatView.renderAllMessages(payload.messages);
-    // this.isMessageFetchingByInitRender = true;
   };
 
   private initFetchMessageResponse = (payload: MessagesPayload) => {
@@ -163,29 +137,29 @@ export default class Controller {
     this.isMessageFetchingByInitRender = false;
   };
 
-  static messageDeleteResponse = (payload: MessageDeleteResponsePayload) => {
+  static messageDeleteResponse = (payload: MessageResponsePayload) => {
     const { id } = payload.message;
-    // console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
+
     ChatView.deleteMessage(id);
   };
 
-  static messageEditResponse = (payload: MessageEditResponsePayload) => {
+  static messageEditResponse = (payload: MessageResponsePayload) => {
     const { status, id, text } = payload.message;
+
     assertIsDefined(text);
     assertIsDefined(status);
-    // console.log(`Message with ID ${id} is with the Status ${status.isEdited}`);
     ChatView.renderEditedMessage(id, text, status.isEdited);
   };
 
-  private messageDeliveryResponse = (payload: MessageDeliverResponsePayload) => {
+  private messageDeliveryResponse = (payload: MessageResponsePayload) => {
     const { id } = payload.message;
 
     this.chatView.changeDeliveryStatus(id);
   };
 
-  static messageReadResponse = (payload: MessageReadResponsePayload) => {
+  static messageReadResponse = (payload: MessageResponsePayload) => {
     const { id } = payload.message;
-    // console.log(`Message with ID ${id} is with the Status ${status?.isDeleted}`);
+
     ChatView.readMessage(id);
   };
 
@@ -196,6 +170,7 @@ export default class Controller {
       text: payload.error,
     });
     const modal = new Modal(modalContent);
+
     modal.render();
     modal.addCloseBtn('Close');
     modal.open();
@@ -207,16 +182,4 @@ export default class Controller {
     this.model.getActiveUser();
     this.model.getInActiveUser();
   };
-
-  // private handleSendMessage = () => {
-
-  // }
-
-  // public handleUserLogin() {
-  //   const userDataJSON = localStorage.getItem('userData');
-  //   if (userDataJSON) {
-  //     const { login, password } = JSON.parse(userDataJSON);
-  //     this.model.loginUser(login, password);
-  //   }
-  // }
 }

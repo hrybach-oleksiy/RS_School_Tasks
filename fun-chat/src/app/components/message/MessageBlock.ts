@@ -1,9 +1,9 @@
 import BaseComponent from '../BaseComponent';
 import { div, span, p } from '../HTMLComponents';
 
-import { assertIsDefined, formatDate } from '../../../utilities/utils';
-
 import { Message } from '../../../types/interfaces';
+
+import { assertIsDefined, formatDate } from '../../../utilities/utils';
 
 import styles from './MessageBlock.module.scss';
 
@@ -33,6 +33,7 @@ export default class MessageBlock extends BaseComponent {
     const authorName = span(['author-name'], this.author);
 
     assertIsDefined(messageData.datetime);
+
     const dateElement = span(['date'], formatDate(messageData.datetime));
     messageHeader.appendChildren([authorName, dateElement]);
 

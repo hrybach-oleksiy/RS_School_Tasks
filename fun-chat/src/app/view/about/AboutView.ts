@@ -1,7 +1,9 @@
-import { assertIsDefined } from '../../../utilities/utils';
 import BaseComponent from '../../components/BaseComponent';
 import { p, a, button } from '../../components/HTMLComponents';
-import { LinkAttribute } from '../../../types/enums';
+
+import { LinkAttribute, RouteHash } from '../../../types/enums';
+
+import { assertIsDefined } from '../../../utilities/utils';
 
 import styles from './AboutView.module.scss';
 
@@ -31,8 +33,6 @@ export default class AboutView extends BaseComponent {
     backBtn.addListener('click', this.handleCloseButton);
 
     this.appendChildren([textElement, gitHubLink, backBtn]);
-
-    // console.log('about page rendered');
   }
 
   private handleCloseButton = () => {
@@ -43,7 +43,7 @@ export default class AboutView extends BaseComponent {
 
     window.location.hash = currentLocation;
 
-    if (currentLocation === 'chat') {
+    if (currentLocation === RouteHash.CHAT) {
       this.updateUserList();
     }
   };

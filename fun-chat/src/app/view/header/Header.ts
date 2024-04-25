@@ -3,6 +3,8 @@ import { p, button, div, h2 } from '../../components/HTMLComponents';
 
 import EventManager from '../../event-manager/EventManager';
 
+import { RouteHash } from '../../../types/enums';
+
 import styles from './Header.module.scss';
 
 export default class Header extends BaseComponent {
@@ -48,11 +50,11 @@ export default class Header extends BaseComponent {
     this.logoutButton.getNode().remove();
     this.logoutCallback();
 
-    sessionStorage.setItem('currentLocation', 'login');
+    sessionStorage.setItem('currentLocation', RouteHash.LOGIN);
     this.eventManager.setUseLoginSubmitEventCallback(true);
   };
 
   static handleAboutButtonClick = (): void => {
-    window.location.hash = 'about';
+    window.location.hash = RouteHash.ABOUT;
   };
 }

@@ -1,9 +1,6 @@
+import { RouteHash } from '../../../types/enums';
 import BaseComponent from '../../components/BaseComponent';
 import { h1, button } from '../../components/HTMLComponents';
-// import Router from '../../router/Router';
-
-// import LoginForm from '../../components/login-form/LoginForm';
-// import Chat from '../chat/Chat';
 
 import styles from './NotFound.module.scss';
 
@@ -23,9 +20,9 @@ export default class NotFoundView extends BaseComponent {
     backBtn.addListener('click', () => {
       const isUserLogin = sessionStorage.getItem('userData');
       if (isUserLogin) {
-        window.location.hash = 'chat';
+        window.location.hash = RouteHash.CHAT;
       } else {
-        window.location.hash = '/';
+        window.location.hash = RouteHash.ROOT;
       }
     });
     this.appendChildren([title, backBtn]);

@@ -1,6 +1,7 @@
-import { assertIsDefined } from '../../../utilities/utils';
 import BaseComponent from '../BaseComponent';
 import { ul, li } from '../HTMLComponents';
+
+import { assertIsDefined } from '../../../utilities/utils';
 
 import styles from './ContextMenu.module.scss';
 

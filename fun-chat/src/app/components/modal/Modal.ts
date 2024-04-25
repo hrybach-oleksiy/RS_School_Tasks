@@ -18,31 +18,15 @@ export default class Modal extends BaseComponent {
       classNames: [styles.modal, styles.hidden, 'modal-js'],
     });
 
-    // this.modalElement = ElementCreator.create('div', { class: 'modal hidden' });
-    // this.closeButton = null;
-    // this.gameHandler = gameHandler;
     this.content = content;
-    // this.modalContentElement = ElementCreator.create('div', {
-    //   class: 'modal__content',
-    // });
   }
 
   public render() {
     const rootElement = document.querySelector('main');
-    // const modalContent = ElementCreator.create('div', {
-    //   class: 'modal__content',
-    // });
+
     assertIsDefined(rootElement);
     this.contentElement.append(this.content);
-
-    // if (this.content instanceof HTMLElement) {
-    //   this.modalContentElement.append(this.content);
-    // } else {
-    //   this.modalContentElement.innerHTML = this.content;
-    // }
-
     this.append(this.contentElement);
-
     rootElement.append(this.getNode());
   }
 
@@ -65,7 +49,6 @@ export default class Modal extends BaseComponent {
     const closeBtn = button(['btn', 'close'], text);
 
     closeBtn.addListener('click', this.close);
-
     this.contentElement.append(closeBtn);
   }
 }

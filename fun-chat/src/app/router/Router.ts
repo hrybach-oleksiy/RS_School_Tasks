@@ -1,11 +1,11 @@
 import { RoutesPath, User } from '../../types/interfaces';
+import { RouteHash } from '../../types/enums';
 
 export default class Router {
   private routes: RoutesPath[];
 
   constructor(routes: RoutesPath[]) {
     this.routes = routes;
-    // window.addEventListener('DOMContentLoaded', this.locationHandler);
     window.addEventListener('hashchange', this.locationHandler);
 
     this.locationHandler();
@@ -15,12 +15,12 @@ export default class Router {
     const userData = Router.getUserData();
     let location = window.location.hash.replace('#', '');
 
-    if (location === 'login' && userData) {
-      location = 'chat';
-    } else if (location === 'chat' && !userData) {
-      location = 'login';
+    if (location === RouteHash.LOGIN && userData) {
+      location = RouteHash.CHAT;
+    } else if (location === RouteHash.CHAT && !userData) {
+      location = RouteHash.LOGIN;
     } else if (location.length === 0) {
-      location = userData ? 'chat' : 'login';
+      location = userData ? RouteHash.CHAT : RouteHash.LOGIN;
     }
 
     window.location.hash = location;

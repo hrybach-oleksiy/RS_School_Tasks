@@ -41,4 +41,12 @@ enum MessageRequestType {
   DELIVER = 'MSG_DELIVER',
 }
 
-export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType, MessageRequestType };
+enum RouteHash {
+  LOGIN = 'login',
+  CHAT = 'chat',
+  ABOUT = 'about',
+  NOT_FOUND = '404',
+  ROOT = '/',
+}
+
+export { LinkAttribute, ImageAttribute, FormAttribute, UserRequestType, MessageRequestType, RouteHash };

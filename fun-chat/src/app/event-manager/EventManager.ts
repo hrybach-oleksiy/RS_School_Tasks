@@ -12,7 +12,6 @@ export default class EventManager {
   private handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      // console.log(this.useLoginSubmitEventCallback);
       if (this.useLoginSubmitEventCallback && this.loginSubmitEventCallback && window.location.hash === '#login') {
         this.loginSubmitEventCallback();
       }
