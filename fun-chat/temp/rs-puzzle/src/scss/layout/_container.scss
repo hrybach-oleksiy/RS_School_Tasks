@@ -1,0 +1,12 @@
+.container {
+    display: grid;
+    grid-template-rows: 80px 1fr 80px;
+    max-width: $container-width;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0 $container-offset;
+
+    @include media-mobile {
+        padding: 0 16px;
+    }
+}
